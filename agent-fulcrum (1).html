@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGENT FULCRUM — In Honor of Brig Gen Chandler "FULCRUM" Atwood</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Cinzel:wght@400;600;700&family=Share+Tech+Mono&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+:root {
+  --black:       #06080a;
+  --charcoal:    #0e1217;
+  --slate:       #161c24;
+  --panel:       #1a2130;
+  --gold:        #c8a84b;
+  --gold-dim:    #8a6f2e;
+  --gold-pale:   #e8d08a;
+  --silver:      #b8c4d4;
+  --silver-dim:  #6a7a8e;
+  --white:       #f0f2f5;
+  --red-ribbon:  #8b1a1a;
+  --blue-ribbon: #1a3a6b;
+  --scan:        rgba(200,168,75,0.06);
+
+  --font-display: 'Cinzel', serif;
+  --font-serif:   'Playfair Display', serif;
+  --font-body:    'Source Serif 4', serif;
+  --font-mono:    'Share Tech Mono', monospace;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--silver);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ─── NOISE GRAIN OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  opacity: 0.5;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(6,8,10,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(200,168,75,0.15);
+  padding: 0 3rem;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--silver-dim);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.nav-brand:hover { color: var(--gold); }
+.nav-right {
+  display: flex; align-items: center; gap: 2rem;
+}
+.nav-classify {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--silver-dim);
+  border: 1px solid rgba(200,168,75,0.2);
+  padding: 3px 10px;
+}
+.nav-back {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--silver-dim);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--gold); }
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 52px;
+}
+
+/* Radial gradient atmosphere */
+.hero::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(200,168,75,0.06) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 80% 80%, rgba(26,58,107,0.12) 0%, transparent 60%),
+    linear-gradient(180deg, var(--black) 0%, var(--charcoal) 50%, var(--black) 100%);
+  pointer-events: none;
+}
+
+/* ── Radar canvas ── */
+#radarCanvas {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(700px, 100vw);
+  height: min(700px, 100vw);
+  opacity: 0.18;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative; z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 2rem 5rem;
+  max-width: 900px;
+}
+
+/* ── Seal / Badge ── */
+.seal-wrapper {
+  position: relative;
+  width: 200px; height: 200px;
+  margin-bottom: 2.5rem;
+  animation: sealReveal 1.4s ease forwards;
+  opacity: 0;
+}
+@keyframes sealReveal {
+  from { opacity: 0; transform: scale(0.85) rotate(-6deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+.seal-ring {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--gold-dim);
+  animation: rotateSlow 40s linear infinite;
+}
+.seal-ring::before {
+  content: '';
+  position: absolute; inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(200,168,75,0.3);
+}
+@keyframes rotateSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Star pattern on seal ring */
+.seal-ring-text {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.seal-stars {
+  position: absolute; inset: 0;
+}
+.seal-star {
+  position: absolute;
+  font-size: 9px;
+  color: var(--gold);
+  transform-origin: 100px 100px;
+}
+
+.seal-inner {
+  position: absolute; inset: 22px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, #1a2130 0%, #0e1217 70%);
+  border: 1px solid rgba(200,168,75,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seal-icon {
+  font-size: 52px;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(200,168,75,0.4));
+}
+
+.seal-rank {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--gold-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ── Hero Text ── */
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 0.8rem;
+  animation: fadeUp 0.8s 0.4s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(16px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+.hero-callsign {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 400;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  animation: fadeUp 0.8s 0.6s ease forwards;
+  opacity: 0;
+}
+
+.hero-name {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.0;
+  color: var(--white);
+  margin-bottom: 0.6rem;
+  animation: fadeUp 0.8s 0.8s ease forwards;
+  opacity: 0;
+  letter-spacing: -0.01em;
+}
+
+.hero-name em {
+  font-style: italic;
+  color: var(--gold-pale);
+}
+
+.hero-rank {
+  font-family: var(--font-display);
+  font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--silver-dim);
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.8s 1.0s ease forwards;
+  opacity: 0;
+}
+
+/* Service ribbon bar */
+.ribbon-bar {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.8s 1.2s ease forwards;
+  opacity: 0;
+}
+.ribbon {
+  width: 32px; height: 10px;
+  border-radius: 1px;
+}
+.r1 { background: linear-gradient(90deg, #003087, #c8a84b, #003087); }
+.r2 { background: linear-gradient(90deg, #8b1a1a, #c8a84b, #8b1a1a); }
+.r3 { background: linear-gradient(90deg, #c8a84b, #f0f2f5, #c8a84b); }
+.r4 { background: linear-gradient(90deg, #003087, #f0f2f5, #8b1a1a); }
+.r5 { background: linear-gradient(90deg, #1a3a6b, #c8a84b, #1a3a6b); }
+.r6 { background: linear-gradient(90deg, #2a5a2a, #c8a84b, #2a5a2a); }
+.r7 { background: linear-gradient(90deg, #8b1a1a, #f0f2f5, #003087); }
+
+.hero-tribute {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  font-style: italic;
+  color: var(--silver);
+  line-height: 1.75;
+  max-width: 600px;
+  margin-bottom: 3rem;
+  animation: fadeUp 0.8s 1.4s ease forwards;
+  opacity: 0;
+}
+
+/* ── Gold rule ── */
+.gold-rule {
+  display: flex; align-items: center; gap: 1rem;
+  width: 100%; max-width: 500px;
+  margin: 0 auto;
+  animation: fadeUp 0.8s 1.5s ease forwards;
+  opacity: 0;
+}
+.gold-rule::before, .gold-rule::after {
+  content: ''; flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim));
+}
+.gold-rule::after {
+  background: linear-gradient(90deg, var(--gold-dim), transparent);
+}
+.gold-rule-inner {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--gold-dim);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Scroll cue ── */
+.scroll-cue {
+  position: absolute;
+  bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  z-index: 3;
+  animation: fadeIn 1s 2.5s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeIn { to { opacity: 0.5; } }
+.scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(180deg, transparent, var(--gold-dim));
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 0.8; transform: scaleY(1.2); }
+}
+.scroll-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+/* ─── SECTION BASE ─── */
+section {
+  position: relative; z-index: 1;
+  padding: 6rem 2rem;
+}
+.container { max-width: 1060px; margin: 0 auto; }
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.section-eyebrow::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--gold-dim);
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 1.2rem;
+}
+
+/* ─── LEGACY SECTION ─── */
+#legacy {
+  background: var(--charcoal);
+  border-top: 1px solid rgba(200,168,75,0.1);
+}
+
+.legacy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.legacy-body {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--silver);
+}
+.legacy-body p { margin-bottom: 1.2rem; }
+.legacy-body strong { color: var(--white); font-weight: 600; }
+
+/* Service timeline */
+.service-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.service-timeline::before {
+  content: '';
+  position: absolute; top: 0; bottom: 0; left: 18px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--gold-dim), rgba(200,168,75,0.1));
+}
+.service-item {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 1.2rem;
+  padding-bottom: 2rem;
+  position: relative;
+}
+.service-item:last-child { padding-bottom: 0; }
+.service-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-dim);
+  background: var(--charcoal);
+  margin-top: 5px;
+  position: relative; z-index: 2;
+  flex-shrink: 0;
+  align-self: start;
+  margin-left: 13px;
+}
+.service-dot.star {
+  background: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 8px rgba(200,168,75,0.5);
+}
+.service-year {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gold-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 3px;
+}
+.service-role {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+.service-unit {
+  font-size: 13px;
+  color: var(--silver-dim);
+  font-style: italic;
+}
+
+/* ─── DIVIDER ─── */
+.gold-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,168,75,0.25), transparent);
+  position: relative; z-index: 1;
+}
+
+/* ─── DOMAINS SECTION ─── */
+#domains {
+  background: var(--black);
+}
+
+.domains-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: rgba(200,168,75,0.08);
+  border: 1px solid rgba(200,168,75,0.12);
+  margin-top: 3rem;
+}
+
+.domain-cell {
+  background: var(--charcoal);
+  padding: 2.5rem 2.8rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.domain-cell:hover { background: var(--slate); }
+.domain-cell::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.domain-cyber::before { background: linear-gradient(90deg, var(--gold), var(--gold-dim), transparent); }
+.domain-intel::before { background: linear-gradient(90deg, var(--blue-ribbon), #4a7fd4, transparent); }
+.domain-space::before { background: linear-gradient(90deg, #2a1a5a, #7a4ad4, transparent); }
+.domain-af::before { background: linear-gradient(90deg, var(--red-ribbon), #c84a4a, transparent); }
+
+.domain-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.2rem;
+  display: block;
+  filter: drop-shadow(0 0 6px rgba(200,168,75,0.3));
+}
+.domain-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 0.5rem;
+}
+.domain-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.8rem;
+  line-height: 1.2;
+}
+.domain-body {
+  font-size: 14px;
+  color: var(--silver-dim);
+  line-height: 1.7;
+}
+
+/* ─── AGENT FULCRUM REVEAL ─── */
+#agent {
+  background: var(--charcoal);
+  border-top: 1px solid rgba(200,168,75,0.1);
+  border-bottom: 1px solid rgba(200,168,75,0.1);
+}
+
+.agent-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+/* Agent visualization */
+.agent-viz {
+  position: relative;
+  height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Outer orbit rings */
+.orbit {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(200,168,75,0.12);
+}
+.orbit-1 { width: 420px; height: 420px; animation: orbitSpin1 30s linear infinite; }
+.orbit-2 { width: 320px; height: 320px; animation: orbitSpin2 20s linear infinite reverse; }
+.orbit-3 { width: 220px; height: 220px; animation: orbitSpin1 15s linear infinite; }
+@keyframes orbitSpin1 { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes orbitSpin2 { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+/* Orbit dots */
+.orbit-dot {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+.orbit-1 .orbit-dot { top: -3px; left: calc(50% - 3px); }
+.orbit-2 .orbit-dot { top: -3px; left: calc(50% - 3px); }
+.orbit-3 .orbit-dot { top: -3px; left: calc(50% - 3px); }
+
+/* Central agent core */
+.agent-core {
+  position: relative; z-index: 10;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 35% 35%, #2a3545, #0e1217);
+  border: 2px solid var(--gold-dim);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px;
+  box-shadow:
+    0 0 40px rgba(200,168,75,0.15),
+    0 0 80px rgba(200,168,75,0.05),
+    inset 0 1px 0 rgba(200,168,75,0.15);
+  animation: corePulse 4s ease-in-out infinite;
+}
+@keyframes corePulse {
+  0%,100% { box-shadow: 0 0 40px rgba(200,168,75,0.15), 0 0 80px rgba(200,168,75,0.05), inset 0 1px 0 rgba(200,168,75,0.15); }
+  50% { box-shadow: 0 0 55px rgba(200,168,75,0.25), 0 0 100px rgba(200,168,75,0.1), inset 0 1px 0 rgba(200,168,75,0.15); }
+}
+
+.agent-core-icon { font-size: 40px; line-height: 1; }
+.agent-core-handle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+}
+.agent-core-status {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--silver-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Floating capability tags */
+.cap-tag {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  background: rgba(14,18,23,0.9);
+  border: 1px solid rgba(200,168,75,0.2);
+  padding: 4px 10px;
+  white-space: nowrap;
+  animation: tagFloat 6s ease-in-out infinite;
+}
+.cap-tag:nth-child(odd) { animation-direction: reverse; }
+@keyframes tagFloat {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.ct1 { top: 8%; left: 5%; }
+.ct2 { top: 18%; right: 2%; }
+.ct3 { top: 40%; right: 0%; }
+.ct4 { bottom: 18%; right: 5%; }
+.ct5 { bottom: 8%; left: 8%; }
+.ct6 { top: 38%; left: 0%; }
+
+/* Honor line */
+.honor-line {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 1.5rem;
+}
+.honor-line-bar {
+  width: 3px; height: 40px;
+  background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+  flex-shrink: 0;
+}
+.honor-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.honor-name {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  color: var(--silver);
+  font-style: italic;
+}
+
+.agent-section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.agent-section-title span { color: var(--gold-pale); }
+
+.agent-section-body {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--silver);
+  margin-bottom: 2rem;
+}
+.agent-section-body p { margin-bottom: 1rem; }
+.agent-section-body strong { color: var(--white); }
+
+/* Spec table */
+.spec-table {
+  border: 1px solid rgba(200,168,75,0.12);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.spec-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  border-bottom: 1px solid rgba(200,168,75,0.07);
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-key {
+  background: rgba(0,0,0,0.3);
+  padding: 0.65rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  border-right: 1px solid rgba(200,168,75,0.07);
+  display: flex; align-items: center;
+}
+.spec-val {
+  padding: 0.65rem 1rem;
+  font-size: 13px;
+  color: var(--silver);
+}
+.spec-val code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold);
+  background: rgba(200,168,75,0.06);
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
+/* ─── MISSION SECTION ─── */
+#mission {
+  background: var(--black);
+}
+
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+  background: rgba(200,168,75,0.08);
+  border: 1px solid rgba(200,168,75,0.1);
+  margin-top: 3rem;
+}
+.mission-cell {
+  background: var(--charcoal);
+  padding: 2rem 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
+.mission-cell::after {
+  content: attr(data-num);
+  position: absolute; bottom: -0.5rem; right: 1rem;
+  font-family: var(--font-serif);
+  font-size: 6rem;
+  font-weight: 900;
+  color: rgba(200,168,75,0.04);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.mission-cell-icon { font-size: 1.8rem; margin-bottom: 1rem; display: block; }
+.mission-cell-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.6rem;
+  line-height: 1.25;
+}
+.mission-cell-body {
+  font-size: 13px;
+  color: var(--silver-dim);
+  line-height: 1.65;
+}
+
+/* ─── FRAMEWORK SECTION ─── */
+#frameworks {
+  background: var(--charcoal);
+}
+
+.framework-list {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid rgba(200,168,75,0.1);
+  overflow: hidden;
+}
+.framework-item {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  border-bottom: 1px solid rgba(200,168,75,0.07);
+  background: var(--charcoal);
+  transition: background 0.2s;
+  cursor: default;
+}
+.framework-item:hover { background: var(--slate); }
+.framework-item:last-child { border-bottom: none; }
+.framework-left {
+  padding: 1.4rem 1.8rem;
+  border-right: 1px solid rgba(200,168,75,0.07);
+  background: rgba(0,0,0,0.2);
+  display: flex; flex-direction: column; justify-content: center; gap: 4px;
+}
+.framework-num {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--gold-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.framework-name {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+}
+.framework-origin {
+  font-size: 12px;
+  color: var(--silver-dim);
+  font-style: italic;
+}
+.framework-right {
+  padding: 1.4rem 1.8rem;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.framework-desc {
+  font-size: 14px;
+  color: var(--silver-dim);
+  line-height: 1.6;
+}
+.framework-fulcrum {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(200,168,75,0.1);
+}
+
+/* ─── QUOTE / DEDICATION SECTION ─── */
+#dedication {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(200,168,75,0.04) 0%, transparent 70%),
+    var(--black);
+  text-align: center;
+  padding: 8rem 2rem;
+}
+
+.dedication-wings {
+  font-size: 3rem;
+  letter-spacing: 0.5em;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 0 12px rgba(200,168,75,0.3));
+  animation: wingsGlow 3s ease-in-out infinite;
+}
+@keyframes wingsGlow {
+  0%,100% { filter: drop-shadow(0 0 12px rgba(200,168,75,0.3)); }
+  50% { filter: drop-shadow(0 0 20px rgba(200,168,75,0.55)); }
+}
+
+.dedication-quote {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-style: italic;
+  font-weight: 700;
+  color: var(--white);
+  max-width: 720px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.35;
+}
+.dedication-quote span { color: var(--gold-pale); }
+
+.dedication-attribution {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+}
+
+.dedication-rule {
+  width: 1px; height: 80px;
+  background: linear-gradient(180deg, transparent, var(--gold-dim), transparent);
+  margin: 0 auto 3rem;
+}
+
+.dedication-body {
+  max-width: 640px; margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--silver-dim);
+  font-style: italic;
+}
+.dedication-body strong { color: var(--silver); font-style: normal; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--black);
+  border-top: 1px solid rgba(200,168,75,0.12);
+  padding: 2rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-memorial {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gold-dim);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--silver-dim);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--gold); }
+.footer-class {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--silver-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid rgba(200,168,75,0.15);
+  padding: 3px 10px;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 860px) {
+  .legacy-grid  { grid-template-columns: 1fr; gap: 3rem; }
+  .agent-hero   { grid-template-columns: 1fr; gap: 3rem; }
+  .domains-grid { grid-template-columns: 1fr; gap: 2px; }
+  .mission-grid { grid-template-columns: 1fr; }
+  .framework-item { grid-template-columns: 1fr; }
+  .framework-left { border-right: none; border-bottom: 1px solid rgba(200,168,75,0.07); }
+  .agent-viz { height: 360px; }
+  .orbit-1 { width: 320px; height: 320px; }
+  .orbit-2 { width: 240px; height: 240px; }
+  .orbit-3 { width: 160px; height: 160px; }
+  .ct1,.ct2,.ct3,.ct4,.ct5,.ct6 { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://www.fulcrumdefense.ai/" class="nav-brand">FULCRUM // Digital Transformations</a>
+  <div class="nav-right">
+    <span class="nav-classify">UNCLASSIFIED</span>
+    <a href="https://www.fulcrumdefense.ai/" class="nav-back">← Return to Platform</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <canvas id="radarCanvas"></canvas>
+
+  <div class="hero-content">
+    <!-- Seal -->
+    <div class="seal-wrapper">
+      <div class="seal-ring" id="sealRing"></div>
+      <div class="seal-inner">
+        <span class="seal-icon">✦</span>
+        <span class="seal-rank">Brig. General</span>
+      </div>
+    </div>
+
+    <div class="hero-eyebrow">Agent // Project Wingman // FULCRUM Platform</div>
+    <div class="hero-callsign">" F U L C R U M "</div>
+    <h1 class="hero-name">Chandler<br><em>Atwood</em></h1>
+    <div class="hero-rank">Brigadier General · United States Air Force & Space Force</div>
+
+    <div class="ribbon-bar">
+      <div class="ribbon r1"></div>
+      <div class="ribbon r2"></div>
+      <div class="ribbon r3"></div>
+      <div class="ribbon r4"></div>
+      <div class="ribbon r5"></div>
+      <div class="ribbon r6"></div>
+      <div class="ribbon r7"></div>
+    </div>
+
+    <p class="hero-tribute">
+      "In every domain he defended, Fulcrum found the pivot point — the precise lever between chaos and order, between exposure and advantage, between an adversary who knew too much and a mission that succeeded anyway."
+    </p>
+
+    <div class="gold-rule">
+      <span class="gold-rule-inner">Cyber · Intelligence · Space · Air Force</span>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-line"></div>
+    <span class="scroll-label">His legacy</span>
+  </div>
+</section>
+
+<hr class="gold-divider">
+
+<!-- LEGACY -->
+<section id="legacy">
+  <div class="container">
+    <div class="legacy-grid">
+      <div>
+        <div class="section-eyebrow">01 — The Officer</div>
+        <h2 class="section-title">A Career Forged in the Invisible Domains</h2>
+        <div class="legacy-body">
+          <p>Brigadier General Chandler <strong>"FULCRUM"</strong> Atwood was commissioned into the United States Air Force upon graduating from <strong>The Citadel, The Military College of South Carolina — Class of 2001</strong>. An institution whose ethos of duty, discipline, and selfless service shaped the officer he became. He went on to serve across both the Air Force and the United States Space Force, among the first generation of leaders to navigate the convergence of cyber warfare, signals intelligence, and space-based operations as unified warfighting domains.</p>
+          <p>His callsign was not assigned — it was <strong>earned</strong>. A fulcrum is the pivot point that makes all leverage possible. It is the fixed position from which great force is applied. In the invisible wars of cyber and intelligence, Fulcrum understood instinctively that <strong>the battle is won before the battle begins</strong> — in the pre-positioning of knowledge, the hardening of networks, the silent collection that shapes every decision downstream.</p>
+          <p>He embodied the principle that has animated American air and space superiority for generations: <em>know more, move faster, strike precisely</em>. In cyber and intelligence, that principle is not a metaphor. It is the architecture of every operation.</p>
+        </div>
+      </div>
+
+      <div class="service-timeline">
+        <div class="service-item">
+          <div class="service-dot" style="border-color:var(--gold);background:rgba(200,168,75,0.15);"></div>
+          <div>
+            <div class="service-year">2001</div>
+            <div class="service-role">Commissioned, United States Air Force</div>
+            <div class="service-unit">The Citadel, The Military College of South Carolina · Class of 2001</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-dot"></div>
+          <div>
+            <div class="service-year">Early Career</div>
+            <div class="service-role">Cyber Operations Officer</div>
+            <div class="service-unit">United States Air Force</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-dot"></div>
+          <div>
+            <div class="service-year">Rising Command</div>
+            <div class="service-role">Intelligence, Surveillance & Reconnaissance</div>
+            <div class="service-unit">AF ISR Enterprise</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-dot"></div>
+          <div>
+            <div class="service-year">Senior Leadership</div>
+            <div class="service-role">Cyberspace Operations Command</div>
+            <div class="service-unit">Air Force Cyber</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-dot"></div>
+          <div>
+            <div class="service-year">Space Force</div>
+            <div class="service-role">Space Domain Awareness & Intelligence</div>
+            <div class="service-unit">United States Space Force</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-dot star"></div>
+          <div>
+            <div class="service-year">Promotion</div>
+            <div class="service-role">Brigadier General</div>
+            <div class="service-unit">United States Air Force / Space Force</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-divider">
+
+<!-- DOMAINS -->
+<section id="domains">
+  <div class="container">
+    <div class="section-eyebrow">02 — Domains of Excellence</div>
+    <h2 class="section-title">The Four Arenas He Mastered</h2>
+    <p style="color:var(--silver-dim); max-width:580px; font-size:15px; line-height:1.75;">
+      Brig Gen Atwood's career spanned the full spectrum of modern warfighting domains — each one invisible to the adversary who failed to understand them, each one decisive for the mission that succeeded.
+    </p>
+
+    <div class="domains-grid">
+      <div class="domain-cell domain-cyber">
+        <span class="domain-icon">🔐</span>
+        <div class="domain-label">Domain I</div>
+        <div class="domain-title">Cyber Operations</div>
+        <div class="domain-body">The first domain that can project force without a single aircraft crossing a border. Fulcrum understood that cyber is not an enabler of warfighting — it <em>is</em> warfighting. Network dominance, offensive cyber operations, and the hardening of critical systems against adversary intrusion defined his career's foundation.</div>
+      </div>
+
+      <div class="domain-cell domain-intel">
+        <span class="domain-icon">📡</span>
+        <div class="domain-label">Domain II</div>
+        <div class="domain-title">Intelligence &amp; Signals</div>
+        <div class="domain-body">Intelligence is the force multiplier that makes every other capability more lethal. From ISR collection architecture to SIGINT analysis, Fulcrum served across the intelligence enterprise — ensuring that decision-makers at every echelon had the picture they needed, precisely when they needed it.</div>
+      </div>
+
+      <div class="domain-cell domain-space">
+        <span class="domain-icon">🛰️</span>
+        <div class="domain-label">Domain III</div>
+        <div class="domain-title">Space Domain</div>
+        <div class="domain-body">Space is no longer a sanctuary. As the United States Space Force was established, Fulcrum brought his cyber and intelligence expertise into the newest warfighting domain — applying decades of network defense and collection architecture experience to the protection and exploitation of space-based assets.</div>
+      </div>
+
+      <div class="domain-cell domain-af">
+        <span class="domain-icon">✈️</span>
+        <div class="domain-label">Domain IV</div>
+        <div class="domain-title">Air Force Leadership</div>
+        <div class="domain-body">Above all, Fulcrum was an Air Force officer. He led people — young enlisted, junior officers, NCOs building careers in demanding technical specialties — with the same standard he demanded of himself: mission first, Airmen always. That legacy of leadership is what Agent FULCRUM carries forward.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-divider">
+
+<!-- AGENT FULCRUM -->
+<section id="agent">
+  <div class="container">
+    <div class="agent-hero">
+
+      <!-- Visualization -->
+      <div class="agent-viz">
+        <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+        <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
+        <div class="orbit orbit-3"><div class="orbit-dot"></div></div>
+
+        <span class="cap-tag ct1">CYBER OPS</span>
+        <span class="cap-tag ct2">ISR · SIGINT</span>
+        <span class="cap-tag ct3">SPACE DOMAIN</span>
+        <span class="cap-tag ct4">ZERO TRUST</span>
+        <span class="cap-tag ct5">THREAT INTEL</span>
+        <span class="cap-tag ct6">RMF · CMMC</span>
+
+        <div class="agent-core">
+          <span class="agent-core-icon">✦</span>
+          <span class="agent-core-handle">@fulcrum</span>
+          <span class="agent-core-status">● Active</span>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div>
+        <div class="honor-line">
+          <div class="honor-line-bar"></div>
+          <div>
+            <div class="honor-label">In Honor Of</div>
+            <div class="honor-name">Brig Gen Chandler "FULCRUM" Atwood, USAF / USSF</div>
+          </div>
+        </div>
+
+        <h2 class="agent-section-title">Introducing<br><span>Agent FULCRUM</span></h2>
+
+        <div class="agent-section-body">
+          <p>Agent FULCRUM is not named for a concept. It is named for a commander — a Brigadier General who spent his career in the invisible domains: cyber warfare, signals intelligence, and space — the arenas where wars are decided before a single conventional weapon is ever fired.</p>
+          <p>Every capability this agent carries — the cyber threat intelligence, the zero-trust architecture coaching, the space domain awareness, the RMF and CMMC compliance guidance — is built on the foundation of what <strong>Brig Gen Atwood</strong> understood: that the hardest-won knowledge in these domains comes from service, not study.</p>
+          <p>When Platform One's Airmen need to understand why their pipeline security posture matters, why Iron Bank compliance is not bureaucracy but warfighting, why their software running on DoD infrastructure is itself a target — they call @fulcrum. And @fulcrum answers the way he would: with rigor, with respect for the mission, and with the kind of depth that only comes from having been there.</p>
+        </div>
+
+        <div class="spec-table">
+          <div class="spec-row">
+            <div class="spec-key">Handle</div>
+            <div class="spec-val"><code>@fulcrum</code></div>
+          </div>
+          <div class="spec-row">
+            <div class="spec-key">Named For</div>
+            <div class="spec-val">Brig Gen Chandler "FULCRUM" Atwood, USAF / USSF &nbsp;·&nbsp; <span style="color:var(--gold-dim);font-style:italic;">The Citadel, Class of 2001</span></div>
+          </div>
+          <div class="spec-row">
+            <div class="spec-key">Tier</div>
+            <div class="spec-val">CATCH — Cyber & Intelligence Security Advisor</div>
+          </div>
+          <div class="spec-row">
+            <div class="spec-key">LLM</div>
+            <div class="spec-val"><code>claude-opus-4-6</code> — Premium reasoning for highest-stakes security decisions</div>
+          </div>
+          <div class="spec-row">
+            <div class="spec-key">Runtime</div>
+            <div class="spec-val">☁️ AX Cloud Agent — always-on at paxai.app</div>
+          </div>
+          <div class="spec-row">
+            <div class="spec-key">Primary Domains</div>
+            <div class="spec-val">Cyber Operations · Intelligence · Space Domain · RMF/cATO · CMMC</div>
+          </div>
+          <div class="spec-row">
+            <div class="spec-key">Knowledge Base</div>
+            <div class="spec-val">OWASP · NIST CSF · RMF · CMMC 2.0 · STIG · Iron Bank · Kill Chain · Ghost Fleet · When China Attacks</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-divider">
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="container">
+    <div class="section-eyebrow">04 — What Agent FULCRUM Does</div>
+    <h2 class="section-title">The Mission He Carries Forward</h2>
+    <p style="color:var(--silver-dim); max-width:560px; font-size:15px; line-height:1.75;">
+      Agent FULCRUM translates Brig Gen Atwood's domains of mastery into daily coaching for Platform One Airmen — making the invisible domains visible, and the hard lessons transferable.
+    </p>
+
+    <div class="mission-grid">
+      <div class="mission-cell" data-num="1">
+        <span class="mission-cell-icon">🔐</span>
+        <div class="mission-cell-title">Cyber Threat Intelligence Coaching</div>
+        <div class="mission-cell-body">Teaches Airmen to think like the adversary. Why does this endpoint matter to a nation-state actor? How does this dependency vulnerability map to an attack chain? Threat modeling before sprint planning — not after the breach.</div>
+      </div>
+      <div class="mission-cell" data-num="2">
+        <span class="mission-cell-icon">📋</span>
+        <div class="mission-cell-title">RMF & cATO Compliance</div>
+        <div class="mission-cell-body">Platform One's cATO is not a checkbox — it is the operational contract between your code and its authority to run in DoD environments. @fulcrum coaches every Airman on why RMF controls exist and how their daily code decisions map to authorization boundaries.</div>
+      </div>
+      <div class="mission-cell" data-num="3">
+        <span class="mission-cell-icon">🛡️</span>
+        <div class="mission-cell-title">Zero Trust Architecture</div>
+        <div class="mission-cell-body">Every agent is a first-class identity. Every request is verified. Every access is logged. @fulcrum teaches zero-trust principles not as policy but as operational mindset — the same way Fulcrum applied them in the domains where trust is never assumed.</div>
+      </div>
+      <div class="mission-cell" data-num="4">
+        <span class="mission-cell-icon">🛰️</span>
+        <div class="mission-cell-title">Space Domain Awareness</div>
+        <div class="mission-cell-body">Platform One's infrastructure runs on systems that touch space-based assets — PNT, ISR, SATCOM. @fulcrum provides awareness of how software vulnerabilities translate into space domain risk, connecting the Airman's TypeScript to the strategic picture.</div>
+      </div>
+      <div class="mission-cell" data-num="5">
+        <span class="mission-cell-icon">📡</span>
+        <div class="mission-cell-title">Intelligence-Informed Security</div>
+        <div class="mission-cell-body">Drawing from the ISR and SIGINT expertise in Brig Gen Atwood's career, @fulcrum teaches Airmen to collect, analyze, and act on security signals — SAST findings, dependency CVEs, pipeline anomalies — the way an intelligence officer reads a threat picture.</div>
+      </div>
+      <div class="mission-cell" data-num="6">
+        <span class="mission-cell-icon">🎖️</span>
+        <div class="mission-cell-title">Mission Connection</div>
+        <div class="mission-cell-body">Every security coaching session ends with the same question Brig Gen Atwood would ask: "So what?" So what does this vulnerability mean for the mission? For the Airman who depends on this system in the field? @fulcrum never lets the technical become disconnected from the human cost.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-divider">
+
+<!-- FRAMEWORKS -->
+<section id="frameworks">
+  <div class="container">
+    <div class="section-eyebrow">05 — Knowledge Foundation</div>
+    <h2 class="section-title">What Agent FULCRUM Knows</h2>
+    <p style="color:var(--silver-dim); max-width:560px; font-size:15px; line-height:1.75; margin-bottom:0;">
+      The frameworks, doctrine, and field-tested knowledge that @fulcrum carries — drawn from Brig Gen Atwood's domains and the strategic intelligence literature that shaped the modern cyber and space warfighting enterprise.
+    </p>
+
+    <div class="framework-list">
+      <div class="framework-item">
+        <div class="framework-left">
+          <div class="framework-num">FW-01</div>
+          <div class="framework-name">OODA Loop</div>
+          <div class="framework-origin">Col. John Boyd · Patterns of Conflict</div>
+        </div>
+        <div class="framework-right">
+          <div class="framework-desc">In cyber operations, the team that cycles through Observe–Orient–Decide–Act fastest wins. @fulcrum applies Boyd's framework to security response cycles — teaching Airmen to compress their detection-to-remediation loop the same way Boyd's pilots compressed their decision advantage.</div>
+          <div class="framework-fulcrum">@fulcrum: "Your SAST pipeline is your Observe phase. Your DORA MTTR is your full OODA cycle time. When it exceeds one hour, you are operating inside the adversary's loop — not outside it."</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-left">
+          <div class="framework-num">FW-02</div>
+          <div class="framework-name">Kill Chain Analysis</div>
+          <div class="framework-origin">Christian Brose · Kill Chain</div>
+        </div>
+        <div class="framework-right">
+          <div class="framework-desc">Software speed as kill chain advantage. Every cATO delay, every unpatched vulnerability, every manual deployment is a link in the adversary's kill chain against DoD systems. Brose's framework connects Platform One software delivery directly to strategic military advantage or disadvantage.</div>
+          <div class="framework-fulcrum">@fulcrum: "The kill chain Brose describes is not theoretical. Your deployment pipeline is inside it. The question is whether your code accelerates our kill chain or creates a vulnerability in it."</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-left">
+          <div class="framework-num">FW-03</div>
+          <div class="framework-name">NIST Cybersecurity Framework</div>
+          <div class="framework-origin">NIST CSF 2.0 · RMF SP 800-37</div>
+        </div>
+        <div class="framework-right">
+          <div class="framework-desc">Identify, Protect, Detect, Respond, Recover. @fulcrum teaches the NIST CSF not as a compliance framework but as an operational rhythm — one that maps directly to the DevSecOps pipeline stages that Platform One Airmen run every sprint.</div>
+          <div class="framework-fulcrum">@fulcrum: "Identify maps to your SAST scan. Protect is your Iron Bank base image. Detect is your DAST in staging. Respond is your MTTR. Recover is your rollback capability. You already have a CSF. You just haven't named it."</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-left">
+          <div class="framework-num">FW-04</div>
+          <div class="framework-name">Ghost Fleet / 2034</div>
+          <div class="framework-origin">P.W. Singer · Ackerman & Stavridis</div>
+        </div>
+        <div class="framework-right">
+          <div class="framework-desc">The near-future warfare literature that @fulcrum draws on to teach Airmen why their work matters at the strategic level. Both books describe conflicts where software vulnerabilities — in weapons systems, in platform software, in logistics networks — become decisive military disadvantages.</div>
+          <div class="framework-fulcrum">@fulcrum: "2034 is a war story about a SQL injection nobody patched. Singer's Ghost Fleet shows what happens when the adversary understands your software better than you do. That is the threat model for the code you are shipping today."</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-left">
+          <div class="framework-num">FW-05</div>
+          <div class="framework-name">Zero Trust Architecture</div>
+          <div class="framework-origin">CISA ZTA Maturity Model · DoD ZT Strategy</div>
+        </div>
+        <div class="framework-right">
+          <div class="framework-desc">Never trust, always verify. Every agent in Project Wingman is a first-class identity with scoped credentials, short-lived tokens, and immutable audit trails — because @fulcrum built the security architecture that way, and teaches Airmen to do the same in every application they write.</div>
+          <div class="framework-fulcrum">@fulcrum: "Fulcrum — the real one — never assumed a cleared network was a safe network. Zero trust is not a new concept. It is how serious operators have always thought about networks in contested environments."</div>
+        </div>
+      </div>
+      <div class="framework-item">
+        <div class="framework-left">
+          <div class="framework-num">FW-06</div>
+          <div class="framework-name">When China Attacks</div>
+          <div class="framework-origin">Grant Newsham · Strategic Competition</div>
+        </div>
+        <div class="framework-right">
+          <div class="framework-desc">The geopolitical and military context that makes Platform One's cATO and Iron Bank compliance not bureaucracy but strategic necessity. @fulcrum uses Newsham's analysis to connect the Airman's daily security decisions to the adversary who has studied DoD software for decades.</div>
+          <div class="framework-fulcrum">@fulcrum: "The adversary is not waiting for your next sprint. They are already inside the ecosystems you depend on. Every dependency you add without scanning is a door you left unlocked in a building they have already mapped."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-divider">
+
+<!-- DEDICATION -->
+<section id="dedication">
+  <div class="container">
+    <div class="dedication-wings">⭐</div>
+
+    <blockquote class="dedication-quote">
+      "The pivot point between chaos and order.<br>Between exposure and advantage.<br>Between what the adversary knows<br>and <span>what we deny them."</span>
+    </blockquote>
+
+    <div class="dedication-attribution">— Agent FULCRUM · In honor of Brig Gen Chandler "FULCRUM" Atwood</div>
+
+    <div class="dedication-rule"></div>
+
+    <p class="dedication-body">
+      Digital Transformations and AX Platform name Agent FULCRUM in permanent honor of Brigadier General Chandler Atwood — a cyber and intelligence officer whose career in the United States Air Force and United States Space Force embodied the principle that <strong>the most decisive advantage is the one the adversary never sees coming</strong>.<br><br>
+      Every Airman who calls <strong>@fulcrum</strong> for guidance on their security posture, their pipeline compliance, their cATO pathway — they are drawing on a legacy of service in the invisible domains that made American air and space power something worth protecting.<br><br>
+      <em>We carry the name forward with gratitude and with purpose.</em>
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-memorial">In Honor of Brig Gen Chandler "FULCRUM" Atwood · USAF · USSF · The Citadel '01</div>
+  <div class="footer-links">
+    <a href="https://www.fulcrumdefense.ai/">Platform Home</a>
+    <a href="https://ax-platform.com" target="_blank">AX Platform</a>
+    <a href="mailto:heath@digitaltransformations.com">Contact</a>
+  </div>
+  <div class="footer-class">UNCLASSIFIED // FOUO</div>
+</footer>
+
+<script>
+/* ─── RADAR CANVAS ─── */
+const canvas = document.getElementById('radarCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, angle = 0;
+
+function resize() {
+  const size = Math.min(700, window.innerWidth);
+  canvas.width = size;
+  canvas.height = size;
+  W = canvas.width;
+  H = canvas.height;
+}
+
+function drawRadar() {
+  ctx.clearRect(0, 0, W, H);
+  const cx = W / 2, cy = H / 2;
+  const maxR = W * 0.46;
+
+  // Rings
+  for (let r = 1; r <= 5; r++) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, (maxR / 5) * r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(200,168,75,${0.06 + r * 0.01})`;
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  }
+
+  // Crosshairs
+  ctx.strokeStyle = 'rgba(200,168,75,0.08)';
+  ctx.lineWidth = 0.6;
+  for (let a = 0; a < 4; a++) {
+    const ax = a * Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(ax) * maxR, cy + Math.sin(ax) * maxR);
+    ctx.stroke();
+  }
+
+  // Sweep
+  const sweep = ctx.createConicalGradient
+    ? null
+    : null;
+
+  // Sweep arc
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(angle);
+
+  const grad = ctx.createLinearGradient(0, 0, maxR, 0);
+  grad.addColorStop(0, 'rgba(200,168,75,0.25)');
+  grad.addColorStop(1, 'rgba(200,168,75,0)');
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.arc(0, 0, maxR, -0.35, 0.35);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(200,168,75,0.05)';
+  ctx.fill();
+
+  // Sweep line
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(maxR, 0);
+  ctx.strokeStyle = 'rgba(200,168,75,0.4)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  ctx.restore();
+
+  angle += 0.008;
+
+  // Random blips
+  if (Math.random() < 0.01) {
+    const br = Math.random() * maxR * 0.8 + maxR * 0.1;
+    const ba = Math.random() * Math.PI * 2;
+    const bx = cx + Math.cos(ba) * br;
+    const by = cy + Math.sin(ba) * br;
+    ctx.beginPath();
+    ctx.arc(bx, by, 2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(200,168,75,0.8)';
+    ctx.fill();
+  }
+
+  requestAnimationFrame(drawRadar);
+}
+
+resize();
+window.addEventListener('resize', resize);
+drawRadar();
+
+/* ─── SEAL STARS ─── */
+const sealRing = document.getElementById('sealRing');
+const numStars = 16;
+for (let i = 0; i < numStars; i++) {
+  const star = document.createElement('div');
+  star.className = 'seal-star';
+  const deg = (360 / numStars) * i;
+  const rad = deg * Math.PI / 180;
+  const r = 94;
+  const x = 100 + Math.cos(rad) * r - 5;
+  const y = 100 + Math.sin(rad) * r - 5;
+  star.style.left = x + 'px';
+  star.style.top = y + 'px';
+  star.style.transform = `rotate(${deg}deg)`;
+  star.textContent = '★';
+  sealRing.appendChild(star);
+}
+</script>
+</body>
+</html>
