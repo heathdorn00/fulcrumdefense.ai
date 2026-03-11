@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Investor Access — Fulcrum Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:    #060d1f;
+      --navy-mid:#0b1733;
+      --fulcrum: #00c8ff;
+      --gold:    #f0a500;
+      --green:   #00d4a0;
+      --white:   #f0f4ff;
+      --gray:    #7a8fb0;
+      --red:     #e53e3e;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* grid bg */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ambient orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.12;
+    }
+    .orb-1 { width: 600px; height: 600px; background: var(--fulcrum); top: -200px; right: -100px; }
+    .orb-2 { width: 500px; height: 500px; background: var(--gold); bottom: -200px; left: -100px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(6,13,31,0.97);
+      border-bottom: 1px solid rgba(0,200,255,0.1);
+      backdrop-filter: blur(20px); z-index: 100;
+    }
+    .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--fulcrum); text-decoration: none; }
+    .nav-section { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(240,165,0,0.5); border-left: 1px solid rgba(240,165,0,0.15); padding-left: 20px; margin-left: 20px; }
+    .nav-back { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gray); text-decoration: none; transition: color 0.15s; }
+    .nav-back:hover { color: var(--fulcrum); }
+
+    /* GATE CARD */
+    .gate-wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 480px;
+      padding: 0 24px;
+    }
+
+    .gate-card {
+      background: rgba(11,23,51,0.85);
+      border: 1px solid rgba(240,165,0,0.2);
+      padding: 48px 44px 44px;
+      position: relative;
+      backdrop-filter: blur(20px);
+    }
+    .gate-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold), rgba(240,165,0,0.2));
+    }
+
+    .gate-icon {
+      width: 56px; height: 56px;
+      background: rgba(240,165,0,0.08);
+      border: 1px solid rgba(240,165,0,0.25);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px;
+    }
+    .gate-icon svg { width: 24px; height: 24px; stroke: var(--gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .gate-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 3px;
+      color: rgba(240,165,0,0.5); text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .gate-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px; letter-spacing: 2px;
+      color: var(--white); line-height: 1.05;
+      margin-bottom: 12px;
+    }
+    .gate-title span { color: var(--gold); }
+    .gate-desc {
+      font-size: 14px; line-height: 1.7;
+      color: var(--gray); font-weight: 300;
+      margin-bottom: 32px;
+    }
+
+    /* INPUT */
+    .input-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .pw-input {
+      width: 100%;
+      background: rgba(6,13,31,0.8);
+      border: 1px solid rgba(240,165,0,0.2);
+      color: var(--white);
+      padding: 14px 48px 14px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .pw-input:focus { border-color: rgba(240,165,0,0.5); }
+    .pw-input.error { border-color: var(--red); animation: shake 0.35s ease; }
+    .pw-input::placeholder { color: rgba(122,143,176,0.4); letter-spacing: 1px; font-size: 12px; }
+
+    .toggle-pw {
+      position: absolute; right: 14px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: rgba(122,143,176,0.4); transition: color 0.15s;
+      padding: 4px;
+    }
+    .toggle-pw:hover { color: var(--gold); }
+    .toggle-pw svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ERROR MSG */
+    .error-msg {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 1px;
+      color: var(--red);
+      height: 16px;
+      margin-bottom: 16px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .error-msg.visible { opacity: 1; }
+
+    /* BUTTON */
+    .gate-btn {
+      width: 100%;
+      background: var(--gold);
+      color: var(--navy);
+      border: 2px solid var(--gold);
+      padding: 15px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px; letter-spacing: 3px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .gate-btn:hover {
+      background: transparent;
+      color: var(--gold);
+    }
+    .gate-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s; }
+    .gate-btn:hover svg { transform: translateX(4px); }
+
+    /* SUCCESS STATE */
+    .gate-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 12px 0 4px;
+    }
+    .success-icon {
+      width: 56px; height: 56px;
+      background: rgba(0,212,160,0.1);
+      border: 1px solid rgba(0,212,160,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .success-icon svg { width: 24px; height: 24px; stroke: var(--green); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .success-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; color: var(--white); margin-bottom: 6px; }
+    .success-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: rgba(0,212,160,0.6); margin-bottom: 20px; }
+    .success-bar { width: 100%; height: 3px; background: rgba(0,212,160,0.15); margin-bottom: 0; overflow: hidden; }
+    .success-bar-fill { height: 100%; background: var(--green); width: 0%; transition: width 1.8s linear; }
+
+    /* FOOTER NOTE */
+    .gate-footer {
+      margin-top: 28px;
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 1.5px;
+      color: rgba(122,143,176,0.35);
+    }
+    .gate-footer::before {
+      content: '';
+      display: inline-block; width: 16px; height: 1px;
+      background: rgba(122,143,176,0.2);
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-8px); }
+      40%      { transform: translateX(8px); }
+      60%      { transform: translateX(-6px); }
+      80%      { transform: translateX(4px); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<nav>
+  <div style="display:flex;align-items:center">
+    <a href="index.html" class="nav-brand">FULCRUM</a>
+    <span class="nav-section">INVESTOR ACCESS</span>
+  </div>
+  <a href="index.html" class="nav-back">← Back to Platform</a>
+</nav>
+
+<div class="gate-wrap">
+  <div class="gate-card">
+
+    <!-- LOCKED STATE -->
+    <div id="lockState">
+      <div class="gate-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <div class="gate-label">Citadel Network · Confidential</div>
+      <div class="gate-title">Investor <span>Access</span></div>
+      <div class="gate-desc">This content is restricted to qualified investors and authorized advisors. Enter your access code to continue.</div>
+
+      <div class="input-wrap">
+        <input
+          class="pw-input"
+          id="pwInput"
+          type="password"
+          placeholder="Enter access code"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          onkeydown="if(event.key==='Enter')checkPassword()"
+        />
+        <button class="toggle-pw" id="toggleBtn" onclick="toggleVisibility()" tabindex="-1" type="button">
+          <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+
+      <div class="error-msg" id="errorMsg">Incorrect access code. Please try again.</div>
+
+      <button class="gate-btn" onclick="checkPassword()">
+        Unlock Investor Brief
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="gate-success" id="successState">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="success-title">Access Granted</div>
+      <div class="success-sub">Redirecting to Investor Brief...</div>
+      <div class="success-bar"><div class="success-bar-fill" id="progressBar"></div></div>
+    </div>
+
+  </div>
+
+  <div class="gate-footer">
+    DIGITAL TRANSFORMATIONS LLC · CONFIDENTIAL · AUTHORIZED USE ONLY
+  </div>
+</div>
+
+<script>
+  // SHA-256 hash of the password — password is not stored in plaintext
+  // Hash of: Fulcrum2026
+  const HASH = '230b4593df28b76cb0477b85488c8a5c52aab49e8e592461a44d2059cfc44bac';
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function checkPassword() {
+    const input = document.getElementById('pwInput');
+    const err   = document.getElementById('errorMsg');
+    const val   = input.value.trim();
+
+    if (!val) {
+      input.classList.add('error');
+      err.classList.add('visible');
+      err.textContent = 'Please enter an access code.';
+      setTimeout(() => input.classList.remove('error'), 400);
+      return;
+    }
+
+    const hashed = await sha256(val);
+
+    if (hashed === HASH) {
+      // Correct — show success and redirect
+      document.getElementById('lockState').style.display = 'none';
+      const s = document.getElementById('successState');
+      s.style.display = 'flex';
+      // animate progress bar
+      setTimeout(() => {
+        document.getElementById('progressBar').style.width = '100%';
+      }, 50);
+      // redirect after bar fills
+      setTimeout(() => {
+        window.location.href = 'blog-investor-thesis.html';
+      }, 2000);
+    } else {
+      // Wrong
+      input.classList.add('error');
+      err.classList.add('visible');
+      err.textContent = 'Incorrect access code. Please try again.';
+      input.value = '';
+      input.focus();
+      setTimeout(() => {
+        input.classList.remove('error');
+      }, 400);
+    }
+  }
+
+  function toggleVisibility() {
+    const input = document.getElementById('pwInput');
+    const icon  = document.getElementById('eyeIcon');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+    } else {
+      input.type = 'password';
+      icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    }
+  }
+
+  // Auto-focus
+  document.getElementById('pwInput').focus();
+</script>
+</body>
+</html>
