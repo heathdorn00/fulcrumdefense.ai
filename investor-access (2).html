@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="refresh" content="0; url=blog-investor-thesis.html"/>
+  <title>Investor Access — Fulcrum Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:    #060d1f;
+      --navy-mid:#0b1733;
+      --fulcrum: #00c8ff;
+      --gold:    #f0a500;
+      --green:   #00d4a0;
+      --white:   #f0f4ff;
+      --gray:    #7a8fb0;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.12;
+    }
+    .orb-1 { width: 600px; height: 600px; background: var(--fulcrum); top: -200px; right: -100px; }
+    .orb-2 { width: 500px; height: 500px; background: var(--gold); bottom: -200px; left: -100px; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(6,13,31,0.97);
+      border-bottom: 1px solid rgba(0,200,255,0.1);
+      backdrop-filter: blur(20px); z-index: 100;
+    }
+    .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--fulcrum); text-decoration: none; }
+    .nav-section { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(240,165,0,0.5); border-left: 1px solid rgba(240,165,0,0.15); padding-left: 20px; margin-left: 20px; }
+    .nav-back { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gray); text-decoration: none; transition: color 0.15s; }
+    .nav-back:hover { color: var(--fulcrum); }
+
+    .gate-wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 480px;
+      padding: 0 24px;
+    }
+
+    .gate-card {
+      background: rgba(11,23,51,0.85);
+      border: 1px solid rgba(240,165,0,0.2);
+      padding: 48px 44px 44px;
+      position: relative;
+      backdrop-filter: blur(20px);
+    }
+    .gate-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold), rgba(240,165,0,0.2));
+    }
+
+    .gate-success {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 12px 0 4px;
+    }
+    .success-icon {
+      width: 56px; height: 56px;
+      background: rgba(0,212,160,0.1);
+      border: 1px solid rgba(0,212,160,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .success-icon svg { width: 24px; height: 24px; stroke: var(--green); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .success-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; color: var(--white); margin-bottom: 6px; }
+    .success-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: rgba(0,212,160,0.6); margin-bottom: 20px; }
+    .success-bar { width: 100%; height: 3px; background: rgba(0,212,160,0.15); overflow: hidden; }
+    .success-bar-fill { height: 100%; background: var(--green); width: 0%; transition: width 1.8s linear; }
+
+    .gate-footer {
+      margin-top: 28px;
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 1.5px;
+      color: rgba(122,143,176,0.35);
+    }
+    .gate-footer::before {
+      content: '';
+      display: inline-block; width: 16px; height: 1px;
+      background: rgba(122,143,176,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<nav>
+  <div style="display:flex;align-items:center">
+    <a href="index.html" class="nav-brand">FULCRUM</a>
+    <span class="nav-section">INVESTOR ACCESS</span>
+  </div>
+  <a href="index.html" class="nav-back">← Back to Platform</a>
+</nav>
+
+<div class="gate-wrap">
+  <div class="gate-card">
+    <div class="gate-success">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="success-title">Access Granted</div>
+      <div class="success-sub">Redirecting to Investor Brief...</div>
+      <div class="success-bar"><div class="success-bar-fill" id="progressBar"></div></div>
+    </div>
+  </div>
+
+  <div class="gate-footer">
+    DIGITAL TRANSFORMATIONS LLC · CONFIDENTIAL · AUTHORIZED USE ONLY
+  </div>
+</div>
+
+<script>
+  // Animate progress bar then redirect
+  setTimeout(() => {
+    document.getElementById('progressBar').style.width = '100%';
+  }, 50);
+  setTimeout(() => {
+    window.location.href = 'blog-investor-thesis.html';
+  }, 2000);
+</script>
+</body>
+</html>
