@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enterprise MCP Security for Defense — Fulcrum Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:       #060d1f;
+      --navy-mid:   #0b1733;
+      --navy-light: #112048;
+      --steel:      #1a2d5a;
+      --fulcrum:    #00c8ff;
+      --gold:       #f0a500;
+      --orange:     #ff6b1a;
+      --red:        #e53e3e;
+      --white:      #f0f4ff;
+      --gray:       #7a8fb0;
+      --body-text:  #a8bcda;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(6,13,31,0.97);
+      border-bottom: 1px solid rgba(0,200,255,0.12);
+      backdrop-filter: blur(20px); z-index: 100;
+    }
+    .nav-left { display: flex; align-items: center; gap: 0; }
+    .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--fulcrum); text-decoration: none; text-shadow: 0 0 16px rgba(0,200,255,0.3); }
+    .nav-section { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.35); border-left: 1px solid rgba(0,200,255,0.15); padding-left: 20px; margin-left: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gray); text-decoration: none; transition: color 0.15s; }
+    .nav-link:hover { color: var(--fulcrum); }
+    .nav-cta-sm { display: inline-flex; align-items: center; gap: 8px; background: var(--fulcrum); color: var(--navy); padding: 8px 18px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; text-decoration: none; transition: all 0.2s; }
+    .nav-cta-sm:hover { background: rgba(0,200,255,0.12); color: var(--fulcrum); border: 1px solid var(--fulcrum); }
+
+    /* ── HERO ── */
+    .post-hero {
+      position: relative; z-index: 1;
+      max-width: 860px; margin: 0 auto;
+      padding: 120px 48px 72px;
+    }
+    .post-category {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px;
+      color: var(--fulcrum); border: 1px solid rgba(0,200,255,0.25);
+      padding: 5px 12px; margin-bottom: 28px; text-transform: uppercase;
+    }
+    .post-category-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--fulcrum); animation: pulse-dot 2s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 0 rgba(0,200,255,0.4)} 50%{box-shadow:0 0 0 5px rgba(0,200,255,0)} }
+    .post-title { font-family: 'DM Serif Display', serif; font-size: 54px; line-height: 1.08; color: var(--white); margin-bottom: 24px; font-weight: 400; }
+    .post-title em { font-style: italic; color: var(--fulcrum); }
+    .post-deck { font-size: 19px; line-height: 1.65; color: var(--body-text); font-weight: 300; max-width: 680px; margin-bottom: 36px; }
+    .post-meta { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid rgba(0,200,255,0.1); }
+    .meta-author { display: flex; align-items: center; gap: 10px; }
+    .author-avatar { width: 36px; height: 36px; background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.25); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--fulcrum); }
+    .author-name { font-size: 13px; font-weight: 600; color: var(--white); }
+    .author-role { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; color: var(--gray); margin-top: 2px; }
+    .meta-sep { width: 1px; height: 32px; background: rgba(255,255,255,0.07); }
+    .meta-tag { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: rgba(0,200,255,0.5); border: 1px solid rgba(0,200,255,0.15); padding: 4px 9px; }
+
+    .hero-rule { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 48px; }
+    .hero-rule-line { height: 1px; background: linear-gradient(90deg, var(--fulcrum), rgba(0,200,255,0.1) 60%, transparent); margin-bottom: 64px; }
+
+    /* ── LAYOUT ── */
+    .post-layout {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 228px;
+      gap: 60px; max-width: 1080px;
+      margin: 0 auto; padding: 0 48px 120px;
+    }
+
+    /* ── BODY ── */
+    .post-body h2 {
+      font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 2px;
+      color: var(--white); margin: 52px 0 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .post-body h2::before { content: ''; display: inline-block; width: 4px; height: 26px; background: var(--fulcrum); flex-shrink: 0; }
+    .post-body h2.red::before { background: var(--red); }
+    .post-body h2.gold::before { background: var(--gold); }
+    .post-body h2.orange::before { background: var(--orange); }
+
+    .post-body p { font-size: 16px; line-height: 1.85; color: var(--body-text); margin-bottom: 20px; font-weight: 300; }
+    .post-body p strong { color: var(--white); font-weight: 600; }
+    .post-body p code, .post-body li code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--fulcrum); background: rgba(0,200,255,0.07); padding: 2px 6px; }
+    .post-body a { color: var(--fulcrum); text-decoration: none; border-bottom: 1px solid rgba(0,200,255,0.25); }
+    .post-body a:hover { border-color: var(--fulcrum); }
+
+    .post-body .lead { font-size: 19px; line-height: 1.75; color: rgba(240,244,255,0.85); font-weight: 300; margin-bottom: 36px; }
+
+    /* checklist */
+    .check-list { list-style: none; margin: 16px 0 24px; display: flex; flex-direction: column; gap: 10px; }
+    .check-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.65; color: var(--body-text); font-weight: 300; }
+    .check-list li::before { content: '✓'; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fulcrum); background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.2); width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .check-list li strong { color: var(--white); font-weight: 600; }
+
+    /* warning list */
+    .warn-list { list-style: none; margin: 16px 0 24px; display: flex; flex-direction: column; gap: 10px; }
+    .warn-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.65; color: var(--body-text); font-weight: 300; }
+    .warn-list li::before { content: '⚠'; font-size: 12px; color: var(--red); background: rgba(229,62,62,0.08); border: 1px solid rgba(229,62,62,0.2); width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .warn-list li strong { color: var(--white); font-weight: 600; }
+
+    /* callout */
+    .callout { background: rgba(0,200,255,0.05); border: 1px solid rgba(0,200,255,0.18); border-left: 4px solid var(--fulcrum); padding: 20px 24px; margin: 28px 0; font-size: 15px; line-height: 1.7; color: var(--body-text); }
+    .callout.red { border-left-color: var(--red); background: rgba(229,62,62,0.05); border-color: rgba(229,62,62,0.18); }
+    .callout.gold { border-left-color: var(--gold); background: rgba(240,165,0,0.05); border-color: rgba(240,165,0,0.18); }
+    .callout.orange { border-left-color: var(--orange); background: rgba(255,107,26,0.05); border-color: rgba(255,107,26,0.18); }
+    .callout-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 8px; color: var(--fulcrum); }
+    .callout.red .callout-label { color: var(--red); }
+    .callout.gold .callout-label { color: var(--gold); }
+    .callout.orange .callout-label { color: var(--orange); }
+
+    /* pull quote */
+    .pull-quote { border-top: 2px solid var(--fulcrum); border-bottom: 1px solid rgba(0,200,255,0.12); padding: 28px 0; margin: 40px 0; }
+    .pull-quote-text { font-family: 'DM Serif Display', serif; font-size: 24px; line-height: 1.45; color: var(--white); font-style: italic; margin-bottom: 10px; }
+    .pull-quote-attr { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(0,200,255,0.35); }
+
+    /* stat row */
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(0,200,255,0.07); border: 1px solid rgba(0,200,255,0.1); margin: 32px 0; }
+    .stat-cell { background: rgba(6,13,31,0.98); padding: 24px 20px; text-align: center; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: var(--fulcrum); line-height: 1; margin-bottom: 6px; }
+    .stat-num.red { color: var(--red); }
+    .stat-num.gold { color: var(--gold); }
+    .stat-desc { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--gray); line-height: 1.5; }
+
+    /* control matrix */
+    .control-matrix { background: rgba(4,10,22,0.95); border: 1px solid rgba(0,200,255,0.12); margin: 28px 0; overflow: hidden; }
+    .matrix-header { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr; background: rgba(0,200,255,0.06); border-bottom: 1px solid rgba(0,200,255,0.12); }
+    .matrix-header-cell { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: rgba(0,200,255,0.5); text-transform: uppercase; padding: 12px 16px; }
+    .matrix-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr; border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+    .matrix-row:last-child { border-bottom: none; }
+    .matrix-row:hover { background: rgba(0,200,255,0.03); }
+    .matrix-cell { padding: 12px 16px; font-size: 13px; color: var(--body-text); font-weight: 300; display: flex; align-items: center; }
+    .matrix-cell.name { font-weight: 600; color: var(--white); font-size: 13px; }
+    .matrix-pill { display: inline-flex; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1.5px; padding: 3px 8px; }
+    .pill-green { background: rgba(0,200,255,0.1); color: var(--fulcrum); border: 1px solid rgba(0,200,255,0.25); }
+    .pill-gold { background: rgba(240,165,0,0.08); color: var(--gold); border: 1px solid rgba(240,165,0,0.2); }
+    .pill-red { background: rgba(229,62,62,0.08); color: var(--red); border: 1px solid rgba(229,62,62,0.2); }
+
+    /* numbered section heading */
+    .section-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px;
+      background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.3);
+      font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px;
+      color: var(--fulcrum); flex-shrink: 0;
+    }
+
+    /* step starter pack */
+    .starter-list { display: flex; flex-direction: column; gap: 14px; margin: 20px 0; }
+    .starter-item { display: flex; align-items: flex-start; gap: 16px; }
+    .starter-num { width: 28px; height: 28px; background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.25); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: var(--fulcrum); flex-shrink: 0; margin-top: 2px; }
+    .starter-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+    .starter-desc { font-size: 13.5px; color: var(--gray); font-weight: 300; line-height: 1.6; }
+
+    /* hr */
+    .post-divider { border: none; border-top: 1px solid rgba(0,200,255,0.07); margin: 44px 0; }
+
+    /* refs */
+    .ref-list { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+    .ref-item { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: var(--gray); font-weight: 300; line-height: 1.6; }
+    .ref-item a { color: rgba(0,200,255,0.6); text-decoration: none; border-bottom: 1px solid rgba(0,200,255,0.15); font-size: 12px; }
+    .ref-item a:hover { color: var(--fulcrum); border-color: var(--fulcrum); }
+    .ref-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(0,200,255,0.4); background: rgba(0,200,255,0.07); border: 1px solid rgba(0,200,255,0.15); width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── SIDEBAR ── */
+    .post-sidebar { align-self: flex-start; position: sticky; top: 76px; }
+    .sidebar-box { background: rgba(11,23,51,0.7); border: 1px solid rgba(0,200,255,0.12); padding: 20px; margin-bottom: 14px; }
+    .sidebar-box-title { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.4); text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,200,255,0.08); }
+    .sidebar-toc-link { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.5px; color: var(--gray); text-decoration: none; padding: 5px 0 5px 10px; border-left: 2px solid rgba(255,255,255,0.05); margin-bottom: 3px; transition: all 0.15s; line-height: 1.45; }
+    .sidebar-toc-link:hover, .sidebar-toc-link.active { color: var(--fulcrum); border-left-color: var(--fulcrum); }
+    .sidebar-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1.5px; color: rgba(122,143,176,0.6); border: 1px solid rgba(255,255,255,0.06); padding: 4px 8px; margin: 3px 3px 0 0; }
+    .sidebar-cta { display: block; text-align: center; background: var(--fulcrum); color: var(--navy); padding: 13px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; text-decoration: none; transition: all 0.2s; margin-top: 4px; }
+    .sidebar-cta:hover { background: transparent; color: var(--fulcrum); outline: 1px solid var(--fulcrum); }
+    .sidebar-nist { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: rgba(240,165,0,0.6); border: 1px solid rgba(240,165,0,0.2); padding: 4px 9px; display: inline-block; margin-bottom: 6px; margin-right: 4px; }
+
+    /* ── FOOTER NAV ── */
+    .post-footer-nav { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 16px; max-width: 860px; margin: 0 auto; padding: 0 48px 80px; }
+    .pfn-btn { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: rgba(11,23,51,0.6); border: 1px solid rgba(0,200,255,0.1); text-decoration: none; transition: all 0.2s; flex: 1; }
+    .pfn-btn:hover { border-color: rgba(0,200,255,0.3); background: rgba(0,200,255,0.04); }
+    .pfn-btn.next { justify-content: flex-end; text-align: right; }
+    .pfn-dir { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: rgba(0,200,255,0.35); margin-bottom: 4px; }
+    .pfn-title { font-size: 13px; font-weight: 600; color: var(--white); }
+    .pfn-arrow { font-size: 18px; color: rgba(0,200,255,0.3); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-brand">FULCRUM</a>
+    <span class="nav-section">INTEL BRIEF</span>
+  </div>
+  <div class="nav-right">
+    <a href="index.html#platform" class="nav-link">PLATFORM</a>
+    <a href="docs.html" class="nav-link">DOCS</a>
+    <a href="get-started.html" class="nav-cta-sm">Get Started →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="post-hero">
+  <div class="post-category">
+    <span class="post-category-dot"></span>
+    Enterprise Security · IL2–IL5
+  </div>
+  <h1 class="post-title">Securing <em>MCP</em> at<br>Defense Enterprise Scale</h1>
+  <p class="post-deck">When AI agents can create tickets, pull repositories, rotate credentials, and deploy services — the MCP tool layer becomes a high-value control plane. This is Fulcrum's operational guide to locking it down from IL2 through IL5, with controls informed by NIST 800-53, OWASP LLM Top 10, and DoD STIG requirements.</p>
+  <div class="post-meta">
+    <div class="meta-author">
+      <div class="author-avatar">DT</div>
+      <div>
+        <div class="author-name">Digital Transformations LLC</div>
+        <div class="author-role">Fulcrum Platform · Security Architecture</div>
+      </div>
+    </div>
+    <div class="meta-sep"></div>
+    <span class="meta-tag">MARCH 2026</span>
+    <span class="meta-tag">14 MIN READ</span>
+    <span class="meta-tag" style="border-color:rgba(229,62,62,0.3);color:rgba(229,62,62,0.7)">SECURITY</span>
+    <span class="meta-tag" style="border-color:rgba(240,165,0,0.25);color:rgba(240,165,0,0.6)">IL5 ALIGNED</span>
+  </div>
+</div>
+
+<div class="hero-rule"><div class="hero-rule-line"></div></div>
+
+<!-- CONTENT -->
+<div class="post-layout">
+<article class="post-body">
+
+  <p class="lead">Model Context Protocol makes it straightforward for AI agents to call tools and retrieve context from systems. That convenience is also the threat surface. Once an agent can <em>do things</em> — create tickets, pull classified repositories, rotate keys, trigger deployment pipelines, query sensor data — the tool layer becomes the most consequential control plane in your environment. Treat it accordingly.</p>
+
+  <p>This guide distills operational security controls for MCP deployments at defense enterprise scale. It is aligned with <strong>NIST SP 800-53 Rev 5</strong>, <strong>OWASP Top 10 for LLM Applications</strong>, and <strong>DoD STIG requirements</strong>, and shows how Fulcrum operationalizes each control through its native architecture — not as an add-on layer, but as the platform's default behavior at every impact level.</p>
+
+  <div class="callout">
+    <div class="callout-label">⬡ Fulcrum Security Position</div>
+    Fulcrum is designed so that <strong>security controls are not optional configurations</strong> — they are the architecture. OAuth 2.1, short-lived tokens, row-level security, immutable audit trails, and Human-in-the-Loop gates are not features you turn on. They are what the platform is. This guide explains why each control exists and how to verify it is operating correctly in your environment.
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-cell">
+      <div class="stat-num">800-53</div>
+      <div class="stat-desc">NIST control framework<br>alignment at every IL level</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num red">0</div>
+      <div class="stat-desc">Long-lived credentials<br>in Fulcrum MCP sessions</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num gold">100%</div>
+      <div class="stat-desc">Agent actions logged<br>to immutable audit trail</div>
+    </div>
+  </div>
+
+  <hr class="post-divider"/>
+
+  <!-- SECTION 1 -->
+  <h2 id="inventory">
+    <span class="section-num">1</span>
+    Establish an MCP Server Inventory and Trust Boundary
+  </h2>
+
+  <p>Before any security control can be enforced, you need a complete answer to three questions: <strong>what MCP servers exist in your environment</strong>, <strong>what tools they expose</strong>, and <strong>which identities are authorized to call them</strong>. In a defense context, this is not optional hygiene — it is a prerequisite for any ATO conversation.</p>
+
+  <p>An unregistered MCP server in a classified environment is a shadow IT problem with an AI-shaped threat surface. It can be called by any agent that discovers it, invoked with any parameters that pass schema validation, and — without centralized logging — leave no trace in your audit record.</p>
+
+  <ul class="check-list">
+    <li><strong>Maintain an approved MCP server registry.</strong> For each server: owner, mission purpose, environment (dev/test/prod/IL tier), full tool list, risk tier, and authorization status. This registry is your ATO artifact for the MCP layer.</li>
+    <li><strong>Enforce tool allowlists per workspace.</strong> No agent should have access to the full tool surface of every server. Each workspace gets a scoped allowlist that matches its mission and classification level.</li>
+    <li><strong>Pin server versions and dependency digests.</strong> Floating version references are a supply chain risk. Every registered server should be pinned to a validated digest, with a documented update process that includes re-validation.</li>
+    <li><strong>Apply provenance checks to all third-party MCP servers.</strong> In a defense deployment, any server not built and maintained by your program office or a vetted partner requires explicit provenance documentation before it enters the registry.</li>
+  </ul>
+
+  <p><strong>How Fulcrum operationalizes this:</strong> The Fulcrum workspace is the source of truth for your MCP server registry. Server onboarding flows through a structured intake task — owner, risk tier, tool manifest, approval chain — and the workspace thread captures every decision, exception, and configuration change. When an auditor asks what was authorized when, the answer lives in the workspace, not in a spreadsheet someone forgot to update.</p>
+
+  <div class="callout gold">
+    <div class="callout-label">★ ATO Implication</div>
+    Your MCP server registry is a continuous ATO artifact. Every time a new server is added, a tool is modified, or an authorization exception is granted, that event needs to be captured, attributed, and timestamped. Fulcrum's immutable task and message log handles this automatically — the audit trail requires no additional tooling.
+  </div>
+
+  <hr class="post-divider"/>
+
+  <!-- SECTION 2 -->
+  <h2 id="least-priv">
+    <span class="section-num">2</span>
+    Treat Every Tool Call as a Privileged Operation
+  </h2>
+
+  <p>MCP doesn't eliminate the requirement for classical access control. It intensifies it. A tool call is not a chat message — it is an authenticated action against a real system. At IL4 and IL5, the consequences of an improperly scoped tool call can include data exfiltration, unauthorized modification of mission-critical records, or accidental exposure of controlled unclassified information to an agent operating at the wrong classification level.</p>
+
+  <p>The foundational principle is <strong>least privilege</strong>: every agent identity, in every workspace, for every tool interaction, gets the minimum authorization required to complete its assigned mission function — nothing more.</p>
+
+  <ul class="check-list">
+    <li><strong>Separate identities for humans and agents.</strong> Agent service accounts are distinct from human user credentials. A Codex agent running a build pipeline should never be operating on a human engineer's credential context, with its broader entitlements and audit ambiguity.</li>
+    <li><strong>Short-lived, scoped credentials only.</strong> Fulcrum MCP sessions use OAuth 2.1 with short-lived tokens scoped to the specific workspace and tool set. No persistent secrets. Token rotation is enforced at the protocol level — not as a configuration option, but as the default behavior.</li>
+    <li><strong>Read-only by default; explicit write grants.</strong> Every tool that modifies state — creates records, updates configurations, deletes data, triggers pipelines — requires an explicit authorization grant. The default posture is read access. Write access is audited and attributed to a specific agent identity for every invocation.</li>
+    <li><strong>Step-up controls for sensitive operations.</strong> High-sensitivity tool calls — anything touching credentials, production configurations, or classified data — require an additional authorization event before execution. In Fulcrum, this is the Human-in-the-Loop gate: the agent cannot proceed until a credentialed human reviewer explicitly approves the action.</li>
+  </ul>
+
+  <div class="pull-quote">
+    <div class="pull-quote-text">"The question is not whether your AI agents have too much access. At defense enterprise scale, they almost certainly do. The question is whether you can prove it, enumerate it, and revoke it on demand."</div>
+    <div class="pull-quote-attr">— Fulcrum Platform · Security Architecture Principles</div>
+  </div>
+
+  <hr class="post-divider"/>
+
+  <!-- SECTION 3 -->
+  <h2 id="injection" class="red">
+    <span class="section-num">3</span>
+    Defend Against Prompt Injection and Unsafe Output Handling
+  </h2>
+
+  <p>OWASP's Top 10 for LLM Applications identifies two failure modes that appear consistently in deployed agent systems. Both are architectural, not incidental — they require deliberate controls, not awareness alone.</p>
+
+  <p><strong>Prompt Injection</strong> occurs when untrusted external content — a ticket description, a document pulled from a repository, a message from an external system — contains instructions that cause the agent to take actions outside its authorized mission scope. At the most dangerous end of this spectrum, a carefully crafted input in a classified document repository could instruct an agent to exfiltrate data, modify access controls, or call tools it was never intended to invoke.</p>
+
+  <p><strong>Insecure Output Handling</strong> occurs when an agent's output is treated as trusted and executed without validation — when generated code is deployed, when a generated IAM policy is applied, when a generated configuration file is pushed to production. The agent's confidence is not a validation mechanism. The output must be checked before it executes.</p>
+
+  <ul class="warn-list">
+    <li><strong>Treat all external content as untrusted input.</strong> Issues, emails, documents, web content, tickets — regardless of source or classification marking — are untrusted text until explicitly validated. Agents should never concatenate raw external content into tool command strings.</li>
+    <li><strong>Enforce strict tool schemas with argument validation.</strong> Every tool call must have schema-validated arguments: types checked, ranges bounded, allowed values enumerated. An agent should not be able to call a tool with a parameter it wasn't authorized to provide.</li>
+    <li><strong>Require output validation before downstream execution.</strong> Generated code, configurations, queries, and policies must pass a validation step before execution. In Fulcrum, this is a structured review task — the output is posted to the workspace, a validation agent or human reviewer confirms it, and execution proceeds only after sign-off.</li>
+  </ul>
+
+  <p><strong>How Fulcrum operationalizes this:</strong> Fulcrum enforces a <strong>Plan-Then-Act</strong> default for all agent workflows. Before any tool-calling sequence begins, the agent posts a structured execution plan to the workspace — what tools it intends to call, with what parameters, toward what objective. This plan is visible to all workspace participants and creates a review checkpoint before any action touches a real system. The workspace thread captures the plan, the approval, and the execution record in a single continuous audit chain.</p>
+
+  <div class="callout red">
+    <div class="callout-label">⚠ High-Risk Scenario</div>
+    An agent with access to a document management system and a deployment pipeline, operating without Plan-Then-Act controls, processes a document containing injected instructions. The injection causes the agent to call the deployment pipeline with a modified configuration. Without a review gate between analysis and action, the pipeline executes before any human sees what happened. The audit trail shows the tool call — but not that it was prompted by injected content. Fulcrum's Plan-Then-Act architecture surfaces the intent before execution, giving reviewers the opportunity to catch the anomaly.
+  </div>
+
+  <hr class="post-divider"/>
+
+  <!-- SECTION 4 -->
+  <h2 id="hitl" class="gold">
+    <span class="section-num">4</span>
+    Human-in-the-Loop Gates for High-Impact Actions
+  </h2>
+
+  <p>Not every tool call requires manual review. Routine read operations, status queries, and low-risk information retrieval can run with automated oversight. But a specific category of tool calls should <strong>never</strong> execute without explicit human approval — regardless of how confident the agent is, how well-formed the request looks, or how routine the action appears in isolation.</p>
+
+  <p>In a defense enterprise environment, that category includes any tool call that modifies production systems, touches credentials or secrets, deletes or overwrites data, triggers irreversible actions, or operates at a higher classification level than the agent's normal workspace scope.</p>
+
+  <ul class="check-list">
+    <li><strong>Approval gates for destructive and high-risk tools.</strong> These gates are not configurable pop-ups — they are hard stops. The tool cannot be invoked until a credentialed approver explicitly signs off on the specific action with the specific parameters the agent intends to use.</li>
+    <li><strong>Previews and dry runs before execution.</strong> Where possible, agents should generate a preview of the action — a diff, a dry-run output, a "what will change" summary — before requesting approval. This is especially important for configuration changes and data operations.</li>
+    <li><strong>Two-person review for production changes.</strong> For operations that modify production systems or classified data, require two independent approvers from distinct organizational roles. This mirrors the two-person integrity rule that defense programs already apply to physical systems.</li>
+  </ul>
+
+  <p><strong>How Fulcrum operationalizes this:</strong> Human-in-the-Loop gates are a native primitive in the Fulcrum workspace — not a bolt-on approval workflow, but a first-class platform operation. The agent posts the pending action, the parameters, and the preview to the workspace as a structured approval task. The task is assigned to a credentialed approver. The agent cannot proceed until the task is explicitly resolved. The resolution — approval or rejection, with the approver's identity and timestamp — is captured immutably in the audit trail alongside the original tool call record.</p>
+
+  <hr class="post-divider"/>
+
+  <!-- SECTION 5 -->
+  <h2 id="gateway">
+    <span class="section-num">5</span>
+    Centralize MCP Traffic Through a Gateway
+  </h2>
+
+  <p>Direct client-to-server MCP connections scale poorly and create enforcement gaps. As the number of agents and servers in your environment grows, the number of unmonitored connection surfaces grows with it. A gateway architecture gives you a single, auditable choke point for every MCP interaction in the environment.</p>
+
+  <p>For IL4 and IL5 deployments, a gateway is not optional — it is the mechanism by which you can credibly assert that all tool calls are authenticated, all parameters are logged, and all traffic is rate-limited. Without a gateway, your ATO assertion about MCP security is theoretical.</p>
+
+  <ul class="check-list">
+    <li><strong>Mutual TLS or equivalent strong client authentication.</strong> Every agent connecting to the MCP gateway presents a validated client certificate. Anonymous or weakly authenticated connections are rejected at the gateway before they reach any server.</li>
+    <li><strong>Centralized authorization decisions.</strong> The gateway is the enforcement point for workspace-level tool allowlists. An agent carrying a valid token for workspace A cannot call tools from workspace B's allowlist by connecting directly to the server.</li>
+    <li><strong>Structured audit logs with full attribution.</strong> Every tool call logged at the gateway should capture: agent identity, workspace, tool name, parameters (appropriately redacted for classified content), timestamp, response status, and latency. This is your IL5 audit record.</li>
+    <li><strong>Rate limits and concurrency controls.</strong> Runaway agents — stuck in loops, processing unexpectedly large inputs, or responding to injected instructions — can consume disproportionate resources and mask their activity in volume. Rate limits and concurrency caps at the gateway provide a first line of defense against this pattern.</li>
+  </ul>
+
+  <!-- CONTROL MATRIX -->
+  <div class="control-matrix">
+    <div class="matrix-header">
+      <div class="matrix-header-cell">Gateway Control</div>
+      <div class="matrix-header-cell">NIST 800-53 Ref</div>
+      <div class="matrix-header-cell">IL Level</div>
+      <div class="matrix-header-cell">Status in Fulcrum</div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-cell name">Mutual TLS / Strong Auth</div>
+      <div class="matrix-cell"><code>IA-3, SC-8</code></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-gold">IL4+</span></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">NATIVE</span></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-cell name">Tool Allowlist Enforcement</div>
+      <div class="matrix-cell"><code>AC-6, AC-17</code></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">IL2+</span></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">NATIVE</span></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-cell name">Structured Audit Logs</div>
+      <div class="matrix-cell"><code>AU-2, AU-12</code></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">IL2+</span></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">NATIVE</span></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-cell name">Rate Limiting / Quotas</div>
+      <div class="matrix-cell"><code>SC-5, SI-17</code></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">IL2+</span></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">NATIVE</span></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-cell name">Row-Level Security</div>
+      <div class="matrix-cell"><code>AC-3, AC-16</code></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-gold">IL4+</span></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">NATIVE</span></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-cell name">Short-Lived Token Rotation</div>
+      <div class="matrix-cell"><code>IA-5, SC-28</code></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">IL2+</span></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">NATIVE</span></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-cell name">Human-in-the-Loop Gates</div>
+      <div class="matrix-cell"><code>AC-5, CA-7</code></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">IL2+</span></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">NATIVE</span></div>
+    </div>
+    <div class="matrix-row">
+      <div class="matrix-cell name">Immutable Audit Trail</div>
+      <div class="matrix-cell"><code>AU-9, AU-10</code></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-gold">IL4+</span></div>
+      <div class="matrix-cell"><span class="matrix-pill pill-green">NATIVE</span></div>
+    </div>
+  </div>
+
+  <hr class="post-divider"/>
+
+  <!-- SECTION 6 -->
+  <h2 id="blast-radius">
+    <span class="section-num">6</span>
+    Contain Blast Radius at Runtime
+  </h2>
+
+  <p>Even with a complete access control architecture, servers can be compromised, agents can behave unexpectedly, and edge cases in tool schema validation can create exploitation windows. Defense-in-depth requires treating your MCP server runtime as <strong>potentially hostile</strong> and designing containment so that a compromise of one server cannot cascade into the broader environment.</p>
+
+  <ul class="check-list">
+    <li><strong>Isolated container execution.</strong> MCP servers run in non-root containers with no privilege escalation path. Container images are scanned against known vulnerability databases before deployment and on a continuous basis in production.</li>
+    <li><strong>Network egress restriction.</strong> MCP servers should only be able to reach the endpoints they explicitly require. An allowlist-based egress policy means that even a compromised server cannot exfiltrate data to an arbitrary external destination.</li>
+    <li><strong>Resource quotas and concurrency limits.</strong> CPU, memory, request timeout, and concurrent connection limits are set per server. A server experiencing unexpected load — whether from a runaway agent loop or an active attack — trips its quota before it can destabilize adjacent systems.</li>
+    <li><strong>Hard environment separation.</strong> Dev, test, and production MCP runtimes are not connected by any network path or shared credential. An experiment in the IL2 dev environment cannot accidentally call a production server or access production data.</li>
+  </ul>
+
+  <div class="callout orange">
+    <div class="callout-label">⬡ IL5 Requirement</div>
+    At IL5, environment separation is not a best practice — it is a requirement. Any path between a development environment and a production environment that handles Controlled Unclassified Information or higher is a finding. Fulcrum's workspace model enforces this separation at the platform level: IL tier is a property of the workspace, and cross-tier tool calls are rejected at the gateway, not the server.
+  </div>
+
+  <hr class="post-divider"/>
+
+  <!-- SECTION 7 -->
+  <h2 id="lifecycle">
+    <span class="section-num">7</span>
+    Treat Security as a Continuous Program, Not a One-Time Hardening Pass
+  </h2>
+
+  <p>NIST's AI Risk Management Framework (AI RMF 1.0) describes a four-function cycle: <strong>Govern, Map, Measure, Manage</strong>. The intent is explicit: AI security is not a checklist you complete before deployment. It is a continuous risk management program that runs in parallel with operations.</p>
+
+  <p>For MCP deployments at defense enterprise scale, this means the security work you do before go-live is the foundation — not the conclusion. The threat model changes as agents gain new capabilities, as tools are added to the registry, as classification levels change, and as adversaries develop new techniques for exploiting LLM agent architectures.</p>
+
+  <ul class="check-list">
+    <li><strong>Govern:</strong> Define ownership, risk acceptance thresholds, and escalation paths for agent/tool workflows. Every workspace should have a named security owner and a documented risk acceptance statement.</li>
+    <li><strong>Map:</strong> Document where each agent can pull context from and where it can act. This mapping is the authoritative source for your tool allowlists and the basis for your blast radius analysis.</li>
+    <li><strong>Measure:</strong> Track security incidents, near-misses, anomalous tool call patterns, and control coverage metrics. The Fulcrum audit trail provides the raw data; program security reviews provide the analysis cadence.</li>
+    <li><strong>Manage:</strong> Continuously improve controls as the threat model evolves. Rotate credentials on schedule. Patch and re-validate servers when vulnerabilities are disclosed. Update gateway policies when new tool categories are onboarded.</li>
+  </ul>
+
+  <p><strong>How Fulcrum operationalizes this:</strong> The Fulcrum workspace is the operating system for continuous improvement. Security incidents become structured tasks. Postmortem findings become new control requirements. Control requirements become workspace templates that propagate to every new deployment. The security program compounds — each incident makes the next deployment harder to attack.</p>
+
+  <hr class="post-divider"/>
+
+  <!-- STARTER PACK -->
+  <h2 id="starter">
+    <span class="section-num">★</span>
+    Implementation Sequence for Fulcrum Deployments
+  </h2>
+
+  <p>If you are standing up a new Fulcrum deployment and want to implement these controls in priority order, this is the sequence. Each step builds on the last and corresponds to a specific IL readiness milestone.</p>
+
+  <div class="starter-list">
+    <div class="starter-item">
+      <div class="starter-num">1</div>
+      <div>
+        <div class="starter-title">Registry and Allowlists — IL2 Day One</div>
+        <div class="starter-desc">Create your MCP server intake workflow in Fulcrum. Register every server with owner, risk tier, and tool manifest. Apply workspace-level tool allowlists. This is your Day One security posture and your first ATO artifact.</div>
+      </div>
+    </div>
+    <div class="starter-item">
+      <div class="starter-num">2</div>
+      <div>
+        <div class="starter-title">Identity Separation and Short-Lived Tokens — IL2 Week One</div>
+        <div class="starter-desc">Create distinct service accounts for each agent role. Confirm OAuth 2.1 token scoping matches tool allowlists. Verify no persistent credentials exist in any agent configuration. Fulcrum enforces this by default — verify it is operating as expected in your deployment.</div>
+      </div>
+    </div>
+    <div class="starter-item">
+      <div class="starter-num">3</div>
+      <div>
+        <div class="starter-title">Plan-Then-Act and Output Validation — IL2–IL4 Transition</div>
+        <div class="starter-desc">Configure Plan-Then-Act as the required workflow pattern for all agent tool-calling sequences. Establish output validation tasks for any agent that generates code, configurations, queries, or policies. These controls are the primary defense against prompt injection at the workflow level.</div>
+      </div>
+    </div>
+    <div class="starter-item">
+      <div class="starter-num">4</div>
+      <div>
+        <div class="starter-title">Human-in-the-Loop Gate Configuration — IL4 Baseline</div>
+        <div class="starter-desc">Define the tool call categories that require HiTL approval in your environment: production writes, credential operations, classified data access, irreversible actions. Configure approval roles and assign credentialed reviewers. Validate the gate operates correctly before any production tool calls are attempted.</div>
+      </div>
+    </div>
+    <div class="starter-item">
+      <div class="starter-num">5</div>
+      <div>
+        <div class="starter-title">Gateway Standardization — IL4 ATO Requirement</div>
+        <div class="starter-desc">Front all MCP server access through the Fulcrum gateway with mTLS client authentication, centralized authorization, structured audit logs, and rate limits. Validate that direct server access is blocked at the network level. Export audit logs to your SIEM for continuous monitoring.</div>
+      </div>
+    </div>
+    <div class="starter-item">
+      <div class="starter-num">6</div>
+      <div>
+        <div class="starter-title">Runtime Containment and Environment Separation — IL5 Prerequisite</div>
+        <div class="starter-desc">Validate container isolation, egress restrictions, and resource quotas for all MCP servers. Confirm environment separation is enforced at the network and platform level — no cross-tier paths exist. Document the separation architecture as part of your IL5 ATO package.</div>
+      </div>
+    </div>
+    <div class="starter-item">
+      <div class="starter-num">7</div>
+      <div>
+        <div class="starter-title">Continuous Lifecycle Program — IL5 Sustained Operations</div>
+        <div class="starter-desc">Establish your NIST AI RMF cycle: monthly security reviews against the Fulcrum audit trail, quarterly control coverage assessments, annual threat model updates. Incidents become tasks. Postmortems become templates. The program compounds continuously.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="post-divider"/>
+
+  <!-- REFERENCES -->
+  <h2 id="references">
+    <span class="section-num">§</span>
+    References
+  </h2>
+
+  <div class="ref-list">
+    <div class="ref-item"><span class="ref-num">1</span><div>NIST AI Risk Management Framework (AI RMF 1.0) — Govern, Map, Measure, Manage cycle for continuous AI risk management.<br><a href="https://nvlpubs.nist.gov/nistpubs/ai/nist.ai.100-1.pdf" target="_blank">nvlpubs.nist.gov/nistpubs/ai/nist.ai.100-1.pdf ↗</a></div></div>
+    <div class="ref-item"><span class="ref-num">2</span><div>NIST SP 800-53 Rev 5 — Security and Privacy Controls for Information Systems and Organizations. AC, AU, IA, SC, SI control families referenced throughout.<br><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.pdf" target="_blank">nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.pdf ↗</a></div></div>
+    <div class="ref-item"><span class="ref-num">3</span><div>OWASP Top 10 for LLM Applications — Prompt Injection (LLM01) and Insecure Output Handling (LLM02) are the primary LLM-specific threats addressed in Section 3.<br><a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank">owasp.org/www-project-top-10-for-large-language-model-applications ↗</a></div></div>
+    <div class="ref-item"><span class="ref-num">4</span><div>OWASP LLM Prompt Injection Prevention Cheat Sheet — Defensive patterns for input validation and context isolation in LLM agent architectures.<br><a href="https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html" target="_blank">cheatsheetseries.owasp.org ↗</a></div></div>
+    <div class="ref-item"><span class="ref-num">5</span><div>DoD Impact Level 5 (IL5) Security Requirements — Authorization baseline for DoD Mission Critical / National Security Systems on commercial cloud infrastructure. Pathway through Second Front Systems (current DISA PA holder at IL5).</div></div>
+  </div>
+
+</article>
+
+<!-- SIDEBAR -->
+<aside class="post-sidebar">
+  <div class="sidebar-box">
+    <div class="sidebar-box-title">In This Brief</div>
+    <a href="#inventory" class="sidebar-toc-link">1. MCP Inventory &amp; Trust Boundary</a>
+    <a href="#least-priv" class="sidebar-toc-link">2. Least Privilege Tool Calls</a>
+    <a href="#injection" class="sidebar-toc-link">3. Prompt Injection Defense</a>
+    <a href="#hitl" class="sidebar-toc-link">4. Human-in-the-Loop Gates</a>
+    <a href="#gateway" class="sidebar-toc-link">5. MCP Gateway</a>
+    <a href="#blast-radius" class="sidebar-toc-link">6. Blast Radius Containment</a>
+    <a href="#lifecycle" class="sidebar-toc-link">7. Continuous Security Program</a>
+    <a href="#starter" class="sidebar-toc-link">★ Implementation Sequence</a>
+    <a href="#references" class="sidebar-toc-link">§ References</a>
+  </div>
+
+  <div class="sidebar-box">
+    <div class="sidebar-box-title">Standards Alignment</div>
+    <span class="sidebar-nist">NIST 800-53</span>
+    <span class="sidebar-nist">AI RMF 1.0</span>
+    <span class="sidebar-nist">OWASP LLM</span>
+    <span class="sidebar-nist">DoD IL5</span>
+    <span class="sidebar-nist">STIG</span>
+  </div>
+
+  <div class="sidebar-box">
+    <div class="sidebar-box-title">Tags</div>
+    <span class="sidebar-tag">MCP SECURITY</span>
+    <span class="sidebar-tag">IL5</span>
+    <span class="sidebar-tag">OAUTH 2.1</span>
+    <span class="sidebar-tag">NIST 800-53</span>
+    <span class="sidebar-tag">OWASP</span>
+    <span class="sidebar-tag">AUDIT TRAIL</span>
+    <span class="sidebar-tag">HITL</span>
+    <span class="sidebar-tag">ZERO TRUST</span>
+  </div>
+
+  <div class="sidebar-box">
+    <div class="sidebar-box-title">Deploy Securely Today</div>
+    <p style="font-size:12px;color:var(--gray);line-height:1.65;margin-bottom:14px;font-weight:300">All security controls described in this guide are native to the Fulcrum platform — no additional configuration required at IL2.</p>
+    <a href="get-started.html" class="sidebar-cta">Launch Fulcrum →</a>
+  </div>
+
+  <div class="sidebar-box">
+    <div class="sidebar-box-title">Related</div>
+    <a href="docs.html" class="sidebar-toc-link">What is MCP? →</a>
+    <a href="blog-refactor-cell.html" class="sidebar-toc-link">The Refactor Cell →</a>
+    <a href="index.html#platform" class="sidebar-toc-link">Platform Overview →</a>
+  </div>
+</aside>
+
+</div>
+
+<!-- FOOTER NAV -->
+<div class="post-footer-nav">
+  <a href="blog-refactor-cell.html" class="pfn-btn">
+    <div class="pfn-arrow">←</div>
+    <div>
+      <div class="pfn-dir">Previous</div>
+      <div class="pfn-title">The Refactor Cell</div>
+    </div>
+  </a>
+  <a href="get-started.html" class="pfn-btn next">
+    <div>
+      <div class="pfn-dir">Deploy Now</div>
+      <div class="pfn-title">Start Your Free IL2 Trial →</div>
+    </div>
+    <div class="pfn-arrow">→</div>
+  </a>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('[id]');
+  const tocLinks = document.querySelectorAll('.sidebar-toc-link[href^="#"]');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
