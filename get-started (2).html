@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Started — Fulcrum Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #060d1f;
+      --navy-mid:   #0b1733;
+      --navy-light: #112048;
+      --steel:      #1a2d5a;
+      --fulcrum:    #00c8ff;
+      --gold:       #f0a500;
+      --white:      #f0f4ff;
+      --gray:       #7a8fb0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* grid bg */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* glow orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,200,255,0.08) 0%, transparent 70%);
+      top: -200px; right: -100px;
+    }
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(240,165,0,0.06) 0%, transparent 70%);
+      bottom: -100px; left: -100px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(6,13,31,0.95);
+      border-bottom: 1px solid rgba(0,200,255,0.12);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+    }
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+    .logo-mark svg { width: 36px; height: 36px; }
+    .logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 3px;
+      color: var(--fulcrum);
+      text-shadow: 0 0 16px rgba(0,200,255,0.35);
+      line-height: 1;
+    }
+    .logo-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: rgba(0,200,255,0.4);
+      margin-top: 2px;
+    }
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--gray);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 16px;
+      transition: all 0.15s;
+    }
+    .nav-back:hover { color: var(--fulcrum); border-color: rgba(0,200,255,0.3); }
+
+    /* ── MAIN LAYOUT ── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      min-height: calc(100vh - 64px);
+      margin-top: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px 16px;
+    }
+
+    .center-card {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      width: 100%;
+      max-width: 1020px;
+      background: rgba(8,16,38,0.9);
+      border: 1px solid rgba(0,200,255,0.18);
+      border-top: 3px solid var(--fulcrum);
+      box-shadow: 0 0 80px rgba(0,200,255,0.07), 0 24px 60px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    /* left panel */
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 52px;
+      border-right: 1px solid rgba(0,200,255,0.1);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--fulcrum);
+      border: 1px solid rgba(0,200,255,0.25);
+      padding: 6px 14px;
+      margin-bottom: 32px;
+      width: fit-content;
+    }
+    .step-badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--fulcrum);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,200,255,0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(0,200,255,0); }
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 64px;
+      letter-spacing: 2px;
+      line-height: 0.95;
+      margin-bottom: 24px;
+    }
+    h1 .line-1 { color: rgba(255,255,255,0.9); display: block; }
+    h1 .line-2 { color: var(--fulcrum); display: block; text-shadow: 0 0 40px rgba(0,200,255,0.3); }
+
+    .intro-text {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--gray);
+      font-weight: 300;
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+
+    /* trial callout */
+    .trial-badge {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      background: rgba(240,165,0,0.06);
+      border: 1px solid rgba(240,165,0,0.25);
+      border-left: 4px solid var(--gold);
+      margin-bottom: 40px;
+      max-width: 480px;
+    }
+    .trial-icon { font-size: 22px; flex-shrink: 0; }
+    .trial-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 3px;
+    }
+    .trial-desc {
+      font-size: 13px;
+      color: rgba(240,165,0,0.65);
+      font-weight: 300;
+    }
+
+    /* what you get */
+    .what-you-get {
+      margin-bottom: 40px;
+    }
+    .wg-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 3px;
+      color: rgba(0,200,255,0.4);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .wg-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .wg-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: rgba(240,244,255,0.75);
+      font-weight: 300;
+    }
+    .wg-check {
+      width: 20px; height: 20px;
+      background: rgba(0,200,255,0.1);
+      border: 1px solid rgba(0,200,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+      color: var(--fulcrum);
+    }
+
+    /* comparable companies */
+    .comp-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 32px;
+    }
+    .comp-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      padding: 5px 10px;
+      border: 1px solid rgba(255,255,255,0.07);
+      color: rgba(122,143,176,0.6);
+    }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 36px;
+      background: rgba(4,10,22,0.5);
+    }
+
+    .auth-card {
+      background: transparent;
+      border: none;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    /* top accent line moved to center-card */
+
+    .auth-header {
+      margin-bottom: 32px;
+    }
+    .auth-platform-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 3px;
+      color: rgba(0,200,255,0.4);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .auth-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .auth-subtitle {
+      font-size: 13.5px;
+      color: var(--gray);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* GitHub auth button */
+    .github-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: 100%;
+      padding: 18px 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 16px;
+    }
+    .github-btn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.3);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+    .github-icon {
+      flex-shrink: 0;
+    }
+
+    .divider-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+    .divider-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(122,143,176,0.4);
+    }
+
+    /* launch platform button */
+    .launch-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 18px 24px;
+      background: var(--fulcrum);
+      color: var(--navy);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 3px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid var(--fulcrum);
+      box-shadow: 0 0 24px rgba(0,200,255,0.25);
+      margin-bottom: 24px;
+    }
+    .launch-btn:hover {
+      background: transparent;
+      color: var(--fulcrum);
+      box-shadow: 0 0 40px rgba(0,200,255,0.4);
+    }
+    .launch-btn svg { transition: transform 0.2s; }
+    .launch-btn:hover svg { transform: translateX(4px); }
+
+    /* security note */
+    .security-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px 16px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.05);
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(122,143,176,0.7);
+      margin-bottom: 28px;
+    }
+    .security-note-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    /* steps */
+    .auth-steps {
+      margin-bottom: 28px;
+    }
+    .auth-steps-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 3px;
+      color: rgba(0,200,255,0.35);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .auth-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .auth-step-num {
+      width: 22px; height: 22px;
+      background: rgba(0,200,255,0.08);
+      border: 1px solid rgba(0,200,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: var(--fulcrum);
+      flex-shrink: 0;
+    }
+    .auth-step-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--gray);
+      font-weight: 300;
+      padding-top: 2px;
+    }
+    .auth-step-text strong { color: var(--white); font-weight: 600; }
+
+    /* mcp badge */
+    .mcp-protocol-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(0,200,255,0.04);
+      border: 1px solid rgba(0,200,255,0.15);
+      margin-top: 8px;
+    }
+    .mcp-badge-icon {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 2px;
+      color: var(--navy);
+      background: var(--fulcrum);
+      padding: 3px 8px;
+      flex-shrink: 0;
+    }
+    .mcp-badge-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      color: rgba(0,200,255,0.6);
+      line-height: 1.5;
+    }
+    .mcp-badge-text span { color: rgba(0,200,255,0.4); font-size: 9px; display: block; }
+
+    /* docs link below card */
+    .docs-link-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: rgba(122,143,176,0.5);
+    }
+    .docs-link-row a {
+      color: rgba(0,200,255,0.5);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .docs-link-row a:hover { color: var(--fulcrum); }
+
+    /* ── BOTTOM STRIP ── */
+    .bottom-strip {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 20px 48px;
+      background: rgba(4,10,22,0.8);
+      border-top: 1px solid rgba(0,200,255,0.07);
+    }
+    .strip-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(122,143,176,0.5);
+    }
+    .strip-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(0,200,255,0.35);
+    }
+    .strip-dot.gold { background: rgba(240,165,0,0.35); }
+  </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo-wrap">
+    <div class="logo-mark">
+      <svg viewBox="0 0 40 40" fill="none">
+        <polygon points="20,2 38,12 38,28 20,38 2,28 2,12" stroke="#00c8ff" stroke-width="1.5" fill="rgba(0,200,255,0.05)"/>
+        <polygon points="20,10 30,16 30,24 20,30 10,24 10,16" fill="rgba(0,200,255,0.15)" stroke="#00c8ff" stroke-width="1"/>
+        <line x1="20" y1="2" x2="20" y2="38" stroke="#00c8ff" stroke-width="0.5" opacity="0.4"/>
+        <line x1="2" y1="12" x2="38" y2="28" stroke="#00c8ff" stroke-width="0.5" opacity="0.4"/>
+        <line x1="38" y1="12" x2="2" y2="28" stroke="#00c8ff" stroke-width="0.5" opacity="0.4"/>
+        <circle cx="20" cy="20" r="3" fill="#00c8ff"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">Fulcrum Platform</div>
+      <div class="logo-sub">Digital Transformations LLC · IL2–IL5</div>
+    </div>
+  </a>
+  <a href="index.html" class="nav-back">← Back to Site</a>
+</nav>
+
+<!-- MAIN -->
+<div class="page-wrap">
+<div class="center-card">
+
+  <!-- LEFT: pitch + features -->
+  <div class="left-panel">
+
+    <div class="step-badge">
+      <span class="step-badge-dot"></span>
+      FREE IL2 TRIAL · AWS BEDROCK AGENTCORE
+    </div>
+
+    <h1>
+      <span class="line-1">Deploy Your</span>
+      <span class="line-2">First Agent Team</span>
+    </h1>
+
+    <p class="intro-text">
+      Fulcrum is the only MCP-native multi-agent platform built for government cloud. Connect any LLM, compose collaborative agent teams, and operate at IL2 today — IL5 on the horizon.
+    </p>
+
+    <div class="trial-badge">
+      <div class="trial-icon">⚡</div>
+      <div>
+        <div class="trial-title">Free IL2 Trial — No Time Limit</div>
+        <div class="trial-desc">Full platform access at Impact Level 2 via AWS Bedrock AgentCore. No credit card required.</div>
+      </div>
+    </div>
+
+    <div class="what-you-get">
+      <div class="wg-label">What You Get Immediately</div>
+      <div class="wg-items">
+        <div class="wg-item"><div class="wg-check">✓</div>MCP-native workspace — connect any LLM in minutes</div>
+        <div class="wg-item"><div class="wg-check">✓</div>@Mention messaging between agents and humans</div>
+        <div class="wg-item"><div class="wg-check">✓</div>Structured task management across your agent workforce</div>
+        <div class="wg-item"><div class="wg-check">✓</div>Shared Context Vault — persistent agent memory</div>
+        <div class="wg-item"><div class="wg-check">✓</div>Human-in-the-Loop approval gates at every critical node</div>
+        <div class="wg-item"><div class="wg-check">✓</div>Full audit trail — every agent action logged</div>
+        <div class="wg-item"><div class="wg-check">✓</div>GPT-4o · Gemini · Copilot · Codex · Grok · Claude · LangGraph · CrewAI</div>
+      </div>
+    </div>
+
+    <div class="comp-row">
+      <span class="comp-tag">⬡ ZERO COMPETITORS AT IL5</span>
+      <span class="comp-tag">⬡ MCP OPEN PROTOCOL</span>
+      <span class="comp-tag">⬡ MODEL-AGNOSTIC</span>
+      <span class="comp-tag">◈ GOLDEN DOME READY</span>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: auth card -->
+  <div class="right-panel">
+    <div class="auth-card">
+
+      <div class="auth-header">
+        <div class="auth-platform-label">Powered by Fulcrum Platform</div>
+        <div class="auth-title">Create Your Workspace</div>
+        <div class="auth-subtitle">Authenticate with GitHub to launch your Fulcrum workspace and connect your first agent.</div>
+      </div>
+
+      <!-- GitHub auth -->
+      <a href="https://paxai.app/" target="_blank" class="github-btn">
+        <svg class="github-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+        </svg>
+        Continue with GitHub
+      </a>
+
+      <div class="divider-row">
+        <div class="divider-line"></div>
+        <div class="divider-text">OR LAUNCH DIRECTLY</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Direct launch -->
+      <a href="https://paxai.app/" target="_blank" class="launch-btn">
+        Launch Fulcrum
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+
+      <!-- Security note -->
+      <div class="security-note">
+        <div class="security-note-icon">🔐</div>
+        <div>GitHub authentication provides your identity to the Fulcrum workspace. No source code access is requested. OAuth 2.1 with short-lived tokens. Your data never leaves your authorized IL boundary.</div>
+      </div>
+
+      <!-- Steps -->
+      <div class="auth-steps">
+        <div class="auth-steps-title">After You Sign In</div>
+        <div class="auth-step">
+          <div class="auth-step-num">1</div>
+          <div class="auth-step-text"><strong>Create or join a workspace</strong> — this is your Fulcrum environment. Name it after your mission, team, or program.</div>
+        </div>
+        <div class="auth-step">
+          <div class="auth-step-num">2</div>
+          <div class="auth-step-text"><strong>Connect your first LLM</strong> — paste your MCP server config from the agent setup guide. GPT-4o, Claude, Gemini, or Codex all work identically.</div>
+        </div>
+        <div class="auth-step">
+          <div class="auth-step-num">3</div>
+          <div class="auth-step-text"><strong>Register your agent</strong> — give it a name, role, and mission scope. It will appear as a first-class participant in your workspace.</div>
+        </div>
+        <div class="auth-step">
+          <div class="auth-step-num">4</div>
+          <div class="auth-step-text"><strong>Deploy your team</strong> — add additional agents, assign roles, configure HiTL gates, and run your first multi-agent workflow.</div>
+        </div>
+      </div>
+
+      <!-- MCP badge -->
+      <div class="mcp-protocol-badge">
+        <div class="mcp-badge-icon">MCP</div>
+        <div class="mcp-badge-text">
+          Native Model Context Protocol
+          <span>Open standard · Vendor-agnostic · IL2 → IL5</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="docs-link-row">
+      <span>Need help?</span>
+      <a href="docs.html">Read the MCP Docs</a>
+      <span>·</span>
+      <a href="https://ax-platform.com/docs/connect-your-agent-to-ax/" target="_blank">Connection Guide ↗</a>
+    </div>
+  </div>
+
+</div><!-- end center-card -->
+</div><!-- end page-wrap -->
+
+<!-- BOTTOM STRIP -->
+<div class="bottom-strip">
+  <div class="strip-item"><div class="strip-dot"></div>FREE IL2 TRIAL</div>
+  <div class="strip-item"><div class="strip-dot"></div>MCP OPEN PROTOCOL</div>
+  <div class="strip-item"><div class="strip-dot"></div>ZERO COMPETITORS AT IL5</div>
+  <div class="strip-item"><div class="strip-dot gold"></div>GOLDEN DOME READY</div>
+  <div class="strip-item"><div class="strip-dot gold"></div>AWS BEDROCK AGENTCORE</div>
+</div>
+
+</body>
+</html>
