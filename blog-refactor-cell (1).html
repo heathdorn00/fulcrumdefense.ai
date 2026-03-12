@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Refactor Cell — Fulcrum Platform Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:       #060d1f;
+      --navy-mid:   #0b1733;
+      --navy-light: #112048;
+      --steel:      #1a2d5a;
+      --fulcrum:    #00c8ff;
+      --gold:       #f0a500;
+      --orange:     #ff6b1a;
+      --white:      #f0f4ff;
+      --gray:       #7a8fb0;
+      --body-text:  #a8bcda;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(6,13,31,0.97);
+      border-bottom: 1px solid rgba(0,200,255,0.12);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+    }
+    .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--fulcrum); text-decoration: none; text-shadow: 0 0 16px rgba(0,200,255,0.35); }
+    .nav-section { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.35); border-left: 1px solid rgba(0,200,255,0.15); padding-left: 20px; margin-left: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gray); text-decoration: none; transition: color 0.15s; }
+    .nav-link:hover { color: var(--fulcrum); }
+    .nav-cta-sm { display: inline-flex; align-items: center; gap: 8px; background: var(--fulcrum); color: var(--navy); padding: 8px 18px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; text-decoration: none; transition: all 0.2s; }
+    .nav-cta-sm:hover { background: rgba(0,200,255,0.15); color: var(--fulcrum); }
+
+    /* ── HERO ── */
+    .post-hero {
+      position: relative; z-index: 1;
+      padding: 120px 0 80px;
+      max-width: 860px;
+      margin: 0 auto;
+      padding-left: 48px; padding-right: 48px;
+    }
+    .post-category {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px;
+      color: var(--orange); border: 1px solid rgba(255,107,26,0.3);
+      padding: 5px 12px; margin-bottom: 28px; text-transform: uppercase;
+    }
+    .post-category-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); }
+    .post-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 58px; line-height: 1.05;
+      color: var(--white); margin-bottom: 24px;
+      font-weight: 400;
+    }
+    .post-title em { font-style: italic; color: var(--fulcrum); }
+    .post-deck {
+      font-size: 20px; line-height: 1.65;
+      color: var(--body-text); font-weight: 300;
+      max-width: 680px; margin-bottom: 36px;
+    }
+    .post-meta {
+      display: flex; align-items: center; gap: 20px;
+      flex-wrap: wrap;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0,200,255,0.1);
+    }
+    .meta-author { display: flex; align-items: center; gap: 10px; }
+    .author-avatar {
+      width: 36px; height: 36px;
+      background: rgba(0,200,255,0.1);
+      border: 1px solid rgba(0,200,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; color: var(--fulcrum);
+    }
+    .author-name { font-size: 13px; font-weight: 600; color: var(--white); }
+    .author-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; color: var(--gray); margin-top: 2px; }
+    .meta-sep { width: 1px; height: 32px; background: rgba(255,255,255,0.08); }
+    .meta-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px;
+      color: rgba(0,200,255,0.5); border: 1px solid rgba(0,200,255,0.15);
+      padding: 4px 8px;
+    }
+
+    /* ── HERO DIVIDER ── */
+    .hero-rule {
+      position: relative; z-index: 1;
+      max-width: 860px; margin: 0 auto;
+      padding: 0 48px;
+    }
+    .hero-rule-line {
+      height: 1px;
+      background: linear-gradient(90deg, var(--fulcrum), rgba(0,200,255,0.1) 60%, transparent);
+      margin-bottom: 64px;
+    }
+
+    /* ── CONTENT ── */
+    .post-layout {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 60px;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 48px 120px;
+    }
+
+    /* prose */
+    .post-body h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; letter-spacing: 2px;
+      color: var(--white); margin: 52px 0 18px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .post-body h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px; height: 28px;
+      background: var(--fulcrum);
+      flex-shrink: 0;
+    }
+    .post-body h2.orange::before { background: var(--orange); }
+    .post-body h2.gold::before { background: var(--gold); }
+
+    .post-body p {
+      font-size: 16px; line-height: 1.85;
+      color: var(--body-text); margin-bottom: 20px;
+      font-weight: 300;
+    }
+    .post-body p strong { color: var(--white); font-weight: 600; }
+    .post-body p a { color: var(--fulcrum); text-decoration: none; border-bottom: 1px solid rgba(0,200,255,0.25); }
+    .post-body p a:hover { border-color: var(--fulcrum); }
+
+    /* lead paragraph */
+    .post-body .lead {
+      font-size: 19px; line-height: 1.75;
+      color: rgba(240,244,255,0.85);
+      font-weight: 300;
+      margin-bottom: 36px;
+    }
+
+    /* callout */
+    .callout {
+      background: rgba(0,200,255,0.05);
+      border: 1px solid rgba(0,200,255,0.2);
+      border-left: 4px solid var(--fulcrum);
+      padding: 20px 24px; margin: 32px 0;
+      font-size: 15px; line-height: 1.7; color: var(--body-text);
+    }
+    .callout.orange { border-left-color: var(--orange); background: rgba(255,107,26,0.05); border-color: rgba(255,107,26,0.2); }
+    .callout.gold { border-left-color: var(--gold); background: rgba(240,165,0,0.05); border-color: rgba(240,165,0,0.2); }
+    .callout-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2.5px;
+      text-transform: uppercase; margin-bottom: 8px;
+      color: var(--fulcrum);
+    }
+    .callout.orange .callout-label { color: var(--orange); }
+    .callout.gold .callout-label { color: var(--gold); }
+
+    /* code block */
+    .code-block {
+      background: rgba(4,10,22,0.98);
+      border: 1px solid rgba(0,200,255,0.1);
+      border-left: 3px solid rgba(0,200,255,0.4);
+      padding: 18px 22px; margin: 24px 0;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.75;
+      color: rgba(200,220,255,0.7); overflow-x: auto;
+    }
+    .code-label { font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.3); text-transform: uppercase; margin-bottom: 8px; }
+    .code-block .c { color: rgba(0,200,255,0.35); }
+    .code-block .k { color: var(--fulcrum); }
+    .code-block .s { color: rgba(240,165,0,0.8); }
+
+    /* pull quote */
+    .pull-quote {
+      border-top: 2px solid var(--fulcrum);
+      border-bottom: 1px solid rgba(0,200,255,0.15);
+      padding: 28px 0; margin: 40px 0;
+    }
+    .pull-quote-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px; line-height: 1.4;
+      color: var(--white); font-style: italic;
+      margin-bottom: 12px;
+    }
+    .pull-quote-attr {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px;
+      color: rgba(0,200,255,0.4);
+    }
+
+    /* stat row */
+    .stat-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: rgba(0,200,255,0.08);
+      border: 1px solid rgba(0,200,255,0.1);
+      margin: 32px 0;
+    }
+    .stat-cell {
+      background: rgba(6,13,31,0.98);
+      padding: 24px 20px; text-align: center;
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 44px;
+      color: var(--fulcrum); line-height: 1; margin-bottom: 6px;
+    }
+    .stat-num.orange { color: var(--orange); }
+    .stat-num.gold { color: var(--gold); }
+    .stat-desc { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--gray); line-height: 1.5; }
+
+    /* agent cell diagram */
+    .agent-diagram {
+      background: rgba(4,10,22,0.95);
+      border: 1px solid rgba(0,200,255,0.15);
+      padding: 28px; margin: 32px 0;
+      position: relative; overflow: hidden;
+    }
+    .agent-diagram::before {
+      content: 'FULCRUM REFACTOR CELL';
+      position: absolute; top: 12px; right: 16px;
+      font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 3px; color: rgba(0,200,255,0.2);
+    }
+    .agent-row {
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: 10px;
+    }
+    .agent-node {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px;
+      background: rgba(26,45,90,0.6);
+      border: 1px solid rgba(0,200,255,0.18);
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: var(--white);
+      flex-shrink: 0;
+    }
+    .agent-node.hub { background: rgba(0,200,255,0.1); border-color: var(--fulcrum); color: var(--fulcrum); }
+    .agent-node.output { background: rgba(240,165,0,0.08); border-color: rgba(240,165,0,0.3); color: var(--gold); }
+    .agent-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .agent-arrow { font-size: 12px; color: rgba(0,200,255,0.3); padding: 0 10px; flex-shrink: 0; }
+    .agent-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1.5px; color: rgba(0,200,255,0.3); padding: 0 10px; flex-shrink: 0; }
+
+    /* hr divider */
+    .post-divider { border: none; border-top: 1px solid rgba(0,200,255,0.07); margin: 48px 0; }
+
+    /* ── SIDEBAR ── */
+    .post-sidebar { align-self: flex-start; position: sticky; top: 80px; }
+    .sidebar-box {
+      background: rgba(11,23,51,0.7);
+      border: 1px solid rgba(0,200,255,0.12);
+      padding: 22px; margin-bottom: 16px;
+    }
+    .sidebar-box-title {
+      font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px;
+      color: rgba(0,200,255,0.4); text-transform: uppercase;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0,200,255,0.08);
+    }
+    .sidebar-toc-link {
+      display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 0.5px; color: var(--gray); text-decoration: none;
+      padding: 5px 0 5px 10px;
+      border-left: 2px solid rgba(255,255,255,0.05);
+      margin-bottom: 3px; transition: all 0.15s; line-height: 1.45;
+    }
+    .sidebar-toc-link:hover, .sidebar-toc-link.active { color: var(--fulcrum); border-left-color: var(--fulcrum); }
+    .sidebar-tag {
+      display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1.5px;
+      color: rgba(122,143,176,0.6); border: 1px solid rgba(255,255,255,0.06);
+      padding: 4px 8px; margin: 3px 3px 0 0;
+    }
+    .sidebar-cta {
+      display: block; text-align: center;
+      background: var(--fulcrum); color: var(--navy);
+      padding: 14px; font-family: 'Bebas Neue', sans-serif;
+      font-size: 17px; letter-spacing: 2px; text-decoration: none;
+      transition: all 0.2s; margin-top: 4px;
+    }
+    .sidebar-cta:hover { background: transparent; color: var(--fulcrum); border: 1px solid var(--fulcrum); }
+
+    /* ── FOOTER NAV ── */
+    .post-footer-nav {
+      position: relative; z-index: 1;
+      display: flex; justify-content: space-between; gap: 16px;
+      max-width: 860px; margin: 0 auto;
+      padding: 0 48px 80px;
+    }
+    .pfn-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 24px; background: rgba(11,23,51,0.6);
+      border: 1px solid rgba(0,200,255,0.1);
+      text-decoration: none; transition: all 0.2s; flex: 1;
+    }
+    .pfn-btn:hover { border-color: rgba(0,200,255,0.3); background: rgba(0,200,255,0.04); }
+    .pfn-btn.next { justify-content: flex-end; text-align: right; }
+    .pfn-dir { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: rgba(0,200,255,0.35); margin-bottom: 4px; }
+    .pfn-title { font-size: 13px; font-weight: 600; color: var(--white); }
+    .pfn-arrow { font-size: 18px; color: rgba(0,200,255,0.3); }
+
+  /* ── MOBILE RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; }
+    .nav-right { gap: 10px; }
+    .nav-link { display: none; }
+    .nav-link.nav-cta-sm { display: inline-flex; }
+    .nav-section { display: none; }
+
+    .page-wrap { padding: 0 20px !important; }
+
+    .post-hero { padding: 90px 0 40px !important; }
+    .post-title { font-size: 32px !important; line-height: 1.1 !important; }
+    .post-deck { font-size: 16px !important; }
+    .post-meta { flex-wrap: wrap; gap: 8px !important; }
+
+    .post-layout {
+      grid-template-columns: 1fr !important;
+      padding: 0 0 60px !important;
+      gap: 0 !important;
+    }
+    .post-sidebar { display: none !important; }
+
+    .post-body h2 { font-size: 22px !important; }
+    .post-body h3 { font-size: 18px !important; }
+    .post-body p, .post-body li { font-size: 15px !important; }
+
+    /* stat rows / grids inside posts */
+    .stat-row, .stats-row, .agent-grid, .compare-grid,
+    .arch-compare, .proof-grid, .timeline-grid,
+    .feature-grid, .phase-grid, .workspace-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* code blocks */
+    .code-block, pre { font-size: 11px !important; overflow-x: auto; }
+
+    /* callout / blockquote boxes */
+    .callout, .insight-box, .pull-quote, .arch-box { padding: 18px 16px !important; }
+  }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center">
+    <a href="index.html" class="nav-brand">FULCRUM</a>
+    <span class="nav-section">INTEL BRIEF</span>
+  </div>
+  <div class="nav-right">
+    <a href="index.html#platform" class="nav-link">PLATFORM</a>
+    <a href="docs.html" class="nav-link">DOCS</a>
+    <a href="get-started.html" class="nav-cta-sm">Get Started →</a>
+  </div>
+</nav>
+
+<!-- POST HERO -->
+<div class="post-hero">
+  <div class="post-category">
+    <span class="post-category-dot"></span>
+    Legacy Modernization · AI Agent Ops
+  </div>
+  <h1 class="post-title">The <em>Refactor Cell</em><br>How AI Agent Teams Are Finally Cracking<br>the DoD's 1999 Ada Problem</h1>
+  <p class="post-deck">Tens of millions of lines of Ada 95 code are running mission-critical DoD systems right now. Most of it was last touched before Y2K. Here's how Fulcrum deploys autonomous agent teams to refactor it — without a single contractor standing up a new SOW.</p>
+  <div class="post-meta">
+    <div class="meta-author">
+      <div class="author-avatar">DT</div>
+      <div>
+        <div class="author-name">Digital Transformations LLC</div>
+        <div class="author-title">Fulcrum Platform · Defense AI Operations</div>
+      </div>
+    </div>
+    <div class="meta-sep"></div>
+    <span class="meta-tag">MARCH 2026</span>
+    <span class="meta-tag">12 MIN READ</span>
+    <span class="meta-tag" style="border-color:rgba(255,107,26,0.3);color:rgba(255,107,26,0.7)">ADA MODERNIZATION</span>
+    <span class="meta-tag" style="border-color:rgba(240,165,0,0.25);color:rgba(240,165,0,0.6)">IL4 READY</span>
+  </div>
+</div>
+
+<div class="hero-rule">
+  <div class="hero-rule-line"></div>
+</div>
+
+<!-- CONTENT -->
+<div class="post-layout">
+
+  <!-- BODY -->
+  <article class="post-body">
+
+    <p class="lead">Somewhere in a data center supporting a program you've never heard of, there is Ada code running right now that was compiled in 1999. It controls radar handoffs. It manages fire control sequences. It calculates trajectory corrections at 30 cycles per second. It works. Nobody touches it.</p>
+
+    <p>That's the real legacy software problem in the Department of Defense — not COBOL in finance offices or FORTRAN in weather models, but <strong>Ada 95 embedded deep in weapon system software</strong> that was written under MIL-STD-1815, compiled for hardware that predates the iPhone by a decade, and maintained by a shrinking workforce of engineers who remember when the language was mandated by law.</p>
+
+    <p>The DoD Ada mandate was formally dropped in 1997 as the department embraced commercial off-the-shelf technology. What remained was the installed base: tens of millions of lines of strongly-typed, concurrent, safety-critical Ada code distributed across every branch of service. Avionics. C2 systems. Missile guidance. Target tracking. Ground-based radar. Space-based sensor fusion. All Ada. Much of it vintage 1995–2002.</p>
+
+    <div class="stat-row">
+      <div class="stat-cell">
+        <div class="stat-num">450+</div>
+        <div class="stat-desc">Programming languages replaced<br>by Ada mandate (1983)</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num orange">25+</div>
+        <div class="stat-desc">Years since average DoD<br>Ada codebase was last refactored</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num gold">$3B</div>
+        <div class="stat-desc">Annual DoD software spend<br>that drove the original Ada initiative</div>
+      </div>
+    </div>
+
+    <h2 id="problem">Why Nobody Touches It</h2>
+
+    <p>The reason Ada code doesn't get modernized isn't technical. Ada is actually a remarkably well-structured language — strong typing, explicit concurrency via tasks and protected objects, rigorous exception handling, no pointer arithmetic to create undefined behavior. The engineers who wrote it in 1999 knew what they were doing. The code is often well-documented, modular, and readable.</p>
+
+    <p>The problem is institutional. Touching legacy Ada means:</p>
+
+    <p><strong>Finding people who can read it.</strong> The workforce that built these systems is retiring. Younger engineers aren't trained in Ada. There are no coding bootcamps. The talent pipeline is close to zero for new Ada developers, and experienced hands are expensive, hard to find, and increasingly reluctant to re-engage with codebases they left a decade ago.</p>
+
+    <p><strong>Understanding what it actually does.</strong> The real danger in legacy modernization isn't rewriting the code — it's not understanding the intent behind it. Ada embedded systems often contain undocumented business logic, hardware-specific timing assumptions, and operational constraints that never made it into the comments. Getting it wrong in a weapons system isn't a bug report — it's a mishap.</p>
+
+    <p><strong>Surviving the bureaucratic weight of a modernization program.</strong> A formal legacy code modernization effort requires a new program of record, a new contract, a new SOW, a new ATO process, and years of schedule. By the time the effort is staffed and authorized, the hardware the Ada code runs on may already be obsolete again.</p>
+
+    <div class="callout orange">
+      <div class="callout-label">⬡ The Core Tension</div>
+      The DoD knows these Ada codebases need to evolve. Modern AI and autonomous systems need to interface with them. But the traditional modernization pathway — a new program, a new contract, years of schedule — is structurally incompatible with the pace at which the threat environment is changing.
+    </div>
+
+    <h2 id="refactor-cell" class="orange">What a Refactor Cell Is</h2>
+
+    <p>A <strong>Refactor Cell</strong> is a Fulcrum agent team configuration specifically composed for legacy code analysis and incremental modernization. It's not a replacement for the entire program — it's a standing AI workforce that runs inside your existing environment, continuously working the codebase in parallel with your human engineers.</p>
+
+    <p>The cell is composed of specialized agents, each assigned a role that maps to a distinct phase of the refactoring mission:</p>
+
+    <div class="agent-diagram">
+      <div class="agent-row">
+        <div class="agent-node"><span class="agent-dot" style="background:#10a37f"></span>ANALYST AGENT</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-label">parses Ada packages</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-node hub">⬡ FULCRUM HUB</div>
+      </div>
+      <div class="agent-row" style="margin-left:0">
+        <div class="agent-node"><span class="agent-dot" style="background:#4285f4"></span>DOC AGENT</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-label">generates intent docs</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-node hub">⬡ FULCRUM HUB</div>
+      </div>
+      <div class="agent-row">
+        <div class="agent-node"><span class="agent-dot" style="background:#6366f1"></span>TRANSLATE AGENT</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-label">produces Python/Rust/C</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-node hub">⬡ FULCRUM HUB</div>
+      </div>
+      <div class="agent-row">
+        <div class="agent-node"><span class="agent-dot" style="background:#e85d04"></span>TEST AGENT</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-label">builds regression suite</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-node hub">⬡ FULCRUM HUB</div>
+      </div>
+      <div class="agent-row">
+        <div class="agent-node"><span class="agent-dot" style="background:#f0a500"></span>REVIEW AGENT</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-label">flags HiTL gates</div>
+        <div class="agent-arrow">→</div>
+        <div class="agent-node output">★ HUMAN SME REVIEW</div>
+      </div>
+    </div>
+
+    <p>Each agent operates inside the Fulcrum MCP workspace via structured tool calls — reading context, writing task updates, posting outputs for human review. The human SME stays in the loop at every critical decision point. The agents handle the analytical and translational labor. The human makes the call on anything touching operational behavior.</p>
+
+    <h2 id="how-it-works">How the Cell Works on Ada Code</h2>
+
+    <p>Ada 95 codebases present specific structural challenges that the Refactor Cell is designed to address directly. Here's how the cell processes a representative Ada package — the kind of module you'd find in a 1999-era fire control or tracking system:</p>
+
+    <div class="code-block">
+      <div class="code-label">Representative Ada 95 — Sensor Fusion Package (circa 1999)</div>
+<span class="k">package</span> Sensor_Fusion <span class="k">is</span>
+
+   <span class="c">-- Track correlation threshold, tuned for AN/APG-77 update rate</span>
+   Correlation_Threshold : <span class="k">constant</span> Float := 0.73;
+
+   <span class="k">type</span> Track_State <span class="k">is</span> (Tentative, Firm, Dropped, Coast);
+
+   <span class="k">protected</span> Track_Registry <span class="k">is</span>
+      <span class="k">procedure</span> Update_Track (ID : Track_ID; State : Track_State);
+      <span class="k">function</span>  Get_Track_Count <span class="k">return</span> Natural;
+      <span class="k">entry</span>     Await_Firm_Track (ID : <span class="k">out</span> Track_ID);
+   <span class="k">end</span> Track_Registry;
+
+<span class="k">end</span> Sensor_Fusion;
+    </div>
+
+    <p>The Analyst Agent reads this package and immediately surfaces several facts that a human engineer would need days to reconstruct from documentation: the correlation threshold is hardware-specific to a particular radar's update rate, the protected object signals a concurrent access pattern that must be preserved in any translation, and the <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fulcrum)">Coast</code> track state implies a specific timeout behavior that lives in the package body.</p>
+
+    <p>The Doc Agent then produces an intent document — not a comment restatement, but a prose explanation of <em>why</em> this code exists, what operational behavior it implements, and what constraints any refactored version must preserve. This document goes into the Fulcrum Context Vault as shared knowledge available to every subsequent agent in the cell.</p>
+
+    <div class="callout">
+      <div class="callout-label">⬡ Why This Matters</div>
+      The intent document is the most valuable output of the Refactor Cell — more valuable than any translated code. For decades, the tacit knowledge embedded in these Ada packages has been locked in the heads of engineers who are retiring. Fulcrum extracts it, structures it, and makes it durable. Even if you never translate a line of code, you've recovered the institutional knowledge that was otherwise walking out the door.
+    </div>
+
+    <h2 id="translate">The Translation Layer</h2>
+
+    <p>With intent captured, the Translate Agent produces a target-language equivalent — typically Python for analysis workflows, Rust for performance-critical embedded replacement, or C for systems that interface with existing hardware drivers. The translation preserves the concurrent semantics explicitly: Ada protected objects become Rust <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fulcrum)">Arc&lt;Mutex&gt;</code> patterns or Python <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fulcrum)">asyncio.Lock</code> equivalents, depending on the target runtime requirements.</p>
+
+    <p>Ada's strong typing — one of its genuine strengths — actually makes this translation tractable in a way that weakly-typed legacy languages never are. The type constraints in Ada code tell the Translate Agent exactly what the operational bounds are. A <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fulcrum)">subtype Valid_Range is Float range 0.0 .. 1.0</code> declaration isn't just a type hint — it's a specification that survives into the translation as an explicit validation boundary.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">"Ada's strong typing isn't a burden to refactoring — it's a gift. Every constraint the original engineers encoded into the type system is a specification that the translation agent can read and preserve."</div>
+      <div class="pull-quote-attr">— Fulcrum Platform · Refactor Cell Architecture Notes</div>
+    </div>
+
+    <p>The Test Agent simultaneously builds a regression suite against the original Ada binary outputs. Before a single line of translated code is approved, there is a test suite that validates the new implementation against the behavioral profile of the original — including edge cases, error paths, and the specific timing behaviors that embedded systems engineers obsess over.</p>
+
+    <h2 id="hitl" class="gold">Human-in-the-Loop at Every Critical Gate</h2>
+
+    <p>This is where Fulcrum's architecture makes the Refactor Cell different from any automated code migration tool. The Review Agent doesn't just output a translated module — it surfaces a structured review package to a human SME through Fulcrum's Human-in-the-Loop gate system.</p>
+
+    <p>The review package includes: the original Ada package and its extracted intent document, the translated implementation in the target language, the regression test results, any behavioral discrepancies flagged during testing, and a risk assessment generated by the Review Agent indicating which elements of the translation carry the most operational uncertainty.</p>
+
+    <p>The human SME reviews this package and makes the approval decision. The translated code cannot proceed to integration without explicit human sign-off. Every approval is logged immutably to the Fulcrum audit trail — giving the program office a full chain of custody for every modernization decision made by the cell.</p>
+
+    <div class="callout gold">
+      <div class="callout-label">★ For Program Managers</div>
+      The audit trail is your ATO documentation. Every agent action, every human approval, every test result — captured, timestamped, and exportable. The Refactor Cell doesn't create a modernization liability. It creates a modernization record.
+    </div>
+
+    <h2 id="speed">Speed: What Changes</h2>
+
+    <p>A traditional Ada modernization effort staffs a team of senior engineers, runs them through codebase orientation for weeks, produces a modernization plan that takes months to approve, and begins actual translation work somewhere around month six of a 24-month program.</p>
+
+    <p>A Fulcrum Refactor Cell begins producing intent documents in hours. The Analyst Agent doesn't need codebase orientation. It reads the package headers, traces the dependency graph, and starts producing structured analysis immediately. By the end of the first week of operation, the cell has produced more institutional documentation about the legacy codebase than most programs have accumulated in their entire history.</p>
+
+    <div class="stat-row">
+      <div class="stat-cell">
+        <div class="stat-num">72hrs</div>
+        <div class="stat-desc">Time to first intent document<br>for a 50K-line Ada package</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num orange">9×</div>
+        <div class="stat-desc">Speed improvement vs.<br>traditional staff augmentation</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num gold">100%</div>
+        <div class="stat-desc">Human approval required for<br>every translated module</div>
+      </div>
+    </div>
+
+    <h2 id="openclaw">OpenClaw Integration: Autonomous Execution</h2>
+
+    <p>For Refactor Cell deployments that require autonomous execution capability — running the translated code against test environments, executing build pipelines, or interacting with legacy hardware in the loop — Fulcrum integrates directly with <strong>OpenClaw</strong>, the open agent execution framework.</p>
+
+    <p>OpenClaw agents connected to Fulcrum via MCP can be assigned execution tasks by the Refactor Cell: spin up a test environment, compile the Ada original against a known-good toolchain, run the translated Rust equivalent against the same inputs, compare outputs. The OpenClaw agent executes and returns results. The Fulcrum workspace records every action in the audit trail.</p>
+
+    <p>This gives the Refactor Cell a closed loop: analysis, translation, testing, and execution all coordinated through a single Fulcrum workspace, with human review gates at the boundaries that matter operationally.</p>
+
+    <div class="callout orange">
+      <div class="callout-label">⬡ OpenClaw + Fulcrum</div>
+      Fulcrum provides the orchestration, the audit trail, the Human-in-the-Loop gates, and the shared agent memory. OpenClaw provides the autonomous execution layer. Together they give the Refactor Cell the ability to test translations against live hardware outputs — not just synthetic test cases. <a href="https://ax-platform.com/docs/openclaw/" target="_blank">Read the OpenClaw integration guide →</a>
+    </div>
+
+    <h2 id="start">Starting a Refactor Cell at IL2</h2>
+
+    <p>A Refactor Cell requires no new ATO to begin operating at IL2. The initial phase — codebase analysis, intent documentation, dependency mapping — can run against declassified or development representations of the codebase in a free Fulcrum sandbox on AWS Bedrock AgentCore. No procurement. No contract vehicle. No ATO overhead. A PM with a GitHub account can have the cell running this week.</p>
+
+    <p>The IL4 and IL5 pathways through Second Front Systems extend the cell into classified environments — where the actual operational Ada code lives. The authorization timeline for that pathway is known, proven, and current.</p>
+
+    <p>If your program has Ada code from 1999 that nobody wants to touch — and every major defense program does — the Refactor Cell isn't a theoretical future capability. It's deployable today. The agents are standing by. The only variable is whether your program is ready to let them go to work.</p>
+
+    <div class="callout">
+      <div class="callout-label">⬡ Deploy a Refactor Cell</div>
+      Start at IL2 today — free, no credit card, no procurement required. Brief your PM and your lead engineer. Have the intent documents for your first Ada package by end of week. <a href="get-started.html">Launch Fulcrum →</a>
+    </div>
+
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="post-sidebar">
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">In This Brief</div>
+      <a href="#problem" class="sidebar-toc-link">Why Nobody Touches It</a>
+      <a href="#refactor-cell" class="sidebar-toc-link">What a Refactor Cell Is</a>
+      <a href="#how-it-works" class="sidebar-toc-link">How the Cell Works</a>
+      <a href="#translate" class="sidebar-toc-link">The Translation Layer</a>
+      <a href="#hitl" class="sidebar-toc-link">Human-in-the-Loop Gates</a>
+      <a href="#speed" class="sidebar-toc-link">Speed: What Changes</a>
+      <a href="#openclaw" class="sidebar-toc-link">OpenClaw Integration</a>
+      <a href="#start" class="sidebar-toc-link">Starting at IL2</a>
+    </div>
+
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">Tags</div>
+      <span class="sidebar-tag">ADA 95</span>
+      <span class="sidebar-tag">LEGACY CODE</span>
+      <span class="sidebar-tag">DOD SOFTWARE</span>
+      <span class="sidebar-tag">MCP AGENTS</span>
+      <span class="sidebar-tag">MODERNIZATION</span>
+      <span class="sidebar-tag">IL2–IL5</span>
+      <span class="sidebar-tag">OPENCLAW</span>
+      <span class="sidebar-tag">EMBEDDED SYSTEMS</span>
+    </div>
+
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">Deploy a Refactor Cell</div>
+      <p style="font-size:12px;color:var(--gray);line-height:1.65;margin-bottom:14px;font-weight:300">Start at IL2 today. Free sandbox. No procurement required.</p>
+      <a href="get-started.html" class="sidebar-cta">Launch Fulcrum →</a>
+    </div>
+
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">Related</div>
+      <a href="https://ax-platform.com/docs/openclaw/" target="_blank" class="sidebar-toc-link" style="color:rgba(255,107,26,0.7)">OpenClaw Integration Guide ↗</a>
+      <a href="docs.html" class="sidebar-toc-link">What is MCP? →</a>
+      <a href="index.html#teams" class="sidebar-toc-link">Agent Team Configurations →</a>
+    </div>
+  </aside>
+
+</div>
+
+<!-- POST FOOTER NAV -->
+<div class="post-footer-nav">
+  <a href="index.html" class="pfn-btn">
+    <div class="pfn-arrow">←</div>
+    <div>
+      <div class="pfn-dir">Back</div>
+      <div class="pfn-title">Fulcrum Platform</div>
+    </div>
+  </a>
+  <a href="get-started.html" class="pfn-btn next">
+    <div>
+      <div class="pfn-dir">Deploy Now</div>
+      <div class="pfn-title">Start Your Free IL2 Trial →</div>
+    </div>
+    <div class="pfn-arrow">→</div>
+  </a>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('[id]');
+  const tocLinks = document.querySelectorAll('.sidebar-toc-link[href^="#"]');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
