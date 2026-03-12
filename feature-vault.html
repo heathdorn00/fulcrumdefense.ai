@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Context Vault — Fulcrum Platform Docs</title>
+<meta name="description" content="Fulcrum Context Vault is a shared persistent memory store for AI agents and humans — enabling stateful multi-agent workflows inside IL5/IL6 secure boundaries with full audit trail."/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:       #060d1f;
+    --navy-mid:   #0b1733;
+    --navy-light: #112048;
+    --steel:      #1a2d5a;
+    --fulcrum:    #00c8ff;
+    --gold:       #f0a500;
+    --green:      #00d4a0;
+    --purple:     #a78bfa;
+    --red:        #e53e3e;
+    --white:      #f0f4ff;
+    --gray:       #7a8fb0;
+    --sidebar-w:  280px;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--navy); color: var(--white); font-family: 'Outfit', sans-serif; font-size: 15px; line-height: 1.7; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+    background-size: 48px 48px; pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  .docs-nav { position: fixed; top: 0; left: 0; right: 0; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; background: rgba(6,13,31,0.92); border-bottom: 1px solid rgba(0,200,255,0.1); backdrop-filter: blur(20px); z-index: 100; }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--fulcrum); text-decoration: none; }
+  .nav-section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px; color: rgba(0,200,255,0.35); text-transform: uppercase; padding-left: 16px; border-left: 1px solid rgba(0,200,255,0.15); }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--gray); text-decoration: none; text-transform: uppercase; transition: color 0.15s; }
+  .nav-link:hover { color: var(--fulcrum); }
+  .nav-back { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gray); text-decoration: none; border: 1px solid rgba(0,200,255,0.15); padding: 7px 14px; transition: all 0.15s; text-transform: uppercase; }
+  .nav-back:hover { color: var(--fulcrum); border-color: rgba(0,200,255,0.35); }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--fulcrum); transition: all 0.2s; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-nav-drawer { display: none; position: fixed; top: 56px; left: 0; right: 0; background: rgba(6,13,31,0.98); border-bottom: 1px solid rgba(0,200,255,0.15); backdrop-filter: blur(20px); flex-direction: column; padding: 16px 20px 24px; z-index: 150; }
+  .mobile-nav-drawer.open { display: flex; }
+  .mobile-nav-drawer a { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--gray); text-decoration: none; text-transform: uppercase; padding: 14px 0; border-bottom: 1px solid rgba(0,200,255,0.06); transition: color 0.15s; }
+  .mobile-nav-drawer a:hover { color: var(--fulcrum); }
+  .mobile-sidebar-btn { margin-top: 16px; background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.2); color: var(--fulcrum); padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; }
+
+  /* LAYOUT */
+  .docs-layout { display: flex; min-height: 100vh; padding-top: 56px; position: relative; z-index: 1; }
+
+  /* SIDEBAR */
+  .docs-sidebar { position: sticky; top: 56px; height: calc(100vh - 56px); width: var(--sidebar-w); flex-shrink: 0; overflow-y: auto; padding: 32px 0 40px; border-right: 1px solid rgba(0,200,255,0.1); background: rgba(4,10,22,0.6); scrollbar-width: thin; }
+  .docs-sidebar::-webkit-scrollbar { width: 3px; }
+  .docs-sidebar::-webkit-scrollbar-thumb { background: rgba(0,200,255,0.15); }
+  .sidebar-section { margin-bottom: 28px; }
+  .sidebar-section-title { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.35); text-transform: uppercase; padding: 0 24px 10px; display: block; }
+  .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 9px 24px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.5px; color: var(--gray); text-decoration: none; transition: all 0.15s; border-left: 2px solid transparent; text-transform: uppercase; }
+  .sidebar-link:hover { color: var(--white); background: rgba(0,200,255,0.04); border-left-color: rgba(0,200,255,0.2); }
+  .sidebar-link.active { color: var(--fulcrum); background: rgba(0,200,255,0.06); border-left-color: var(--fulcrum); }
+  .sidebar-link .link-icon { font-size: 13px; opacity: 0.5; flex-shrink: 0; }
+  .sidebar-link.active .link-icon { opacity: 1; }
+  .sidebar-link.dim { opacity: 0.4; pointer-events: none; }
+  .sidebar-divider { height: 1px; background: rgba(0,200,255,0.07); margin: 8px 24px 16px; }
+
+  /* CONTENT */
+  .docs-content { flex: 1; max-width: 860px; padding: 56px 64px 100px; min-width: 0; }
+
+  /* BREADCRUMB */
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(0,200,255,0.35); text-transform: uppercase; margin-bottom: 32px; }
+  .breadcrumb a { color: rgba(0,200,255,0.35); text-decoration: none; transition: color 0.15s; }
+  .breadcrumb a:hover { color: var(--fulcrum); }
+  .breadcrumb span { color: rgba(0,200,255,0.2); }
+
+  /* HERO */
+  .section-hero { padding: 0 0 48px; border-bottom: 1px solid rgba(0,200,255,0.08); margin-bottom: 48px; }
+  .hero-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--fulcrum); text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .hero-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--fulcrum); display: inline-block; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: 58px; letter-spacing: 2px; color: var(--white); line-height: 1; margin-bottom: 16px; }
+  .hero-title span { color: var(--fulcrum); }
+  .hero-sub { font-size: 16px; color: rgba(240,244,255,0.65); max-width: 620px; line-height: 1.7; margin-bottom: 24px; }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-badge { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; padding: 5px 12px; border: 1px solid rgba(0,200,255,0.2); color: rgba(0,200,255,0.6); }
+  .hero-badge.gold { border-color: rgba(240,165,0,0.2); color: rgba(240,165,0,0.6); }
+  .hero-badge.green { border-color: rgba(0,212,160,0.2); color: rgba(0,212,160,0.6); }
+  .hero-badge.purple { border-color: rgba(167,139,250,0.2); color: rgba(167,139,250,0.6); }
+
+  /* SECTIONS */
+  .content-section { margin-bottom: 52px; }
+  .content-section h2 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--white); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,200,255,0.08); }
+  .content-section h3 { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--fulcrum); margin: 28px 0 12px; }
+  .content-section p { color: rgba(240,244,255,0.75); margin-bottom: 14px; line-height: 1.75; }
+  .content-section ul { color: rgba(240,244,255,0.75); padding-left: 20px; margin-bottom: 16px; }
+  .content-section li { margin-bottom: 8px; line-height: 1.7; }
+  .content-section strong { color: var(--white); font-weight: 600; }
+  .content-section code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.15); padding: 2px 7px; color: var(--fulcrum); }
+
+  /* VAULT DIAGRAM */
+  .ui-preview { background: rgba(11,23,51,0.8); border: 1px solid rgba(0,200,255,0.12); margin: 28px 0; overflow: hidden; }
+  .ui-preview-header { background: rgba(0,200,255,0.05); border-bottom: 1px solid rgba(0,200,255,0.1); padding: 10px 16px; display: flex; align-items: center; gap: 8px; }
+  .ui-preview-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .ui-preview-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(0,200,255,0.4); text-transform: uppercase; margin-left: auto; }
+  .ui-preview-body { padding: 24px; }
+
+  /* KV STORE ROWS */
+  .vault-table { width: 100%; border-collapse: collapse; }
+  .vault-table thead tr { border-bottom: 1px solid rgba(0,200,255,0.15); }
+  .vault-table th { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: rgba(0,200,255,0.4); text-align: left; padding: 8px 12px; }
+  .vault-table td { padding: 10px 12px; border-bottom: 1px solid rgba(0,200,255,0.05); font-size: 12px; vertical-align: middle; }
+  .vault-table tr:hover td { background: rgba(0,200,255,0.02); }
+  .vault-key { font-family: 'JetBrains Mono', monospace; color: var(--fulcrum); font-size: 11px; }
+  .vault-value { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(0,212,160,0.8); max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vault-topic { font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 2px 8px; border: 1px solid; }
+  .vault-topic.config { color: rgba(167,139,250,0.8); border-color: rgba(167,139,250,0.2); background: rgba(167,139,250,0.06); }
+  .vault-topic.metrics { color: rgba(0,212,160,0.8); border-color: rgba(0,212,160,0.2); background: rgba(0,212,160,0.06); }
+  .vault-topic.scratchpad { color: rgba(240,165,0,0.8); border-color: rgba(240,165,0,0.2); background: rgba(240,165,0,0.06); }
+  .vault-topic.intel { color: rgba(0,200,255,0.8); border-color: rgba(0,200,255,0.2); background: rgba(0,200,255,0.06); }
+  .vault-ttl { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gray); }
+  .vault-actor { font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 2px 6px; border: 1px solid rgba(0,200,255,0.15); color: rgba(0,200,255,0.6); }
+  .vault-actor.human { border-color: rgba(240,165,0,0.2); color: rgba(240,165,0,0.7); }
+
+  /* FLOW DIAGRAM */
+  .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 0; margin: 28px 0; flex-wrap: wrap; }
+  .flow-node { background: rgba(4,10,22,0.8); border: 1px solid rgba(0,200,255,0.15); padding: 14px 18px; text-align: center; min-width: 110px; }
+  .flow-node.vault { border-color: rgba(0,200,255,0.4); background: rgba(0,200,255,0.06); }
+  .flow-node-icon { font-size: 20px; margin-bottom: 6px; display: block; }
+  .flow-node-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--white); display: block; }
+  .flow-node-sub { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--gray); display: block; margin-top: 2px; }
+  .flow-arrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(0,200,255,0.3); padding: 0 6px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .flow-arrow-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(0,200,255,0.35); letter-spacing: 1px; white-space: nowrap; }
+
+  /* USE CASE GRID */
+  .use-case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+  .use-case-card { background: rgba(11,23,51,0.6); border: 1px solid rgba(0,200,255,0.1); padding: 18px 20px; transition: border-color 0.2s; }
+  .use-case-card:hover { border-color: rgba(0,200,255,0.25); }
+  .use-case-icon { font-size: 20px; margin-bottom: 10px; display: block; }
+  .use-case-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--white); margin-bottom: 6px; font-weight: 600; }
+  .use-case-desc { font-size: 12px; color: var(--gray); line-height: 1.6; }
+
+  /* ACTION GRID */
+  .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0; }
+  .action-card { background: rgba(4,10,22,0.7); border: 1px solid rgba(0,200,255,0.08); padding: 16px 18px; }
+  .action-name { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--fulcrum); margin-bottom: 6px; font-weight: 600; }
+  .action-desc { font-size: 12px; color: var(--gray); line-height: 1.55; }
+
+  /* CODE BLOCK */
+  .code-block { background: rgba(4,10,22,0.9); border: 1px solid rgba(0,200,255,0.1); border-left: 3px solid var(--fulcrum); padding: 20px 24px; margin: 20px 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.8; overflow-x: auto; }
+  .code-block .comment { color: rgba(0,200,255,0.3); }
+  .code-block .key { color: var(--fulcrum); }
+  .code-block .val { color: rgba(240,165,0,0.8); }
+  .code-block .str { color: rgba(0,212,160,0.8); }
+  .code-block .label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: rgba(0,200,255,0.3); margin-bottom: 12px; }
+
+  /* PARAM TABLE */
+  .param-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  .param-table th { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: rgba(0,200,255,0.4); text-align: left; padding: 10px 16px; border-bottom: 1px solid rgba(0,200,255,0.12); background: rgba(0,200,255,0.03); }
+  .param-table td { padding: 12px 16px; border-bottom: 1px solid rgba(0,200,255,0.06); font-size: 13px; color: rgba(240,244,255,0.75); vertical-align: top; }
+  .param-table tr:hover td { background: rgba(0,200,255,0.02); }
+  .param-name { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--fulcrum); }
+  .param-type { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(240,165,0,0.7); white-space: nowrap; }
+  .param-default { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(0,212,160,0.6); }
+
+  /* CALLOUTS */
+  .callout { padding: 18px 20px; margin: 20px 0; border-left: 3px solid; font-size: 13px; line-height: 1.7; }
+  .callout.info { border-color: var(--fulcrum); background: rgba(0,200,255,0.05); color: rgba(240,244,255,0.75); }
+  .callout.gold { border-color: var(--gold); background: rgba(240,165,0,0.05); color: rgba(240,244,255,0.75); }
+  .callout.green { border-color: var(--green); background: rgba(0,212,160,0.05); color: rgba(240,244,255,0.75); }
+  .callout.purple { border-color: var(--purple); background: rgba(167,139,250,0.05); color: rgba(240,244,255,0.75); }
+  .callout-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+  .callout.info .callout-label { color: var(--fulcrum); }
+  .callout.gold .callout-label { color: var(--gold); }
+  .callout.green .callout-label { color: var(--green); }
+  .callout.purple .callout-label { color: var(--purple); }
+
+  /* TOC */
+  .docs-toc { position: sticky; top: 80px; width: 200px; flex-shrink: 0; padding: 32px 0 32px 24px; align-self: flex-start; }
+  .toc-title { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.35); text-transform: uppercase; margin-bottom: 14px; }
+  .toc-link { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.5px; color: var(--gray); text-decoration: none; padding: 6px 0 6px 12px; border-left: 2px solid rgba(255,255,255,0.06); margin-bottom: 2px; line-height: 1.4; transition: all 0.15s; }
+  .toc-link:hover, .toc-link.active { color: var(--fulcrum); border-left-color: var(--fulcrum); }
+
+  /* PAGE NAV */
+  .page-nav { display: flex; justify-content: space-between; gap: 16px; padding: 32px 0 0; margin-top: 48px; border-top: 1px solid rgba(0,200,255,0.08); }
+  .page-nav-link { display: flex; flex-direction: column; gap: 4px; text-decoration: none; padding: 16px 20px; border: 1px solid rgba(0,200,255,0.1); transition: all 0.2s; flex: 1; max-width: 240px; }
+  .page-nav-link:hover { border-color: rgba(0,200,255,0.3); background: rgba(0,200,255,0.04); }
+  .page-nav-direction { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,200,255,0.35); }
+  .page-nav-title { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--white); }
+  .page-nav-link.next { text-align: right; margin-left: auto; }
+
+  /* FAB */
+  .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(4,10,22,0.7); z-index: 98; backdrop-filter: blur(4px); }
+  .sidebar-backdrop.open { display: block; }
+  .sidebar-toggle { display: none; position: fixed; bottom: 24px; right: 20px; width: 52px; height: 52px; border-radius: 50%; background: var(--fulcrum); color: var(--navy); border: none; cursor: pointer; z-index: 200; font-size: 20px; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,200,255,0.35); transition: all 0.2s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .docs-nav { padding: 0 20px; }
+    .nav-right .nav-link { display: none; }
+    .docs-toc { display: none; }
+    .docs-content { padding: 48px 40px 80px; }
+    .use-case-grid { grid-template-columns: 1fr; }
+    .action-grid { grid-template-columns: 1fr; }
+    .flow-diagram { gap: 6px; }
+  }
+  @media (max-width: 768px) {
+    .nav-section-label { display: none; }
+    .nav-right .nav-link, .nav-back { display: none; }
+    .nav-hamburger { display: flex; }
+    .docs-layout { flex-direction: column; }
+    .docs-sidebar { position: fixed; top: 56px; left: -100%; bottom: 0; width: 80%; max-width: 300px; height: calc(100vh - 56px); z-index: 99; transition: left 0.28s cubic-bezier(0.4,0,0.2,1); background: rgba(4,10,22,0.98); }
+    .docs-sidebar.open { left: 0; }
+    .docs-toc { display: none; }
+    .docs-content { padding: 32px 20px 60px !important; max-width: 100% !important; }
+    .hero-title { font-size: 36px !important; }
+    .use-case-grid, .action-grid { grid-template-columns: 1fr !important; }
+    .flow-diagram { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .flow-arrow { flex-direction: row; transform: rotate(90deg); }
+    table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .sidebar-toggle { display: flex; }
+    .page-nav { flex-direction: column; }
+    .page-nav-link { max-width: 100%; }
+    .page-nav-link.next { text-align: left; margin-left: 0; }
+  }
+  @media (max-width: 480px) {
+    .hero-title { font-size: 30px !important; }
+    .docs-content { padding: 24px 16px 48px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="docs-nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-brand">FULCRUM</a>
+    <span class="nav-section-label">PLATFORM DOCS</span>
+  </div>
+  <div class="nav-right">
+    <a href="docs.html" class="nav-link">All Docs</a>
+    <a href="get-started.html" class="nav-link">Get Started</a>
+    <a href="index.html" class="nav-back">← Back to Site</a>
+    <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-nav-drawer" id="mobileNavDrawer">
+  <a href="index.html">← Back to Site</a>
+  <a href="docs.html">All Docs</a>
+  <a href="about.html">About</a>
+  <a href="careers.html" style="color:var(--green)">Careers</a>
+  <a href="investor-access.html" style="color:var(--gold)">Investors</a>
+  <button class="mobile-sidebar-btn" onclick="toggleSidebar();toggleMobileMenu()">☰ Browse Docs Sections</button>
+</div>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">☰</button>
+
+<!-- LAYOUT -->
+<div class="docs-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="docs-sidebar" id="docsSidebar">
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">Getting Started</span>
+      <a href="docs.html#what-is-mcp" class="sidebar-link"><span class="link-icon">⬡</span>What is MCP?</a>
+      <a href="docs.html#why-it-matters" class="sidebar-link"><span class="link-icon">⬡</span>Why It Matters</a>
+      <a href="get-started.html" class="sidebar-link"><span class="link-icon">⚡</span>Quick Start</a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">Core Features</span>
+      <a href="feature-messages.html" class="sidebar-link"><span class="link-icon">💬</span>Messages & @Mentions</a>
+      <a href="feature-tasks.html" class="sidebar-link"><span class="link-icon">📋</span>Tasks & Orchestration</a>
+      <a href="feature-vault.html" class="sidebar-link active"><span class="link-icon">◈</span>Context Vault</a>
+      <a href="#" class="sidebar-link dim"><span class="link-icon">🗂️</span>Mission Workspaces</a>
+      <a href="#" class="sidebar-link dim"><span class="link-icon">🤖</span>Agent Registry</a>
+      <a href="#" class="sidebar-link dim"><span class="link-icon">🔐</span>Access Control & RBAC</a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">MCP Tool Reference</span>
+      <a href="#mcp-tool" class="sidebar-link"><span class="link-icon">⚙</span>context tool</a>
+      <a href="#actions" class="sidebar-link"><span class="link-icon">⚙</span>Actions Reference</a>
+      <a href="#parameters" class="sidebar-link"><span class="link-icon">⚙</span>Parameters</a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">Security</span>
+      <a href="docs.html#il5-compliance" class="sidebar-link"><span class="link-icon">🛡</span>IL5 & IL6 Compliance</a>
+      <a href="docs.html" class="sidebar-link"><span class="link-icon">🔒</span>RBAC & Permissions</a>
+      <a href="docs.html" class="sidebar-link"><span class="link-icon">📋</span>Audit Trails</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="docs-content">
+
+    <div class="breadcrumb">
+      <a href="docs.html">Docs</a>
+      <span>›</span>
+      <a href="docs.html#platform-features">Core Features</a>
+      <span>›</span>
+      Context Vault
+    </div>
+
+    <!-- HERO -->
+    <div class="section-hero" id="overview">
+      <div class="hero-eyebrow">Core Feature · MCP-Native · Shared Memory</div>
+      <h1 class="hero-title">Context <span>Vault</span></h1>
+      <p class="hero-sub">The Context Vault is Fulcrum's shared persistent memory layer. Agents read and write structured data — decisions, intelligence products, configuration, intermediate analysis — so every agent on the team starts with full situational awareness instead of a blank context window.</p>
+      <div class="hero-badges">
+        <span class="hero-badge">Key-Value Store</span>
+        <span class="hero-badge">TTL Expiry</span>
+        <span class="hero-badge purple">Topic Filtering</span>
+        <span class="hero-badge green">Agent → Agent</span>
+        <span class="hero-badge gold">IL5 / IL6</span>
+        <span class="hero-badge">Audit Logged</span>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="content-section" id="how-it-works">
+      <h2>How the Context Vault Works</h2>
+      <p>Every Fulcrum Mission Workspace includes a Context Vault — a structured key-value store accessible to every authorized agent and human in that workspace. Think of it as shared working memory: persistent enough to survive across agent calls, scoped tightly enough that data never bleeds across workspace or clearance boundaries.</p>
+      <p>Agents write to the Vault after completing work. Other agents read from it before starting theirs. This eliminates the most common failure mode in multi-agent systems: agents repeating expensive computation because they had no way to share results.</p>
+
+      <div class="callout purple">
+        <span class="callout-label">Why This Matters for Multi-Agent Workflows</span>
+        Without shared memory, every agent in a pipeline starts blind. Agent B can't use Agent A's output unless a human manually passes it along. The Context Vault makes that handoff automatic — Agent A writes its result, Agent B reads it, the workflow continues. No human in the loop for routine context transfer.
+      </div>
+
+      <!-- FLOW DIAGRAM -->
+      <div class="flow-diagram">
+        <div class="flow-node">
+          <span class="flow-node-icon">🤖</span>
+          <span class="flow-node-label">Agent A</span>
+          <span class="flow-node-sub">Collection</span>
+        </div>
+        <div class="flow-arrow">
+          <span>——set——→</span>
+          <span class="flow-arrow-label">writes result</span>
+        </div>
+        <div class="flow-node vault">
+          <span class="flow-node-icon">◈</span>
+          <span class="flow-node-label">Context Vault</span>
+          <span class="flow-node-sub">Shared Memory</span>
+        </div>
+        <div class="flow-arrow">
+          <span>——get——→</span>
+          <span class="flow-arrow-label">reads result</span>
+        </div>
+        <div class="flow-node">
+          <span class="flow-node-icon">🤖</span>
+          <span class="flow-node-label">Agent B</span>
+          <span class="flow-node-sub">Analysis</span>
+        </div>
+        <div class="flow-arrow">
+          <span>——set——→</span>
+          <span class="flow-arrow-label">writes product</span>
+        </div>
+        <div class="flow-node">
+          <span class="flow-node-icon">👤</span>
+          <span class="flow-node-label">Operator</span>
+          <span class="flow-node-sub">Review</span>
+        </div>
+      </div>
+
+      <!-- LIVE VAULT MOCKUP -->
+      <div class="ui-preview">
+        <div class="ui-preview-header">
+          <div class="ui-preview-dot" style="background:#e53e3e"></div>
+          <div class="ui-preview-dot" style="background:#f0a500;margin-left:4px"></div>
+          <div class="ui-preview-dot" style="background:#00d4a0;margin-left:4px"></div>
+          <span class="ui-preview-label">CONTEXT VAULT · IRONSIDE WORKSPACE · 14 ENTRIES</span>
+        </div>
+        <div class="ui-preview-body">
+          <table class="vault-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Value Preview</th>
+                <th>Topic</th>
+                <th>Written By</th>
+                <th>TTL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="vault-key">maintenance:fleet:ft_cavazos:summary</span></td>
+                <td><span class="vault-value">{"flagged":3,"critical":1,"vehicles":[...]}</span></td>
+                <td><span class="vault-topic metrics">metrics</span></td>
+                <td><span class="vault-actor">IRONSIDE</span></td>
+                <td><span class="vault-ttl">23h 41m</span></td>
+              </tr>
+              <tr>
+                <td><span class="vault-key">ssa:cluster7:correlation</span></td>
+                <td><span class="vault-value">{"objects":4,"maneuver":"delta-v 0.4m/s","threat":"LOW"}</span></td>
+                <td><span class="vault-topic intel">intel</span></td>
+                <td><span class="vault-actor">SSA-AGENT</span></td>
+                <td><span class="vault-ttl">6h 12m</span></td>
+              </tr>
+              <tr>
+                <td><span class="vault-key">mission:config:bub_time</span></td>
+                <td><span class="vault-value">"0830 local"</span></td>
+                <td><span class="vault-topic config">config</span></td>
+                <td><span class="vault-actor human">HD</span></td>
+                <td><span class="vault-ttl">∞ no expiry</span></td>
+              </tr>
+              <tr>
+                <td><span class="vault-key">sitrep:draft:2026-03-12</span></td>
+                <td><span class="vault-value">"SITUATION NORMAL. 3 maintenance flags. 1 SSA anomaly. See attached..."</span></td>
+                <td><span class="vault-topic scratchpad">scratchpad</span></td>
+                <td><span class="vault-actor">SITREP-AGENT</span></td>
+                <td><span class="vault-ttl">11h 58m</span></td>
+              </tr>
+              <tr>
+                <td><span class="vault-key">maritime:ais:gulf_aden:anomalies</span></td>
+                <td><span class="vault-value">{"vessels":2,"status":"under review","sector":"GA-04"}</span></td>
+                <td><span class="vault-topic intel">intel</span></td>
+                <td><span class="vault-actor">MDA-AGENT</span></td>
+                <td><span class="vault-ttl">4h 09m</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- USE CASES -->
+    <div class="content-section" id="use-cases">
+      <h2>Mission Use Cases</h2>
+      <div class="use-case-grid">
+        <div class="use-case-card">
+          <span class="use-case-icon">🔁</span>
+          <div class="use-case-title">Multi-Agent Pipeline State</div>
+          <div class="use-case-desc">Agent A completes collection and writes raw product to the Vault. Agent B reads it, runs analysis, writes the fusion product. Agent C reads that and generates the finished intelligence product — no human coordination between steps.</div>
+        </div>
+        <div class="use-case-card">
+          <span class="use-case-icon">⚙️</span>
+          <div class="use-case-title">Shared Mission Config</div>
+          <div class="use-case-desc">Operators write configuration to the Vault once — BUB times, reporting thresholds, priority targets, escalation rules. Every agent in the workspace reads from the same source of truth without being re-prompted each run.</div>
+        </div>
+        <div class="use-case-card">
+          <span class="use-case-icon">🧠</span>
+          <div class="use-case-title">Computation Caching</div>
+          <div class="use-case-desc">Expensive analysis — SSA correlations, fleet health assessments, biometric database checks — is written to the Vault with a TTL. Subsequent agents read the cached result instead of re-running the computation. Reduces latency and API cost.</div>
+        </div>
+        <div class="use-case-card">
+          <span class="use-case-icon">📝</span>
+          <div class="use-case-title">Agent Scratchpad</div>
+          <div class="use-case-desc">Long-running agents use the Vault as a working scratchpad — writing intermediate reasoning, partial results, and checkpoints. If the agent call is interrupted, work is recoverable from the Vault rather than lost.</div>
+        </div>
+        <div class="use-case-card">
+          <span class="use-case-icon">📊</span>
+          <div class="use-case-title">Cross-Shift Continuity</div>
+          <div class="use-case-desc">Watch officers write shift summaries, open items, and priority flags to the Vault before turnover. The incoming shift's agent team reads context automatically — no manual passdown document required.</div>
+        </div>
+        <div class="use-case-card">
+          <span class="use-case-icon">🎯</span>
+          <div class="use-case-title">Targeting & Collection Deconfliction</div>
+          <div class="use-case-desc">Collection management agents write active collection tasking to the Vault. Before submitting new requirements, the CM agent checks the Vault for conflicts — preventing duplicate tasking across disciplines automatically.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MCP TOOL -->
+    <div class="content-section" id="mcp-tool">
+      <h2>MCP Tool Reference: context</h2>
+      <p>Agents interact with the Context Vault through the <code>context</code> MCP tool. It is scoped to the Mission Workspace and honors all workspace-level RBAC permissions. Agents can only read and write within their authorized workspace boundary.</p>
+
+      <div class="code-block">
+        <span class="label">MCP Tool URI</span>
+        <span class="key">URI:</span> <span class="str">/.../context</span><br/>
+        <span class="key">Description:</span> <span class="val">Operations (action): set, get, list, delete</span>
+      </div>
+
+      <h3 id="actions">Available Actions</h3>
+      <div class="action-grid">
+        <div class="action-card">
+          <div class="action-name">set</div>
+          <div class="action-desc">Write a key-value pair to the Vault. Accepts any JSON-serializable value. Optionally specify a TTL in seconds and a topic for filtering. If the key already exists, it is overwritten.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-name">get</div>
+          <div class="action-desc">Retrieve a value by key. Returns the stored JSON object plus metadata — author, written_at, expires_at. Returns null if the key does not exist or has expired.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-name">list</div>
+          <div class="action-desc">List all Vault entries in the workspace. Filter by key prefix to scope to a domain (e.g., <code>maintenance:</code>) or by topic tag (e.g., <code>intel</code>, <code>config</code>). Returns key names and metadata, not values.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-name">delete</div>
+          <div class="action-desc">Delete a key-value pair by key. Requires the calling agent to have write permission. Audit log entry is preserved even after deletion. Expired entries are auto-purged — no manual delete required.</div>
+        </div>
+      </div>
+
+      <h3 id="parameters">Request Parameters</h3>
+      <table class="param-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="param-name">action</span></td><td><span class="param-type">enum</span></td><td><span class="param-default">"list"</span></td><td>Required. Operation: set, get, list, or delete.</td></tr>
+          <tr><td><span class="param-name">key</span></td><td><span class="param-type">string</span></td><td><span class="param-default">—</span></td><td>Required for set, get, delete. Dot-notation or colon-separated hierarchy recommended (e.g., <code>maintenance:fleet:ft_cavazos</code>).</td></tr>
+          <tr><td><span class="param-name">value</span></td><td><span class="param-type">object</span></td><td><span class="param-default">—</span></td><td>Required for set. Any JSON-serializable value — string, number, array, or object.</td></tr>
+          <tr><td><span class="param-name">ttl</span></td><td><span class="param-type">number</span></td><td><span class="param-default">86400 (24h)</span></td><td>Seconds until this entry expires and is automatically purged. Set to 0 for no expiry.</td></tr>
+          <tr><td><span class="param-name">topic</span></td><td><span class="param-type">string</span></td><td><span class="param-default">—</span></td><td>Optional tag for list filtering. Recommended values: <code>intel</code>, <code>config</code>, <code>metrics</code>, <code>scratchpad</code>. Arbitrary strings accepted.</td></tr>
+          <tr><td><span class="param-name">prefix</span></td><td><span class="param-type">string</span></td><td><span class="param-default">—</span></td><td>For list only. Returns only keys beginning with this string — scope your reads to a domain without fetching the full Vault.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout info">
+        <span class="callout-label">Key Naming Convention</span>
+        Use colon-separated hierarchical keys: <code>domain:subdomain:identifier</code>. This enables efficient prefix filtering — an agent can list all <code>maintenance:</code> entries without touching <code>intel:</code> or <code>ssa:</code> data. Enforce a naming schema per workspace to prevent key collisions across agent teams.
+      </div>
+    </div>
+
+    <!-- CODE EXAMPLES -->
+    <div class="content-section" id="examples">
+      <h2>Code Examples</h2>
+
+      <h3>Write analysis result to the Vault</h3>
+      <div class="code-block">
+        <span class="label">MCP Tool Call · set</span>
+        {<br/>
+        &nbsp;&nbsp;<span class="key">"action"</span>: <span class="str">"set"</span>,<br/>
+        &nbsp;&nbsp;<span class="key">"key"</span>: <span class="str">"maintenance:fleet:ft_cavazos:summary"</span>,<br/>
+        &nbsp;&nbsp;<span class="key">"value"</span>: {<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"flagged"</span>: <span class="val">3</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"critical"</span>: <span class="val">1</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"vehicles"</span>: [<span class="str">"M1A2-0042"</span>, <span class="str">"M1A2-0107"</span>, <span class="str">"M1A2-0219"</span>],<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"generated_at"</span>: <span class="str">"2026-03-12T09:18:00Z"</span><br/>
+        &nbsp;&nbsp;},<br/>
+        &nbsp;&nbsp;<span class="key">"ttl"</span>: <span class="val">86400</span>,<br/>
+        &nbsp;&nbsp;<span class="key">"topic"</span>: <span class="str">"metrics"</span><br/>
+        }
+      </div>
+
+      <h3>Read a result written by another agent</h3>
+      <div class="code-block">
+        <span class="label">MCP Tool Call · get</span>
+        {<br/>
+        &nbsp;&nbsp;<span class="key">"action"</span>: <span class="str">"get"</span>,<br/>
+        &nbsp;&nbsp;<span class="key">"key"</span>: <span class="str">"maintenance:fleet:ft_cavazos:summary"</span><br/>
+        }<br/>
+        <br/>
+        <span class="comment">// Returns: { value: {...}, written_by: "IRONSIDE", written_at: "...", expires_at: "..." }</span>
+      </div>
+
+      <h3>List all intel entries in the workspace</h3>
+      <div class="code-block">
+        <span class="label">MCP Tool Call · list with topic filter</span>
+        {<br/>
+        &nbsp;&nbsp;<span class="key">"action"</span>: <span class="str">"list"</span>,<br/>
+        &nbsp;&nbsp;<span class="key">"topic"</span>: <span class="str">"intel"</span><br/>
+        }<br/>
+        <br/>
+        <span class="comment">// Or filter by key prefix:</span><br/>
+        {<br/>
+        &nbsp;&nbsp;<span class="key">"action"</span>: <span class="str">"list"</span>,<br/>
+        &nbsp;&nbsp;<span class="key">"prefix"</span>: <span class="str">"ssa:"</span><br/>
+        }
+      </div>
+
+      <h3>Write permanent mission config (no expiry)</h3>
+      <div class="code-block">
+        <span class="label">MCP Tool Call · set with no TTL</span>
+        {<br/>
+        &nbsp;&nbsp;<span class="key">"action"</span>: <span class="str">"set"</span>,<br/>
+        &nbsp;&nbsp;<span class="key">"key"</span>: <span class="str">"mission:config:reporting_thresholds"</span>,<br/>
+        &nbsp;&nbsp;<span class="key">"value"</span>: {<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"maintenance_critical_threshold_hours"</span>: <span class="val">72</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"ssa_threat_floor"</span>: <span class="str">"MEDIUM"</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;"bub_time": <span class="str">"0830"</span><br/>
+        &nbsp;&nbsp;},<br/>
+        &nbsp;&nbsp;<span class="key">"ttl"</span>: <span class="val">0</span>,<span class="comment"> // no expiry</span><br/>
+        &nbsp;&nbsp;<span class="key">"topic"</span>: <span class="str">"config"</span><br/>
+        }
+      </div>
+
+      <div class="callout gold">
+        <span class="callout-label">Combine Vault + Tasks + Messages for Full Workflow</span>
+        The most powerful Fulcrum workflows chain all three tools — the Vault holds shared state, Tasks track accountability, Messages handle coordination. Agent A writes to the Vault, creates a task assigned to Agent B, and @mentions it in the channel. Agent B reads the Vault, completes the task, and posts results. See <a href="feature-tasks.html" style="color:var(--gold)">Tasks & Orchestration</a> and <a href="feature-messages.html" style="color:var(--gold)">Messages & @Mentions</a>.
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="content-section" id="security">
+      <h2>Security & Compliance</h2>
+      <ul>
+        <li><strong>Workspace-scoped isolation</strong> — Vault data is strictly bounded to the workspace it was written in. No cross-workspace reads, even within the same organization.</li>
+        <li><strong>Clearance-level enforcement</strong> — IL5/IL6 workspaces enforce additional access controls. Agents registered at a lower clearance level cannot read from a higher-classification Vault.</li>
+        <li><strong>Full write audit trail</strong> — every set, get, list, and delete is logged with actor identity (agent ID or user), timestamp, and key name. Audit log is immutable and retained beyond TTL expiry.</li>
+        <li><strong>Automatic TTL purge</strong> — expired entries are purged from the active store but their audit record is preserved. No sensitive data persists longer than its authorized window.</li>
+        <li><strong>No external transit</strong> — Vault data never leaves the accredited enclave. All reads and writes occur within the IL boundary.</li>
+        <li><strong>Short-lived token auth</strong> — context tool calls are authenticated via OAuth 2.1 short-lived tokens scoped to the workspace, not long-lived API keys.</li>
+      </ul>
+
+      <div class="callout green">
+        <span class="callout-label">IL5 / IL6 Pathway</span>
+        Context Vault data inherits the classification level of the workspace. At IL5/IL6, Vault entries are encrypted at rest with STIG-compliant key management and generate audit exports compatible with CUI handling requirements. See <a href="docs.html#il5-compliance" style="color:var(--green)">IL5 & Security docs</a>.
+      </div>
+    </div>
+
+    <!-- PAGE NAV -->
+    <div class="page-nav">
+      <a href="feature-tasks.html" class="page-nav-link">
+        <span class="page-nav-direction">← Previous</span>
+        <span class="page-nav-title">Tasks & Orchestration</span>
+      </a>
+      <a href="#" class="page-nav-link next">
+        <span class="page-nav-direction">Next →</span>
+        <span class="page-nav-title">Mission Workspaces</span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- TOC -->
+  <aside class="docs-toc">
+    <div class="toc-title">On This Page</div>
+    <a href="#overview" class="toc-link active">Overview</a>
+    <a href="#how-it-works" class="toc-link">How It Works</a>
+    <a href="#use-cases" class="toc-link">Mission Use Cases</a>
+    <a href="#mcp-tool" class="toc-link">MCP Tool Reference</a>
+    <a href="#actions" class="toc-link">Actions</a>
+    <a href="#parameters" class="toc-link">Parameters</a>
+    <a href="#examples" class="toc-link">Code Examples</a>
+    <a href="#security" class="toc-link">Security & Compliance</a>
+  </aside>
+
+</div>
+
+<script>
+  function toggleMobileMenu() {
+    const drawer = document.getElementById('mobileNavDrawer');
+    const btn = document.getElementById('navHamburger');
+    drawer.classList.toggle('open');
+    btn.classList.toggle('open');
+  }
+  function toggleSidebar() {
+    const sidebar = document.getElementById('docsSidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+    const fab = document.getElementById('sidebarToggle');
+    sidebar.classList.toggle('open');
+    backdrop.classList.toggle('open');
+    fab.textContent = sidebar.classList.contains('open') ? '✕' : '☰';
+    document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+  }
+  function closeSidebar() {
+    const sidebar = document.getElementById('docsSidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+    const fab = document.getElementById('sidebarToggle');
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('open');
+    fab.textContent = '☰';
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.docs-sidebar .sidebar-link').forEach(link => {
+    link.addEventListener('click', () => { if (window.innerWidth <= 768) closeSidebar(); });
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      closeSidebar();
+      document.getElementById('mobileNavDrawer').classList.remove('open');
+      document.getElementById('navHamburger').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+  const sections = document.querySelectorAll('[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
