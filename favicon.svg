@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1ad6ff"/>
+      <stop offset="100%" style="stop-color:#0099cc"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="0.8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background: deep navy -->
+  <rect width="32" height="32" rx="5" fill="#060d1f"/>
+
+  <!-- Lever bar — thin, precise, full width with slight taper -->
+  <rect x="3" y="20.5" width="26" height="2" rx="1" fill="url(#g1)" opacity="0.85"/>
+
+  <!-- Fulcrum triangle — solid, pointing up, balanced -->
+  <polygon points="16,7 23,20.5 9,20.5" fill="url(#g1)" filter="url(#glow)"/>
+
+  <!-- Pivot ring at base — punched out dark, glowing ring -->
+  <circle cx="16" cy="20.5" r="2.2" fill="#060d1f"/>
+  <circle cx="16" cy="20.5" r="1.4" fill="none" stroke="#00c8ff" stroke-width="1.2"/>
+  <circle cx="16" cy="20.5" r="0.5" fill="#00c8ff"/>
+</svg>
