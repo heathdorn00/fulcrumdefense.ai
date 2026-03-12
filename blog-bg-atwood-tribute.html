@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Named for a Guardian: Brigadier General Chandler "Fulcrum" Atwood — Fulcrum Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:      #060d1f;
+      --navy-mid:  #0b1733;
+      --navy-light:#112048;
+      --steel:     #1a2d5a;
+      --fulcrum:   #00c8ff;
+      --gold:      #f0a500;
+      --gold-dim:  rgba(240,165,0,0.15);
+      --white:     #f0f4ff;
+      --gray:      #7a8fb0;
+      --body-text: #a8bcda;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* GRID BG */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(240,165,0,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240,165,0,0.018) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* AMBIENT ORB */
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(160px); pointer-events: none; z-index: 0;
+    }
+    .orb-1 { width: 700px; height: 700px; background: rgba(240,165,0,0.06); top: -300px; right: -200px; }
+    .orb-2 { width: 500px; height: 500px; background: rgba(240,165,0,0.04); bottom: -200px; left: -100px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(6,13,31,0.97);
+      border-bottom: 1px solid rgba(240,165,0,0.1);
+      backdrop-filter: blur(20px); z-index: 100;
+    }
+    .nav-left { display: flex; align-items: center; }
+    .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--fulcrum); text-decoration: none; }
+    .nav-section { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(240,165,0,0.45); border-left: 1px solid rgba(240,165,0,0.15); padding-left: 20px; margin-left: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gray); text-decoration: none; transition: color 0.15s; }
+    .nav-link:hover { color: var(--gold); }
+    .nav-cta-sm { display: inline-flex; align-items: center; gap: 8px; background: var(--fulcrum); color: var(--navy); padding: 8px 18px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; text-decoration: none; transition: all 0.2s; }
+    .nav-cta-sm:hover { background: transparent; color: var(--fulcrum); border: 1px solid var(--fulcrum); }
+
+    /* PAGE WRAP */
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+
+    /* ═══════════════════════════════════════════
+       HERO — full-width tribute banner
+    ═══════════════════════════════════════════ */
+    .tribute-hero {
+      position: relative; z-index: 1;
+      padding: 120px 0 0;
+      overflow: hidden;
+    }
+
+    .tribute-hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 64px;
+      align-items: end;
+      padding-bottom: 0;
+    }
+
+    /* left */
+    .tribute-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 3px; color: var(--gold);
+      border: 1px solid rgba(240,165,0,0.3);
+      padding: 5px 14px; margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+    .tribute-tag-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold);
+      animation: gold-pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes gold-pulse {
+      0%,100%{box-shadow:0 0 0 0 rgba(240,165,0,0.4)}
+      50%{box-shadow:0 0 0 6px rgba(240,165,0,0)}
+    }
+
+    .tribute-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: 58px; line-height: 1.05;
+      color: var(--white); font-weight: 400;
+      margin-bottom: 12px;
+    }
+    .tribute-headline em { font-style: italic; color: var(--gold); }
+
+    .tribute-rank {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 3px;
+      color: rgba(240,165,0,0.55); margin-bottom: 32px;
+      text-transform: uppercase;
+    }
+
+    .tribute-rule {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, var(--gold), rgba(240,165,0,0.08) 60%, transparent);
+      margin-bottom: 32px;
+    }
+
+    .tribute-lead {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px; line-height: 1.6;
+      color: rgba(240,244,255,0.85);
+      font-style: italic;
+      max-width: 580px;
+      margin-bottom: 40px;
+    }
+
+    /* right: crest block */
+    .tribute-crest {
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding-bottom: 0;
+    }
+    .crest-frame {
+      width: 220px; height: 220px;
+      background: rgba(240,165,0,0.04);
+      border: 1px solid rgba(240,165,0,0.25);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; margin-bottom: 20px;
+    }
+    .crest-frame::before, .crest-frame::after {
+      content: '';
+      position: absolute;
+      border: 1px solid rgba(240,165,0,0.12);
+    }
+    .crest-frame::before { inset: 8px; }
+    .crest-frame::after  { inset: 16px; }
+    .crest-inner {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 6px; z-index: 1;
+    }
+    .crest-star { font-size: 32px; line-height: 1; }
+    .crest-initials {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px; letter-spacing: 6px;
+      color: var(--gold); line-height: 1;
+      text-shadow: 0 0 40px rgba(240,165,0,0.3);
+    }
+    .crest-line {
+      width: 60px; height: 1px;
+      background: rgba(240,165,0,0.35);
+    }
+    .crest-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; letter-spacing: 3px;
+      color: rgba(240,165,0,0.5); text-align: center;
+      line-height: 1.7;
+    }
+
+    .crest-detail {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 1.5px;
+      color: rgba(240,165,0,0.4);
+      text-align: center; line-height: 2;
+    }
+
+    /* HERO RULE */
+    .hero-gold-rule {
+      position: relative; z-index: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold), rgba(240,165,0,0.06) 70%, transparent);
+      margin: 56px 0 64px;
+    }
+
+    /* ═══════════════════════════════════════════
+       CONTENT LAYOUT
+    ═══════════════════════════════════════════ */
+    .post-layout {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 240px;
+      gap: 56px;
+      padding-bottom: 120px;
+    }
+
+    /* BODY */
+    .post-body h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: 2px;
+      color: var(--white); margin: 52px 0 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .post-body h2::before {
+      content: ''; display: inline-block;
+      width: 4px; height: 24px;
+      background: var(--gold); flex-shrink: 0;
+    }
+
+    .post-body p {
+      font-size: 16px; line-height: 1.88;
+      color: var(--body-text); margin-bottom: 22px;
+      font-weight: 300; max-width: 640px;
+    }
+    .post-body p strong { color: var(--white); font-weight: 600; }
+    .post-body .lead {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px; line-height: 1.7;
+      color: rgba(240,244,255,0.88);
+      margin-bottom: 36px; max-width: 620px;
+      font-style: italic;
+    }
+    .post-body > * { min-width: 0; }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      border-top: 2px solid var(--gold);
+      border-bottom: 1px solid rgba(240,165,0,0.12);
+      padding: 28px 0; margin: 44px 0; max-width: 620px;
+    }
+    .pull-quote-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px; line-height: 1.45;
+      color: var(--white); font-style: italic;
+      margin-bottom: 12px;
+    }
+    .pull-quote-attr {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 2px;
+      color: rgba(240,165,0,0.4);
+    }
+
+    /* CALLOUT */
+    .callout {
+      background: rgba(240,165,0,0.03);
+      border: 1px solid rgba(240,165,0,0.14);
+      border-left: 4px solid var(--gold);
+      padding: 22px 26px; margin: 28px 0;
+      font-size: 15px; line-height: 1.75;
+      color: var(--body-text); max-width: 620px;
+    }
+    .callout-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; letter-spacing: 2.5px;
+      text-transform: uppercase; margin-bottom: 8px;
+      color: var(--gold);
+    }
+
+    /* WORD DEFINITION */
+    .word-def {
+      background: rgba(240,165,0,0.04);
+      border: 1px solid rgba(240,165,0,0.18);
+      padding: 32px 36px; margin: 36px 0;
+      max-width: 560px; position: relative;
+    }
+    .word-def::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold), rgba(240,165,0,0.15));
+    }
+    .word-word {
+      font-family: 'DM Serif Display', serif;
+      font-size: 44px; color: var(--gold);
+      line-height: 1; margin-bottom: 4px;
+      font-style: italic;
+    }
+    .word-phonetic {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 2px;
+      color: rgba(240,165,0,0.4); margin-bottom: 16px;
+    }
+    .word-pos {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 2px;
+      color: rgba(240,165,0,0.35);
+      border-top: 1px solid rgba(240,165,0,0.1);
+      padding-top: 14px; margin-bottom: 10px;
+    }
+    .word-meaning {
+      font-size: 16px; line-height: 1.8;
+      color: var(--body-text); font-weight: 300;
+    }
+    .word-meaning em { color: var(--white); font-style: normal; font-weight: 600; }
+
+    /* ATTRIBUTE LIST */
+    .attr-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; max-width: 580px; }
+    .attr-item { display: flex; align-items: flex-start; gap: 14px; }
+    .attr-star { font-size: 14px; color: rgba(240,165,0,0.5); flex-shrink: 0; margin-top: 2px; }
+    .attr-text { font-size: 15px; line-height: 1.65; color: var(--body-text); }
+    .attr-text strong { color: var(--white); }
+
+    .post-divider { border: none; border-top: 1px solid rgba(240,165,0,0.07); margin: 44px 0; max-width: 640px; }
+
+    /* CLOSING DEDICATION */
+    .dedication {
+      position: relative;
+      padding: 40px 40px;
+      background: rgba(240,165,0,0.03);
+      border: 1px solid rgba(240,165,0,0.18);
+      margin: 44px 0;
+      max-width: 620px;
+    }
+    .dedication::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold), rgba(240,165,0,0.1));
+    }
+    .ded-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; letter-spacing: 3px;
+      color: rgba(240,165,0,0.4); margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+    .ded-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px; line-height: 1.65;
+      color: var(--white); font-style: italic;
+      margin-bottom: 16px;
+    }
+    .ded-sig {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 2px;
+      color: rgba(240,165,0,0.4);
+    }
+
+    /* SIDEBAR */
+    .post-sidebar { align-self: flex-start; position: sticky; top: 76px; }
+    .sidebar-box {
+      background: rgba(11,23,51,0.7);
+      border: 1px solid rgba(240,165,0,0.12);
+      padding: 20px; margin-bottom: 14px;
+    }
+    .sidebar-gold-box {
+      background: rgba(240,165,0,0.04);
+      border: 1px solid rgba(240,165,0,0.2);
+      padding: 20px; margin-bottom: 14px;
+    }
+    .sidebar-box-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; letter-spacing: 3px;
+      color: rgba(240,165,0,0.4); text-transform: uppercase;
+      margin-bottom: 12px; padding-bottom: 10px;
+      border-bottom: 1px solid rgba(240,165,0,0.08);
+    }
+    .sidebar-toc-link {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 0.5px;
+      color: var(--gray); text-decoration: none;
+      padding: 5px 0 5px 10px;
+      border-left: 2px solid rgba(255,255,255,0.05);
+      margin-bottom: 3px; transition: all 0.15s; line-height: 1.45;
+    }
+    .sidebar-toc-link:hover, .sidebar-toc-link.active {
+      color: var(--gold); border-left-color: var(--gold);
+    }
+    .sidebar-tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; letter-spacing: 1.5px;
+      color: rgba(240,165,0,0.5);
+      border: 1px solid rgba(240,165,0,0.15);
+      padding: 4px 8px; margin: 3px 3px 0 0;
+    }
+    .sidebar-quote {
+      font-family: 'DM Serif Display', serif;
+      font-size: 16px; line-height: 1.6;
+      color: var(--white); font-style: italic;
+      margin-bottom: 10px;
+    }
+    .sidebar-quote-attr {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; letter-spacing: 1.5px;
+      color: rgba(240,165,0,0.35);
+    }
+    .sidebar-cta {
+      display: block; text-align: center;
+      background: var(--gold); color: var(--navy);
+      padding: 13px; font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px; letter-spacing: 2px;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .sidebar-cta:hover { background: transparent; color: var(--gold); outline: 1px solid var(--gold); }
+
+    /* FOOTER NAV */
+    .post-footer-nav {
+      position: relative; z-index: 1;
+      display: flex; justify-content: space-between;
+      gap: 16px; padding: 0 0 80px;
+    }
+    .pfn-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 24px;
+      background: rgba(11,23,51,0.6);
+      border: 1px solid rgba(240,165,0,0.1);
+      text-decoration: none; transition: all 0.2s; flex: 1;
+    }
+    .pfn-btn:hover { border-color: rgba(240,165,0,0.3); background: rgba(240,165,0,0.03); }
+    .pfn-btn.next { justify-content: flex-end; text-align: right; }
+    .pfn-dir { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: rgba(240,165,0,0.35); margin-bottom: 4px; }
+    .pfn-title { font-size: 13px; font-weight: 600; color: var(--white); }
+    .pfn-arrow { font-size: 18px; color: rgba(240,165,0,0.3); }
+  </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-brand">FULCRUM</a>
+    <span class="nav-section">NAMED FOR A GUARDIAN</span>
+  </div>
+  <div class="nav-right">
+    <a href="index.html#blog" class="nav-link">FIELD NOTES</a>
+    <a href="investor-access.html" class="nav-link" style="color:var(--gold)">INVESTORS</a>
+    <a href="get-started.html" class="nav-cta-sm">Get Started →</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+<!-- HERO -->
+<div class="tribute-hero">
+  <div class="tribute-hero-inner">
+
+    <!-- LEFT -->
+    <div>
+      <div class="tribute-tag">
+        <span class="tribute-tag-dot"></span>
+        Named for a Guardian · In Memoriam
+      </div>
+      <h1 class="tribute-headline">Brigadier General<br>Chandler <em>"Fulcrum"</em><br>Atwood</h1>
+      <div class="tribute-rank">USSF · Intelligence & Cyber Leader · Citadel, Military College of South Carolina, Class of 2001</div>
+      <div class="tribute-rule"></div>
+      <p class="tribute-lead">"A fulcrum is the point that makes leverage possible. This platform carries his name because he embodied exactly that. He was the person who made everything around him more capable, more effective, more powerful."</p>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(240,165,0,0.4)">Heath Dorn · Founder &amp; CEO · Digital Transformations LLC</div>
+    </div>
+
+    <!-- RIGHT / CREST -->
+    <div class="tribute-crest">
+      <div class="crest-frame">
+        <div class="crest-inner">
+          <div class="crest-star">★</div>
+          <div class="crest-initials">CA</div>
+          <div class="crest-line"></div>
+          <div class="crest-label">BRIGADIER GENERAL<br>UNITED STATES SPACE FORCE</div>
+        </div>
+      </div>
+      <div class="crest-detail">
+        CITADEL ALUMNUS<br>
+        INTELLIGENCE & CYBER<br>
+        SPACE OPERATIONS
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="hero-gold-rule"></div>
+
+<!-- BODY + SIDEBAR -->
+<div class="post-layout">
+<article class="post-body">
+
+  <p class="lead">Every platform has a name. Most names are chosen for what they signal: strength, speed, precision. This one was chosen for a person.</p>
+
+  <p>Fulcrum Platform carries the name of Brigadier General Chandler "Fulcrum" Atwood, United States Space Force. He was an intelligence and cyber leader, guardian of American national security, and graduate of The Citadel, Military College of South Carolina, Class of 2001. Heath Dorn graduated a year earlier, with the Class of 2000. They were Citadel brothers and close friends.</p>
+
+  <p>The name is not a brand decision. It is a tribute and a promise about what this platform is meant to do.</p>
+
+  <hr class="post-divider"/>
+
+  <h2 id="the-man">The Guardian</h2>
+
+  <p>BG Atwood served as an intelligence and cyber leader within the United States Space Force, operating at the intersection of two of the most critical domains in modern national security. His career spanned the years when military AI, cyber operations, and space-based systems went from emerging capabilities to operational requirements. That was the exact window when getting the architecture right became a matter of national survival.</p>
+
+  <p>He was a Citadel man through and through. That background shaped everything he did in uniform: the discipline, the commitment to something larger than yourself, the understanding that leadership means bearing weight others won't. Heath Dorn knows that firsthand. They walked the same campus and trained under the same system.</p>
+
+  <p>That connection isn't incidental to Fulcrum. It is foundational to it.</p>
+
+  <div class="callout">
+    <div class="callout-label">★ The Citadel, Military College of South Carolina · Class of 2001</div>
+    The Citadel's core values are Honor, Duty, and Respect. BG Atwood embodied all three across a career that took him from the parade ground in Charleston, South Carolina to the highest levels of Space Force intelligence and cyber operations. Heath Dorn shared that formation and built Fulcrum from the same set of values.
+  </div>
+
+  <hr class="post-divider"/>
+
+  <h2 id="the-word">What a Fulcrum Is</h2>
+
+  <div class="word-def">
+    <div class="word-word">fulcrum</div>
+    <div class="word-phonetic">/ ˈfo͝olkrəm /</div>
+    <div class="word-pos">NOUN · PHYSICS & METAPHOR</div>
+    <div class="word-meaning">
+      The <em>point of support</em> on which a lever rests or is supported.<br><br>
+      The thing that plays a <em>central or essential role</em> in an activity, event, or situation.<br><br>
+      The element that makes <em>greater force possible</em> with the same input. The point from which everything around it gains leverage.
+    </div>
+  </div>
+
+  <p>The word fits Chandler Atwood. He was not the loudest person in the room. He was the person whose presence made the room more effective. The advisor whose counsel shifted the outcome. The officer whose judgment gave his team leverage they wouldn't have had without him.</p>
+
+  <p>That is what a fulcrum does. And that is what this platform is designed to do.</p>
+
+  <hr class="post-divider"/>
+
+  <h2 id="why-this-name">Why Heath Chose This Name</h2>
+
+  <p>When Heath Dorn decided to name the platform, he didn't reach for a defense acronym or a Latin word for strength. He thought about what the platform actually needed to be. Then he thought about the person who most embodied it.</p>
+
+  <div class="attr-list">
+    <div class="attr-item">
+      <span class="attr-star">★</span>
+      <div class="attr-text"><strong>Model-agnostic at the core.</strong> A fulcrum doesn't care what it's lifting. It makes all of it more capable. Fulcrum Platform doesn't favor Claude over GPT, or Gemini over Grok. It makes every AI agent on every model more powerful by giving them a governed, coordinated environment to operate in.</div>
+    </div>
+    <div class="attr-item">
+      <span class="attr-star">★</span>
+      <div class="attr-text"><strong>The enabling layer, not the headline act.</strong> BG Atwood wasn't in the mission for credit. He was in it because the mission required someone like him. Fulcrum Platform is not trying to be the AI. It is the layer that makes all the AI worth deploying.</div>
+    </div>
+    <div class="attr-item">
+      <span class="attr-star">★</span>
+      <div class="attr-text"><strong>Built for classified environments.</strong> BG Atwood's career lived at the intersection of intelligence, cyber, and space. Those are exactly the domains where Fulcrum Platform must operate at IL5 and IL6. The name is a reminder of what the stakes are and who this is ultimately built for.</div>
+    </div>
+    <div class="attr-item">
+      <span class="attr-star">★</span>
+      <div class="attr-text"><strong>A connection to The Citadel network.</strong> The Citadel Alumni Network is central to how Digital Transformations has built its advisory structure, its capital relationships, and its trust in the defense community. Naming the platform after a Citadel guardian signals that this isn't a Silicon Valley product that wandered into defense. It was built by someone who belongs here.</div>
+    </div>
+  </div>
+
+  <hr class="post-divider"/>
+
+  <h2 id="the-mission">The Platform as Tribute</h2>
+
+  <p>There is a version of naming a product after someone that is purely ceremonial. A plaque on a wall. A footnote in a pitch deck. This is not that.</p>
+
+  <p>Every design decision in Fulcrum Platform is a reflection of what BG Atwood represented: <strong>precision over noise, governance over chaos, human judgment at every critical decision point.</strong> The Human-in-the-Loop architecture is not just a compliance feature. It is the philosophical position that in national security, humans stay in command. The model-agnostic design is not just a technical choice. It is a refusal to be captured by any one vendor's agenda.</p>
+
+  <p>The platform is built for the warfighter. For the program offices. For the analysts and the operators who need AI that works in the real classified environment, not a sanitized demo. BG Atwood spent his career serving those people. Fulcrum Platform is named for him so that every time someone deploys it, they remember what the mission is actually about.</p>
+
+  <div class="pull-quote">
+    <div class="pull-quote-text">"The weapons exist. The sensors exist. The AI exists. What doesn't exist yet is the secure layer that makes them act as one. That layer is what we are building. It carries his name because that's what he would have wanted built."</div>
+    <div class="pull-quote-attr">Heath Dorn · Founder &amp; CEO · Digital Transformations LLC</div>
+  </div>
+
+  <hr class="post-divider"/>
+
+  <h2 id="golden-dome">From The Citadel to Golden Dome</h2>
+
+  <p>The $175 billion Golden Dome initiative is the most significant missile defense program in a generation. It requires exactly what BG Atwood built his career understanding: AI systems that can coordinate across classification levels, in real time, with human oversight at every critical juncture. Sensor agents. Threat-assessment agents. Fire-control agents. All of them working together across providers and domains.</p>
+
+  <p>The architecture for that doesn't exist yet. Fulcrum Platform is being built to be that architecture.</p>
+
+  <p>It would have been exactly the kind of challenge Chandler Atwood would have leaned into. The kind of problem where experience in intelligence, cyber, and space operations matters. You need someone who has lived at that intersection and understands what happens when those systems fail to coordinate.</p>
+
+  <p>The platform is named for him. The mission is dedicated to him. And the team building it carries that forward every day.</p>
+
+  <div class="dedication">
+    <div class="ded-label">★ Dedication</div>
+    <div class="ded-text">To Brigadier General Chandler "Fulcrum" Atwood, United States Space Force. Intelligence officer. Cyber leader. Citadel guardian. You gave your career to protecting this nation at its most sensitive edges. This platform carries your name into the domain you understood better than almost anyone: the intersection of AI, classified operations, and the defense of the American people. It will be worthy of it.</div>
+    <div class="ded-sig">Heath Dorn · Founder, Fulcrum Platform · Citadel, Military College of South Carolina, Class of 2000</div>
+  </div>
+
+</article>
+
+<!-- SIDEBAR -->
+<aside class="post-sidebar">
+
+  <div class="sidebar-gold-box">
+    <div class="sidebar-box-title">The Name</div>
+    <div class="sidebar-quote">"A fulcrum is the point that makes leverage possible."</div>
+    <div class="sidebar-quote-attr">Heath Dorn, on the platform name</div>
+  </div>
+
+  <div class="sidebar-box">
+    <div class="sidebar-box-title">In This Tribute</div>
+    <a href="#the-man" class="sidebar-toc-link">The Guardian</a>
+    <a href="#the-word" class="sidebar-toc-link">What a Fulcrum Is</a>
+    <a href="#why-this-name" class="sidebar-toc-link">Why Heath Chose This Name</a>
+    <a href="#the-mission" class="sidebar-toc-link">The Platform as Tribute</a>
+    <a href="#golden-dome" class="sidebar-toc-link">From The Citadel to Golden Dome</a>
+  </div>
+
+  <div class="sidebar-box">
+    <div class="sidebar-box-title">About BG Atwood</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+      <div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(240,165,0,0.4);margin-bottom:3px">SERVICE</div><div style="font-size:13px;color:var(--white);font-weight:600">United States Space Force</div></div>
+      <div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(240,165,0,0.4);margin-bottom:3px">DOMAIN</div><div style="font-size:13px;color:var(--white);font-weight:600">Intelligence & Cyber</div></div>
+      <div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(240,165,0,0.4);margin-bottom:3px">EDUCATION</div><div style="font-size:13px;color:var(--white);font-weight:600">The Citadel, Military College of South Carolina · Class of 2001</div></div>
+      <div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(240,165,0,0.4);margin-bottom:3px">RANK</div><div style="font-size:13px;color:var(--white);font-weight:600">Brigadier General (O-7)</div></div>
+    </div>
+  </div>
+
+  <div class="sidebar-box">
+    <div class="sidebar-box-title">Related</div>
+    <a href="blog-heath-dorn-founder.html" class="sidebar-toc-link">The Founder Story →</a>
+    <a href="blog-investor-thesis.html" style="color:rgba(240,165,0,0.5);border-left-color:rgba(240,165,0,0.15)" class="sidebar-toc-link">Investor Brief →</a>
+    <a href="index.html#citadel" class="sidebar-toc-link">Citadel Network →</a>
+  </div>
+
+  <div class="sidebar-box">
+    <div class="sidebar-box-title">Tags</div>
+    <span class="sidebar-tag">TRIBUTE</span>
+    <span class="sidebar-tag">CITADEL</span>
+    <span class="sidebar-tag">USSF</span>
+    <span class="sidebar-tag">GOLDEN DOME</span>
+    <span class="sidebar-tag">MISSION</span>
+  </div>
+
+</aside>
+</div>
+
+<!-- FOOTER NAV -->
+<div class="post-footer-nav">
+  <a href="index.html" class="pfn-btn">
+    <div class="pfn-arrow">←</div>
+    <div>
+      <div class="pfn-dir">Back to Platform</div>
+      <div class="pfn-title">Fulcrum Home</div>
+    </div>
+  </a>
+  <a href="blog-heath-dorn-founder.html" class="pfn-btn next">
+    <div>
+      <div class="pfn-dir">Next Brief</div>
+      <div class="pfn-title">The Founder Story →</div>
+    </div>
+    <div class="pfn-arrow">→</div>
+  </a>
+</div>
+
+</div><!-- /page-wrap -->
+
+<script>
+  const sections = document.querySelectorAll('[id]');
+  const tocLinks = document.querySelectorAll('.sidebar-toc-link[href^="#"]');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
