@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Careers — Build the Defense AI Layer — Fulcrum Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:      #060d1f;
+      --navy-mid:  #0b1733;
+      --navy-light:#112048;
+      --steel:     #1a2d5a;
+      --fulcrum:   #00c8ff;
+      --gold:      #f0a500;
+      --green:     #00d4a0;
+      --orange:    #ff6b1a;
+      --white:     #f0f4ff;
+      --gray:      #7a8fb0;
+      --body-text: #a8bcda;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.022) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .orb { position: fixed; border-radius: 50%; filter: blur(140px); pointer-events: none; z-index: 0; }
+    .orb-1 { width: 800px; height: 800px; background: rgba(0,200,255,0.05); top: -300px; right: -200px; }
+    .orb-2 { width: 600px; height: 600px; background: rgba(0,212,160,0.04); bottom: -200px; left: -100px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(6,13,31,0.97);
+      border-bottom: 1px solid rgba(0,200,255,0.12);
+      backdrop-filter: blur(20px); z-index: 100;
+    }
+    .nav-left { display: flex; align-items: center; }
+    .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--fulcrum); text-decoration: none; }
+    .nav-section { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.35); border-left: 1px solid rgba(0,200,255,0.15); padding-left: 20px; margin-left: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gray); text-decoration: none; transition: color 0.15s; }
+    .nav-link:hover { color: var(--fulcrum); }
+    .nav-cta-sm { display: inline-flex; align-items: center; gap: 8px; background: var(--fulcrum); color: var(--navy); padding: 8px 18px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; text-decoration: none; transition: all 0.2s; }
+    .nav-cta-sm:hover { background: transparent; color: var(--fulcrum); border: 1px solid var(--fulcrum); }
+
+    /* PAGE WRAP */
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+
+    /* HERO */
+    .careers-hero {
+      position: relative; z-index: 1;
+      padding: 130px 0 80px;
+      border-bottom: 1px solid rgba(0,200,255,0.08);
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 3px; color: var(--green);
+      border: 1px solid rgba(0,212,160,0.3);
+      padding: 5px 14px; margin-bottom: 24px; text-transform: uppercase;
+    }
+    .hero-eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pdot 2s ease-in-out infinite; }
+    @keyframes pdot { 0%,100%{box-shadow:0 0 0 0 rgba(0,212,160,0.5)} 50%{box-shadow:0 0 0 6px rgba(0,212,160,0)} }
+
+    .careers-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 60px; line-height: 1.04;
+      color: var(--white); font-weight: 400;
+      margin-bottom: 20px; max-width: 780px;
+    }
+    .careers-title em { font-style: italic; color: var(--fulcrum); }
+
+    .careers-sub {
+      font-size: 18px; line-height: 1.75;
+      color: var(--body-text); font-weight: 300;
+      max-width: 620px; margin-bottom: 40px;
+    }
+
+    .hero-stats-row {
+      display: flex; gap: 32px; flex-wrap: wrap;
+      padding-top: 32px;
+      border-top: 1px solid rgba(0,200,255,0.08);
+    }
+    .hero-stat { display: flex; flex-direction: column; gap: 4px; }
+    .hero-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--fulcrum); line-height: 1; }
+    .hero-stat-num.gold { color: var(--gold); }
+    .hero-stat-num.green { color: var(--green); }
+    .hero-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--gray); }
+
+    /* FILTER BAR */
+    .filter-bar {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 10px;
+      padding: 32px 0 24px; flex-wrap: wrap;
+    }
+    .filter-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--gray); text-transform: uppercase; margin-right: 6px; }
+    .filter-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 1.5px; color: var(--gray);
+      background: rgba(11,23,51,0.6);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 7px 14px; cursor: pointer;
+      transition: all 0.15s; text-transform: uppercase;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      color: var(--fulcrum); border-color: rgba(0,200,255,0.3);
+      background: rgba(0,200,255,0.06);
+    }
+    .filter-btn.active { color: var(--navy); background: var(--fulcrum); border-color: var(--fulcrum); }
+
+    /* SECTION HEADERS */
+    .roles-section { position: relative; z-index: 1; margin-bottom: 64px; }
+    .section-heading {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 20px; padding-bottom: 16px;
+      border-bottom: 1px solid rgba(0,200,255,0.08);
+    }
+    .section-heading-bar { width: 4px; height: 28px; flex-shrink: 0; }
+    .section-heading-bar.cyan { background: var(--fulcrum); }
+    .section-heading-bar.gold { background: var(--gold); }
+    .section-heading-bar.green { background: var(--green); }
+    .section-heading-bar.orange { background: var(--orange); }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: var(--white); }
+    .section-count { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--gray); border: 1px solid rgba(255,255,255,0.07); padding: 3px 8px; }
+
+    /* JOB CARDS */
+    .roles-grid { display: flex; flex-direction: column; gap: 12px; }
+
+    .job-card {
+      background: rgba(11,23,51,0.7);
+      border: 1px solid rgba(0,200,255,0.09);
+      transition: all 0.2s; cursor: pointer;
+      overflow: hidden;
+    }
+    .job-card:hover { border-color: rgba(0,200,255,0.25); background: rgba(11,23,51,0.9); }
+    .job-card.expanded { border-color: rgba(0,200,255,0.3); }
+
+    .job-card-header {
+      display: flex; align-items: center; gap: 16px;
+      padding: 20px 24px; cursor: pointer;
+      user-select: none;
+    }
+    .job-accent { width: 3px; flex-shrink: 0; border-radius: 2px; }
+    .job-info { flex: 1; min-width: 0; }
+    .job-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 5px; }
+    .job-meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .job-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 8px;
+      letter-spacing: 1.5px; padding: 3px 8px; text-transform: uppercase;
+    }
+    .tag-clearance { background: rgba(240,165,0,0.08); border: 1px solid rgba(240,165,0,0.25); color: var(--gold); }
+    .tag-remote { background: rgba(0,212,160,0.07); border: 1px solid rgba(0,212,160,0.2); color: var(--green); }
+    .tag-dept { background: rgba(0,200,255,0.07); border: 1px solid rgba(0,200,255,0.2); color: var(--fulcrum); }
+    .tag-new { background: rgba(0,212,160,0.1); border: 1px solid rgba(0,212,160,0.3); color: var(--green); }
+    .tag-senior { background: rgba(255,107,26,0.08); border: 1px solid rgba(255,107,26,0.2); color: var(--orange); }
+    .tag-branch { background: rgba(240,165,0,0.06); border: 1px solid rgba(240,165,0,0.2); color: var(--gold); font-size: 8px; }
+
+    .job-arrow {
+      font-size: 20px; color: rgba(0,200,255,0.25);
+      transition: transform 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .job-card.expanded .job-arrow { transform: rotate(90deg); color: var(--fulcrum); }
+
+    /* JOB BODY */
+    .job-body {
+      display: none; padding: 0 24px 28px 43px;
+      border-top: 1px solid rgba(0,200,255,0.07);
+    }
+    .job-card.expanded .job-body { display: block; }
+    .job-body-inner { padding-top: 20px; max-width: 680px; }
+
+    .jb-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2.5px; color: rgba(0,200,255,0.4); text-transform: uppercase; margin-bottom: 8px; margin-top: 20px; }
+    .jb-label:first-child { margin-top: 0; }
+    .jb-text { font-size: 14px; line-height: 1.75; color: var(--body-text); font-weight: 300; }
+    .jb-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .jb-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.6; color: var(--body-text); font-weight: 300; }
+    .jb-list li::before { content: '⬡'; color: rgba(0,200,255,0.35); font-size: 10px; flex-shrink: 0; margin-top: 2px; }
+    .jb-list li strong { color: var(--white); font-weight: 600; }
+
+    .jb-apply-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-top: 24px;
+      background: var(--fulcrum); color: var(--navy);
+      padding: 12px 24px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 17px; letter-spacing: 2px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .jb-apply-btn:hover { background: transparent; color: var(--fulcrum); outline: 1px solid var(--fulcrum); }
+
+    .jb-note {
+      margin-top: 16px; font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 1px; color: rgba(122,143,176,0.45); line-height: 1.7;
+    }
+
+    /* ORCHESTRATOR GRID */
+    .orchestrator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+    .orch-card {
+      background: rgba(11,23,51,0.7);
+      border: 1px solid rgba(240,165,0,0.1);
+      transition: all 0.2s; cursor: pointer; overflow: hidden;
+    }
+    .orch-card:hover { border-color: rgba(240,165,0,0.3); background: rgba(11,23,51,0.9); }
+    .orch-card.expanded { border-color: rgba(240,165,0,0.35); }
+
+    .orch-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 20px; cursor: pointer; user-select: none;
+    }
+    .orch-emblem { width: 44px; height: 44px; border: 1px solid rgba(240,165,0,0.2); background: rgba(240,165,0,0.05); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .orch-info { flex: 1; }
+    .orch-branch { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; color: var(--white); line-height: 1; margin-bottom: 3px; }
+    .orch-sub { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1.5px; color: rgba(240,165,0,0.45); }
+    .orch-arrow { font-size: 16px; color: rgba(240,165,0,0.2); transition: transform 0.2s, color 0.2s; }
+    .orch-card.expanded .orch-arrow { transform: rotate(90deg); color: var(--gold); }
+
+    .orch-body { display: none; padding: 0 20px 22px; border-top: 1px solid rgba(240,165,0,0.07); }
+    .orch-card.expanded .orch-body { display: block; }
+    .orch-body-inner { padding-top: 16px; }
+
+    /* CTA SECTION */
+    .careers-cta {
+      position: relative; z-index: 1;
+      background: rgba(0,200,255,0.04);
+      border: 1px solid rgba(0,200,255,0.15);
+      border-top: 3px solid var(--fulcrum);
+      padding: 48px 56px; margin: 64px 0 100px;
+      display: flex; align-items: center; justify-content: space-between; gap: 40px;
+    }
+    .cta-left {}
+    .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; color: var(--white); margin-bottom: 8px; }
+    .cta-sub { font-size: 15px; color: var(--body-text); font-weight: 300; max-width: 480px; line-height: 1.65; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--fulcrum); color: var(--navy);
+      padding: 16px 32px; font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px; letter-spacing: 3px; text-decoration: none;
+      transition: all 0.2s; flex-shrink: 0;
+    }
+    .cta-btn:hover { background: transparent; color: var(--fulcrum); outline: 2px solid var(--fulcrum); }
+
+    /* MODAL */
+    .apply-modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(4,10,22,0.92); backdrop-filter: blur(12px);
+      z-index: 999; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .apply-modal.open { display: flex; }
+    .modal-box {
+      background: var(--navy-mid); border: 1px solid rgba(0,200,255,0.2);
+      border-top: 3px solid var(--fulcrum);
+      width: 100%; max-width: 560px; padding: 40px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 20px;
+      background: none; border: none; color: var(--gray);
+      font-size: 20px; cursor: pointer; transition: color 0.15s;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px; color: rgba(0,200,255,0.4); text-transform: uppercase; margin-bottom: 6px; }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--white); margin-bottom: 24px; line-height: 1.1; }
+    .modal-field { margin-bottom: 16px; }
+    .modal-field label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(0,200,255,0.4); text-transform: uppercase; margin-bottom: 6px; }
+    .modal-field input, .modal-field textarea, .modal-field select {
+      width: 100%; background: rgba(6,13,31,0.8); border: 1px solid rgba(0,200,255,0.15);
+      color: var(--white); padding: 12px 14px; font-family: 'Outfit', sans-serif;
+      font-size: 14px; outline: none; transition: border-color 0.2s; resize: vertical;
+    }
+    .modal-field input:focus, .modal-field textarea:focus, .modal-field select:focus { border-color: rgba(0,200,255,0.4); }
+    .modal-field textarea { min-height: 80px; }
+    .modal-submit {
+      width: 100%; background: var(--fulcrum); color: var(--navy);
+      border: none; padding: 15px; font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px; letter-spacing: 3px; cursor: pointer;
+      transition: all 0.2s; margin-top: 8px;
+    }
+    .modal-submit:hover { background: transparent; color: var(--fulcrum); outline: 1px solid var(--fulcrum); }
+    .modal-note { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; color: rgba(122,143,176,0.4); margin-top: 12px; line-height: 1.7; }
+  /* ── MOBILE RESPONSIVE ── */
+  @media (max-width: 768px) {
+    /* Nav */
+    nav { padding: 0 16px; }
+    .nav-left .nav-section { display: none; }
+    .nav-right { gap: 10px; }
+    .nav-link:not([style*="green"]) { display: none; }
+    .nav-cta-sm { font-size: 12px !important; padding: 7px 12px !important; }
+
+    /* Page wrap */
+    .page-wrap { padding: 0 16px !important; }
+
+    /* Hero */
+    .careers-hero { padding: 90px 0 48px; }
+    .careers-title { font-size: 34px !important; }
+    .careers-sub { font-size: 15px !important; }
+    .hero-stats-row { gap: 16px; }
+    .hero-stat-num { font-size: 24px !important; }
+
+    /* Filter bar */
+    .filter-bar { gap: 6px; }
+    .filter-btn { font-size: 8px !important; padding: 6px 10px !important; }
+
+    /* Section headings */
+    .section-heading { flex-wrap: wrap; gap: 8px; }
+    .section-title { font-size: 18px !important; }
+
+    /* Job cards */
+    .job-card-header { padding: 16px; gap: 10px; }
+    .job-accent { display: none; }
+    .job-title { font-size: 14px !important; }
+    .job-meta { gap: 6px; }
+    .job-tag { font-size: 7px !important; padding: 2px 6px !important; }
+    .job-body { padding: 0 16px 22px; }
+    .job-body-inner { padding-top: 14px; }
+    .jb-text { font-size: 13px !important; }
+    .jb-list li { font-size: 13px !important; }
+    .jb-apply-btn { font-size: 14px !important; padding: 10px 18px !important; }
+
+    /* Orchestrator grid: 3-col → 1-col */
+    .orchestrator-grid { grid-template-columns: 1fr !important; }
+    .orch-header { padding: 14px 16px; }
+    .orch-body { padding: 0 16px 18px; }
+
+    /* CTA section */
+    .careers-cta { flex-direction: column; padding: 32px 24px; gap: 24px; }
+    .cta-title { font-size: 22px !important; }
+    .cta-btn { width: 100%; justify-content: center; }
+
+    /* Apply modal */
+    .modal-box { padding: 28px 20px; }
+    .modal-title { font-size: 20px !important; }
+    .modal-field input,
+    .modal-field textarea,
+    .modal-field select { font-size: 16px !important; } /* prevent iOS zoom */
+  }
+
+  @media (max-width: 480px) {
+    .careers-title { font-size: 28px !important; }
+    .hero-stats-row { grid-template-columns: 1fr 1fr; display: grid; }
+  }
+  </style>
+</head>
+<body>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-brand">FULCRUM</a>
+    <span class="nav-section">CAREERS</span>
+  </div>
+  <div class="nav-right">
+    <a href="index.html#blog" class="nav-link">FIELD NOTES</a>
+    <a href="investor-access.html" class="nav-link" style="color:var(--gold)">INVESTORS</a>
+    <a href="get-started.html" class="nav-cta-sm">Get Started →</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <div class="careers-hero">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Now Hiring · Clearance Required for Most Roles</div>
+    <h1 class="careers-title">Build the <em>Defense AI Layer</em><br>That Doesn't Exist Yet</h1>
+    <p class="careers-sub">Fulcrum is the first MCP-native AI agent orchestration platform built for IL5 and above. We are assembling the team that will put it into production across every branch of the U.S. military. Zero competitors. High stakes. Real mission.</p>
+    <div class="hero-stats-row">
+      <div class="hero-stat"><span class="hero-stat-num">12</span><span class="hero-stat-label">Open Roles</span></div>
+      <div class="hero-stat"><span class="hero-stat-num gold">TS/SCI</span><span class="hero-stat-label">Required for most positions</span></div>
+      <div class="hero-stat"><span class="hero-stat-num green">IL5+</span><span class="hero-stat-label">Operating environment</span></div>
+      <div class="hero-stat"><span class="hero-stat-num" style="color:var(--orange)">6</span><span class="hero-stat-label">Military branches served</span></div>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="filterRoles('all',this)">All Roles</button>
+    <button class="filter-btn" onclick="filterRoles('engineering',this)">Engineering</button>
+    <button class="filter-btn" onclick="filterRoles('field',this)">Field Operations</button>
+    <button class="filter-btn" onclick="filterRoles('sales',this)">Sales</button>
+    <button class="filter-btn" onclick="filterRoles('design',this)">Design</button>
+  </div>
+
+  <!-- ─── SECTION 1: ENGINEERING ─── -->
+  <div class="roles-section" data-category="engineering">
+    <div class="section-heading">
+      <div class="section-heading-bar cyan"></div>
+      <div class="section-title">Engineering</div>
+      <div class="section-count">5 OPEN ROLES</div>
+    </div>
+    <div class="roles-grid">
+
+      <!-- ROLE 1: MCP AI Platform Engineer -->
+      <div class="job-card" onclick="toggleCard(this)">
+        <div class="job-card-header">
+          <div class="job-accent" style="height:52px;background:var(--fulcrum)"></div>
+          <div class="job-info">
+            <div class="job-title">MCP AI Platform Engineer</div>
+            <div class="job-meta">
+              <span class="job-tag tag-clearance">TS/SCI Required</span>
+              <span class="job-tag tag-dept">Platform Engineering</span>
+              <span class="job-tag tag-senior">Senior / Expert</span>
+              <span class="job-tag tag-remote">Remote · CONUS</span>
+            </div>
+          </div>
+          <div class="job-arrow">›</div>
+        </div>
+        <div class="job-body">
+          <div class="job-body-inner">
+            <div class="jb-label">About the Role</div>
+            <div class="jb-text">You are the person who makes Fulcrum's MCP layer work at the protocol level. This is an expert-level AI engineering role focused on tool calling, agent-to-agent communication, and MCP server architecture inside classified environments. You will own the integration layer between Fulcrum's runtime and the LLM providers — Claude, GPT-4o, Gemini, Grok, LeapfrogAI — ensuring secure, low-latency, model-agnostic operation at IL5 and IL6.</div>
+
+            <div class="jb-label">What You Will Build</div>
+            <ul class="jb-list">
+              <li>MCP tool servers with production-grade error handling, retry logic, and auditability</li>
+              <li>OAuth 2.1 and short-lived token authentication flows for agent sessions</li>
+              <li>Row-level security and RBAC enforcement at the MCP protocol layer</li>
+              <li>Model-agnostic adapter interfaces for each LLM provider</li>
+              <li>STIG-compliant runtime hardening for IL5 and IL6 operating environments</li>
+            </ul>
+
+            <div class="jb-label">Requirements</div>
+            <ul class="jb-list">
+              <li><strong>Active TS/SCI clearance</strong> — non-negotiable</li>
+              <li>Expert-level AI engineering experience — you have shipped AI systems in production, not just prototypes</li>
+              <li>Deep hands-on knowledge of MCP (Model Context Protocol), tool calling, and function calling across at least two major LLM APIs</li>
+              <li>Experience with OAuth 2.1, JWT, and zero-trust authentication architectures</li>
+              <li>Comfort working in classified networks, air-gapped environments, or IL5-equivalent systems</li>
+              <li>Python or TypeScript fluency; Node.js experience preferred</li>
+            </ul>
+
+            <button class="jb-apply-btn" onclick="openApply('MCP AI Platform Engineer'); event.stopPropagation()">
+              Apply for This Role →
+            </button>
+            <div class="jb-note">U.S. citizenship required. TS/SCI polygraph eligibility preferred. Salary range commensurate with clearance level and experience.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROLE 2: Full Stack AI Developer -->
+      <div class="job-card" onclick="toggleCard(this)">
+        <div class="job-card-header">
+          <div class="job-accent" style="height:52px;background:var(--fulcrum)"></div>
+          <div class="job-info">
+            <div class="job-title">Full Stack AI Developer Engineer</div>
+            <div class="job-meta">
+              <span class="job-tag tag-dept">Product Engineering</span>
+              <span class="job-tag tag-new">New Role</span>
+              <span class="job-tag tag-remote">Remote · CONUS</span>
+            </div>
+          </div>
+          <div class="job-arrow">›</div>
+        </div>
+        <div class="job-body">
+          <div class="job-body-inner">
+            <div class="jb-label">About the Role</div>
+            <div class="jb-text">You will build the full product stack — from the backend API and agent orchestration layer to the user-facing workspace interface. Fulcrum is a collaboration platform for humans and AI agent teams, and you will be building the features that make that collaboration fast, intuitive, and defensible. This role spans the entire stack and requires someone who is genuinely excited about AI-native product development, not just AI as a feature.</div>
+
+            <div class="jb-label">What You Will Build</div>
+            <ul class="jb-list">
+              <li>Real-time messaging, task management, and @mention routing for human-agent workspaces</li>
+              <li>Context Vault: persistent shared memory for agent teams across sessions</li>
+              <li>Human-in-the-Loop gate UI — approval flows, provenance tracking, audit logs</li>
+              <li>REST and streaming API endpoints for MCP tool integration</li>
+              <li>Dashboard and analytics for agent team performance and task completion</li>
+            </ul>
+
+            <div class="jb-label">Requirements</div>
+            <ul class="jb-list">
+              <li>3+ years full stack development with strong TypeScript/Node.js backend and React/Next.js frontend</li>
+              <li>Hands-on experience integrating LLM APIs (OpenAI, Anthropic, or equivalent) into production applications</li>
+              <li>Familiarity with WebSocket or SSE for real-time features</li>
+              <li>Comfort with PostgreSQL or similar relational databases, including row-level security patterns</li>
+              <li>U.S. citizenship required; clearance preferred but not required to start</li>
+            </ul>
+
+            <button class="jb-apply-btn" onclick="openApply('Full Stack AI Developer Engineer'); event.stopPropagation()">
+              Apply for This Role →
+            </button>
+            <div class="jb-note">U.S. citizenship required. Clearance sponsorship available for the right candidate.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROLE 3: DevSecOps -->
+      <div class="job-card" onclick="toggleCard(this)">
+        <div class="job-card-header">
+          <div class="job-accent" style="height:52px;background:var(--fulcrum)"></div>
+          <div class="job-info">
+            <div class="job-title">DevSecOps Engineer</div>
+            <div class="job-meta">
+              <span class="job-tag tag-clearance">TS/SCI Required</span>
+              <span class="job-tag tag-dept">Security Engineering</span>
+              <span class="job-tag tag-remote">Remote · CONUS</span>
+            </div>
+          </div>
+          <div class="job-arrow">›</div>
+        </div>
+        <div class="job-body">
+          <div class="job-body-inner">
+            <div class="jb-label">About the Role</div>
+            <div class="jb-text">Fulcrum's path to IL5 accreditation runs through a DevSecOps engineer who understands what that journey actually requires. You will own the pipeline, the hardening, the STIG compliance, and the authorization package work that gets Fulcrum from IL2 to IL5 to IL6. This is not a checkbox role — it is the engineering work that creates the moat.</div>
+
+            <div class="jb-label">What You Will Own</div>
+            <ul class="jb-list">
+              <li>CI/CD pipeline security — SBOM generation, container scanning, secret management</li>
+              <li>DISA STIG implementation and continuous compliance monitoring</li>
+              <li>IL5 authorization package preparation in partnership with Second Front Game Warden</li>
+              <li>Zero-trust network architecture for air-gapped and classified deployments</li>
+              <li>Kubernetes hardening (UDS Core / Zarf packaging) for tactical edge deployments</li>
+              <li>ATO documentation, POA&M tracking, and ISSO coordination</li>
+            </ul>
+
+            <div class="jb-label">Requirements</div>
+            <ul class="jb-list">
+              <li><strong>Active TS/SCI clearance required</strong></li>
+              <li>Hands-on experience with DoD IL4/IL5 environments and DISA STIGs</li>
+              <li>ATO or RMF experience — you have been through the process, not just read about it</li>
+              <li>Kubernetes, Helm, and container security in DoD or FedRAMP contexts</li>
+              <li>Familiarity with Platform One, Big Bang, or Iron Bank preferred</li>
+              <li>DoD 8570 / 8140 certification (Security+, CISSP, or equivalent) preferred</li>
+            </ul>
+
+            <button class="jb-apply-btn" onclick="openApply('DevSecOps Engineer'); event.stopPropagation()">
+              Apply for This Role →
+            </button>
+            <div class="jb-note">Active TS/SCI required on day one. Polygraph eligibility a strong plus. Remote with occasional SCIF access required.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROLE 4: Anthropic MCP Software Engineer -->
+      <div class="job-card" onclick="toggleCard(this)" style="border-color:rgba(100,160,255,0.15)">
+        <div class="job-card-header">
+          <div class="job-accent" style="height:72px;background:linear-gradient(180deg,#5b8def,#00c8ff)"></div>
+          <div class="job-info">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+              <div class="job-title" style="margin-bottom:0">Software Engineer, Model Context Protocol</div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2px;padding:3px 8px;background:rgba(91,141,239,0.1);border:1px solid rgba(91,141,239,0.3);color:#5b8def;text-transform:uppercase">Anthropic</span>
+            </div>
+            <div class="job-meta">
+              <span class="job-tag" style="background:rgba(91,141,239,0.07);border:1px solid rgba(91,141,239,0.2);color:#5b8def">Protocol Dev Team</span>
+              <span class="job-tag tag-new">Open Source</span>
+              <span class="job-tag tag-senior">5+ Years</span>
+              <span class="job-tag" style="background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.2);color:var(--fulcrum)">📍 San Francisco, CA</span>
+              <span class="job-tag tag-remote">Hybrid · 25%+ In Office</span>
+              <span class="job-tag" style="background:rgba(0,212,160,0.07);border:1px solid rgba(0,212,160,0.2);color:var(--green)">Visa Sponsorship Available</span>
+            </div>
+          </div>
+          <div class="job-arrow">›</div>
+        </div>
+        <div class="job-body">
+          <div class="job-body-inner">
+
+            <!-- Anthropic context bar -->
+            <div style="background:rgba(91,141,239,0.06);border:1px solid rgba(91,141,239,0.15);border-left:3px solid #5b8def;padding:14px 18px;margin-bottom:20px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(91,141,239,0.6);text-transform:uppercase;margin-bottom:4px">About Anthropic</div>
+              <div style="font-size:13px;line-height:1.65;color:var(--body-text);font-weight:300">Anthropic is an AI safety company building reliable, interpretable, and steerable AI systems. Their team includes researchers, engineers, policy experts, and business leaders united by a commitment to beneficial AI — pioneering some of the most consequential technology of our time.</div>
+            </div>
+
+            <div class="jb-label">The Opportunity</div>
+            <div class="jb-text">Model Context Protocol (MCP) is Anthropic's open standard for connecting AI models to external tools, data sources, and services. Since its launch in November 2024, the developer community has built hundreds of integrations on top of MCP — and adoption is accelerating. As a Software Engineer on the MCP team, you will help define and build the protocol that sits at the center of the agentic AI ecosystem, working in public alongside a vibrant open source community.</div>
+
+            <div class="jb-label">What You'll Do</div>
+            <ul class="jb-list">
+              <li>Design and implement core MCP protocol features in collaboration with the open source community</li>
+              <li>Build and maintain SDKs and tooling that make MCP easy to adopt across languages and frameworks</li>
+              <li>Support external developers and internal teams building on MCP — through code, docs, and direct engagement</li>
+              <li>Develop showcase implementations that demonstrate MCP's capabilities and set quality standards for the ecosystem</li>
+              <li>Write clear, comprehensive technical documentation that helps developers succeed quickly</li>
+              <li>Participate in code reviews and provide mentorship to community contributors</li>
+              <li>Help shape the long-term technical direction of the protocol while ensuring backward compatibility</li>
+              <li>Drive technical discussions in public channels, GitHub issues, and community forums</li>
+            </ul>
+
+            <div class="jb-label">Required Qualifications</div>
+            <ul class="jb-list">
+              <li><strong>5+ years</strong> of software engineering experience</li>
+              <li>Strong proficiency in <strong>TypeScript/JavaScript and Python</strong></li>
+              <li>Experience building and maintaining open source projects or developer-facing tools</li>
+              <li>Deep understanding of API design, protocol development, or distributed systems</li>
+              <li>Excellent written communication skills — you can explain complex systems clearly</li>
+              <li>Comfortable working asynchronously in a highly collaborative, public-facing environment</li>
+            </ul>
+
+            <div class="jb-label">Preferred Qualifications</div>
+            <ul class="jb-list">
+              <li>Hands-on experience building MCP servers or clients</li>
+              <li>Familiarity with AI/LLM application development and agentic workflows</li>
+              <li>Experience with security patterns for API and integration design</li>
+              <li>Track record of community leadership in open source ecosystems</li>
+              <li>Background in developer experience (DX) design</li>
+              <li>Contributions to technical standards or cross-company protocol efforts</li>
+            </ul>
+
+            <div class="jb-label">Core Technologies</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(91,141,239,0.08);border:1px solid rgba(91,141,239,0.2);color:#5b8def">TypeScript</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(91,141,239,0.08);border:1px solid rgba(91,141,239,0.2);color:#5b8def">Python</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(91,141,239,0.08);border:1px solid rgba(91,141,239,0.2);color:#5b8def">MCP / JSON-RPC</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(91,141,239,0.08);border:1px solid rgba(91,141,239,0.2);color:#5b8def">REST APIs</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(91,141,239,0.08);border:1px solid rgba(91,141,239,0.2);color:#5b8def">Git / GitHub</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(91,141,239,0.08);border:1px solid rgba(91,141,239,0.2);color:#5b8def">Auth & Security</span>
+            </div>
+
+            <div class="jb-label">What Anthropic Offers</div>
+            <ul class="jb-list">
+              <li>Competitive salary + equity compensation</li>
+              <li>Comprehensive health, dental, and vision coverage</li>
+              <li>Generous parental leave and family planning support</li>
+              <li>Flexible PTO and paid holidays</li>
+              <li><strong>Visa sponsorship available</strong> for qualified candidates</li>
+              <li>Annual learning and development stipend</li>
+              <li>Work at the frontier of AI — with real impact on how developers build</li>
+            </ul>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;align-items:center">
+              <a class="jb-apply-btn" href="https://boards.greenhouse.io/anthropic/jobs/4494503008" target="_blank" onclick="event.stopPropagation()" style="background:#5b8def;color:#fff;text-decoration:none">
+                Apply at Anthropic →
+              </a>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(91,141,239,0.5);line-height:1.7">
+                boards.greenhouse.io/anthropic/jobs/4494503008
+              </div>
+            </div>
+            <div class="jb-note" style="margin-top:12px">Applications reviewed on a rolling basis — no deadline. Apply even if you don't meet every qualification. Equal opportunity employer. Bachelor's degree in a related field or equivalent experience required. Anthropic welcomes applicants from all backgrounds.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── SECTION 2: DESIGN ─── -->
+  <div class="roles-section" data-category="design">
+    <div class="section-heading">
+      <div class="section-heading-bar" style="background:var(--orange)"></div>
+      <div class="section-title">Design</div>
+      <div class="section-count">1 OPEN ROLE</div>
+    </div>
+    <div class="roles-grid">
+
+      <!-- ROLE 4: UI/UX -->
+      <div class="job-card" onclick="toggleCard(this)">
+        <div class="job-card-header">
+          <div class="job-accent" style="height:52px;background:var(--orange)"></div>
+          <div class="job-info">
+            <div class="job-title">UI/UX & Frontend Developer</div>
+            <div class="job-meta">
+              <span class="job-tag tag-dept">Design Engineering</span>
+              <span class="job-tag tag-new">New Role</span>
+              <span class="job-tag tag-remote">Remote · CONUS</span>
+            </div>
+          </div>
+          <div class="job-arrow">›</div>
+        </div>
+        <div class="job-body">
+          <div class="job-body-inner">
+            <div class="jb-label">About the Role</div>
+            <div class="jb-text">Most defense software looks like it was designed in 2007. Fulcrum is the exception. You will design and build the human-facing side of a platform that warfighters, analysts, and program offices will use daily — and you will make it fast, clear, and genuinely good to use. This is a hybrid design and engineering role: you should be able to move from a Figma wireframe to a React component in the same day.</div>
+
+            <div class="jb-label">What You Will Own</div>
+            <ul class="jb-list">
+              <li>Workspace UI: the human-agent collaboration interface where users message, task, and coordinate with AI agent teams</li>
+              <li>Human-in-the-Loop approval interfaces — clarity and precision under pressure</li>
+              <li>Design system: components, tokens, dark-mode-first patterns built for classified environments</li>
+              <li>Public-facing marketing and platform pages (you have seen what is possible)</li>
+              <li>Mobile-responsive layouts for operational use cases across devices</li>
+            </ul>
+
+            <div class="jb-label">Requirements</div>
+            <ul class="jb-list">
+              <li>Strong visual design instincts and an eye for typography, spacing, and motion</li>
+              <li>Figma proficiency for rapid prototyping and design system management</li>
+              <li>React and CSS fluency — you build what you design</li>
+              <li>Experience designing for data-dense, real-time, or mission-critical interfaces is a significant plus</li>
+              <li>Portfolio required — show us something that proves you care about craft</li>
+              <li>U.S. citizenship required; clearance not required to start</li>
+            </ul>
+
+            <button class="jb-apply-btn" onclick="openApply('UI/UX & Frontend Developer'); event.stopPropagation()" style="background:var(--orange);color:var(--navy)">
+              Apply for This Role →
+            </button>
+            <div class="jb-note">Link your portfolio or GitHub in your application. Remote position. Clearance sponsorship available.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── SECTION 3: SALES ─── -->
+  <div class="roles-section" data-category="sales">
+    <div class="section-heading">
+      <div class="section-heading-bar gold"></div>
+      <div class="section-title">Enterprise Sales</div>
+      <div class="section-count">1 OPEN ROLE</div>
+    </div>
+    <div class="roles-grid">
+
+      <!-- ROLE 5: Military Enterprise Sales -->
+      <div class="job-card" onclick="toggleCard(this)" style="border-color:rgba(240,165,0,0.12)">
+        <div class="job-card-header">
+          <div class="job-accent" style="height:64px;background:var(--gold)"></div>
+          <div class="job-info">
+            <div class="job-title">U.S. Military Enterprise Sales Representative</div>
+            <div class="job-meta">
+              <span class="job-tag tag-clearance">TS/SCI Required</span>
+              <span class="job-tag tag-senior">20+ Years Experience</span>
+              <span class="job-tag tag-branch">All Branches</span>
+              <span class="job-tag tag-remote">Remote · CONUS</span>
+            </div>
+          </div>
+          <div class="job-arrow" style="color:rgba(240,165,0,0.3)">›</div>
+        </div>
+        <div class="job-body">
+          <div class="job-body-inner">
+            <div class="jb-label">About the Role</div>
+            <div class="jb-text">This is not a traditional SaaS sales role. You know the difference between a PM and a PO, between a COR and a CO, and between a pilot and a program. You have spent two decades building relationships inside the branches of service, and you understand how AI technology actually gets adopted at the IL6 level and above — not how it gets piloted and forgotten. You will be the person who takes Fulcrum from platform to program.</div>
+
+            <div class="jb-label">What You Will Drive</div>
+            <ul class="jb-list">
+              <li>Program office relationships across Army, Navy, Air Force, Marine Corps, Space Force, and Coast Guard</li>
+              <li>Task order and IDIQ vehicle positioning — SHIELD, SEWP, GSA, and emerging AI contract vehicles</li>
+              <li>Golden Dome and missile defense program access and pipeline development</li>
+              <li>AFWERX, DARPA, and SOCOM rapid acquisition pathway navigation</li>
+              <li>Coordination with the Citadel Network advisory team to open congressional and Pentagon doors</li>
+              <li>Enterprise deal structuring: platform licenses, deployment contracts, and recurring ARR</li>
+            </ul>
+
+            <div class="jb-label">Requirements</div>
+            <ul class="jb-list">
+              <li><strong>20+ years of experience selling technology into U.S. military branches</strong> — program office-level relationships required, not just contracting awareness</li>
+              <li><strong>Active TS/SCI clearance</strong></li>
+              <li>Deep, current knowledge of AI adoption challenges at IL5 and IL6 — you have been in the room where it actually matters</li>
+              <li>Understanding of warfighter needs at the operational level: not demos for CISO teams, but capability conversations with people who plan and execute missions</li>
+              <li>Familiarity with DoD acquisition pathways: OTA, CSO, SBIR, and traditional FAR</li>
+              <li>Existing relationships with at least two of the following: SOCOM, CYBERCOM, MDA, Space Force, AFWERX, or equivalent major commands</li>
+            </ul>
+
+            <button class="jb-apply-btn" onclick="openApply('U.S. Military Enterprise Sales Representative'); event.stopPropagation()" style="background:var(--gold)">
+              Apply for This Role →
+            </button>
+            <div class="jb-note">Compensation includes base salary, commission on booked ARR, and equity participation. This role will carry significant equity given its strategic importance to the raise and growth trajectory.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── SECTION 4: FIELD OPERATIONS / AI ORCHESTRATORS ─── -->
+  <div class="roles-section" data-category="field">
+    <div class="section-heading">
+      <div class="section-heading-bar green"></div>
+      <div class="section-title">AI Orchestrator — Field Operations</div>
+      <div class="section-count">6 OPEN ROLES · ONE PER BRANCH</div>
+    </div>
+
+    <p style="font-size:15px;line-height:1.75;color:var(--body-text);font-weight:300;max-width:700px;margin-bottom:28px">
+      The AI Orchestrator is a human operator embedded with a Fulcrum AI agent team. Your job is to ensure the agents are properly configured for the mission, that human oversight is maintained at every decision point, and that the team is delivering the right outputs to the right people at the right time. This is not a developer role. It is a mission-operations role that requires deep domain knowledge of your branch and a clear-eyed understanding of what AI agents can and cannot do under operational conditions.
+    </p>
+
+    <div class="orchestrator-grid">
+
+      <!-- Army -->
+      <div class="orch-card" onclick="toggleOrch(this)">
+        <div class="orch-header">
+          <div class="orch-emblem">⭐</div>
+          <div class="orch-info">
+            <div class="orch-branch">U.S. Army</div>
+            <div class="orch-sub">AI Orchestrator · Field Operations</div>
+          </div>
+          <div class="orch-arrow">›</div>
+        </div>
+        <div class="orch-body">
+          <div class="orch-body-inner">
+            <div class="jb-label">Branch Focus</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:12px">Ground maneuver, sustainment, ISR, and C2 operations. Experience with Army modernization programs (IVAS, JADC2, Project Convergence) and the operational tempo of brigade-level planning and execution.</div>
+            <div class="jb-label">Clearance</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:16px">TS/SCI required. Active clearance on day one.</div>
+            <button class="jb-apply-btn" style="font-size:14px;padding:10px 18px" onclick="openApply('AI Orchestrator — U.S. Army'); event.stopPropagation()">Apply →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navy -->
+      <div class="orch-card" onclick="toggleOrch(this)">
+        <div class="orch-header">
+          <div class="orch-emblem">⚓</div>
+          <div class="orch-info">
+            <div class="orch-branch">U.S. Navy</div>
+            <div class="orch-sub">AI Orchestrator · Field Operations</div>
+          </div>
+          <div class="orch-arrow">›</div>
+        </div>
+        <div class="orch-body">
+          <div class="orch-body-inner">
+            <div class="jb-label">Branch Focus</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:12px">Maritime operations, carrier strike group coordination, undersea warfare, and NAVSEA program alignment. Understanding of the Navy's AI Task Force and Project Overmatch priorities.</div>
+            <div class="jb-label">Clearance</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:16px">TS/SCI required. Active clearance on day one.</div>
+            <button class="jb-apply-btn" style="font-size:14px;padding:10px 18px" onclick="openApply('AI Orchestrator — U.S. Navy'); event.stopPropagation()">Apply →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Air Force -->
+      <div class="orch-card" onclick="toggleOrch(this)">
+        <div class="orch-header">
+          <div class="orch-emblem">✈</div>
+          <div class="orch-info">
+            <div class="orch-branch">U.S. Air Force</div>
+            <div class="orch-sub">AI Orchestrator · Field Operations</div>
+          </div>
+          <div class="orch-arrow">›</div>
+        </div>
+        <div class="orch-body">
+          <div class="orch-body-inner">
+            <div class="jb-label">Branch Focus</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:12px">Air operations, targeting, ISR fusion, and platform integration across AFWERX and AFLCMC programs. Familiarity with USAF ABMS and the Advanced Battle Management System architecture.</div>
+            <div class="jb-label">Clearance</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:16px">TS/SCI required. Active clearance on day one.</div>
+            <button class="jb-apply-btn" style="font-size:14px;padding:10px 18px" onclick="openApply('AI Orchestrator — U.S. Air Force'); event.stopPropagation()">Apply →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marine Corps -->
+      <div class="orch-card" onclick="toggleOrch(this)">
+        <div class="orch-header">
+          <div class="orch-emblem">🦅</div>
+          <div class="orch-info">
+            <div class="orch-branch">U.S. Marine Corps</div>
+            <div class="orch-sub">AI Orchestrator · Field Operations</div>
+          </div>
+          <div class="orch-arrow">›</div>
+        </div>
+        <div class="orch-body">
+          <div class="orch-body-inner">
+            <div class="jb-label">Branch Focus</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:12px">Expeditionary operations, littoral combat, distributed maritime operations, and Marine Corps Force Design 2030. Understanding of MAGTF structure and how AI fits into a force designed to operate disaggregated at the edge.</div>
+            <div class="jb-label">Clearance</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:16px">TS/SCI required. Active clearance on day one.</div>
+            <button class="jb-apply-btn" style="font-size:14px;padding:10px 18px" onclick="openApply('AI Orchestrator — U.S. Marine Corps'); event.stopPropagation()">Apply →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Space Force -->
+      <div class="orch-card" onclick="toggleOrch(this)" style="border-color:rgba(240,165,0,0.15)">
+        <div class="orch-header">
+          <div class="orch-emblem" style="border-color:rgba(240,165,0,0.25);background:rgba(240,165,0,0.07)">🛰</div>
+          <div class="orch-info">
+            <div class="orch-branch" style="color:var(--gold)">U.S. Space Force</div>
+            <div class="orch-sub" style="color:rgba(240,165,0,0.5)">AI Orchestrator · Golden Dome Priority</div>
+          </div>
+          <div class="orch-arrow" style="color:rgba(240,165,0,0.25)">›</div>
+        </div>
+        <div class="orch-body">
+          <div class="orch-body-inner">
+            <div class="jb-label">Branch Focus</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:12px">Space domain awareness, satellite operations, missile warning, and Golden Dome integration. This is a priority hire — the Space Force sits at the center of the Golden Dome architecture and is named in the heritage of Fulcrum Platform itself. Deep familiarity with USSF Guardian culture and the unique requirements of space operations at the classified level.</div>
+            <div class="jb-label">Clearance</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:8px">TS/SCI required. Polygraph eligibility strongly preferred.</div>
+            <div class="jb-text" style="font-size:12px;color:rgba(240,165,0,0.5);font-style:italic;margin-bottom:16px">Named in honor of BG Chandler "Fulcrum" Atwood, USSF — The Citadel, Class of 2001.</div>
+            <button class="jb-apply-btn" style="font-size:14px;padding:10px 18px;background:var(--gold)" onclick="openApply('AI Orchestrator — U.S. Space Force'); event.stopPropagation()">Apply →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coast Guard -->
+      <div class="orch-card" onclick="toggleOrch(this)">
+        <div class="orch-header">
+          <div class="orch-emblem">⚓</div>
+          <div class="orch-info">
+            <div class="orch-branch">U.S. Coast Guard</div>
+            <div class="orch-sub">AI Orchestrator · Field Operations</div>
+          </div>
+          <div class="orch-arrow">›</div>
+        </div>
+        <div class="orch-body">
+          <div class="orch-body-inner">
+            <div class="jb-label">Branch Focus</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:12px">Maritime law enforcement, port security, search and rescue coordination, and interagency operations. Understanding of USCG's unique dual-role as both a military branch and a federal law enforcement agency — and how AI agent teams need to operate across those contexts.</div>
+            <div class="jb-label">Clearance</div>
+            <div class="jb-text" style="font-size:13px;margin-bottom:16px">TS/SCI required. Active clearance on day one.</div>
+            <button class="jb-apply-btn" style="font-size:14px;padding:10px 18px" onclick="openApply('AI Orchestrator — U.S. Coast Guard'); event.stopPropagation()">Apply →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CTA SECTION -->
+  <div class="careers-cta">
+    <div class="cta-left">
+      <div class="cta-title">Don't See Your Role? We Want to Hear From You.</div>
+      <div class="cta-sub">If you have deep defense AI experience, cleared backgrounds, and a genuine interest in building the platform that doesn't yet exist at IL5 and above — reach out. We are moving fast and the team is being built now.</div>
+    </div>
+    <a href="#" class="cta-btn" onclick="openApply('General Inquiry'); return false;">
+      Get in Touch →
+    </a>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- APPLY MODAL -->
+<div class="apply-modal" id="applyModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeApply()">✕</button>
+    <div class="modal-label">Apply Now · Digital Transformations LLC</div>
+    <div class="modal-title" id="modalTitle">Role Title</div>
+    <div class="modal-field">
+      <label>Full Name</label>
+      <input type="text" placeholder="Your full name"/>
+    </div>
+    <div class="modal-field">
+      <label>Email Address</label>
+      <input type="email" placeholder="your@email.com"/>
+    </div>
+    <div class="modal-field">
+      <label>Current Clearance Level</label>
+      <select>
+        <option value="">Select clearance level</option>
+        <option>TS/SCI with Polygraph</option>
+        <option>TS/SCI</option>
+        <option>Top Secret</option>
+        <option>Secret</option>
+        <option>Public Trust</option>
+        <option>No Active Clearance</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>LinkedIn or Portfolio URL</label>
+      <input type="url" placeholder="https://"/>
+    </div>
+    <div class="modal-field">
+      <label>Why Fulcrum? (Optional)</label>
+      <textarea placeholder="Tell us what draws you to this mission and role..."></textarea>
+    </div>
+    <button class="modal-submit" onclick="submitApply()">Submit Application →</button>
+    <div class="modal-note">Applications are reviewed by the DTS team directly. U.S. citizenship required for all roles. We will respond within 5 business days to qualified candidates.</div>
+  </div>
+</div>
+
+<script>
+  function toggleCard(card) {
+    card.classList.toggle('expanded');
+  }
+  function toggleOrch(card) {
+    card.classList.toggle('expanded');
+  }
+
+  function filterRoles(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.roles-section').forEach(s => {
+      if (cat === 'all') {
+        s.style.display = '';
+      } else {
+        s.style.display = (s.dataset.category === cat) ? '' : 'none';
+      }
+    });
+  }
+
+  function openApply(role) {
+    document.getElementById('modalTitle').textContent = role;
+    document.getElementById('applyModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeApply() {
+    document.getElementById('applyModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // ── FORMSPREE ENDPOINT ──────────────────────────────────────────────────
+  // 1. Go to https://formspree.io and sign up (free)
+  // 2. Create a SECOND form → set email to hdorn@digitaltransformations.com
+  // 3. Replace FULCRUM_CAREERS_ID below with your careers form ID
+  const FORMSPREE_CAREERS = 'https://formspree.io/f/FULCRUM_CAREERS_ID';
+  // ────────────────────────────────────────────────────────────────────────
+
+  async function submitApply() {
+    const fields   = document.querySelectorAll('#applyModal input, #applyModal select, #applyModal textarea');
+    const name     = fields[0].value.trim();
+    const email    = fields[1].value.trim();
+    const clearance = fields[2].value;
+    const linkedin = fields[3].value.trim();
+    const message  = fields[4].value.trim();
+    const role     = document.getElementById('modalTitle').textContent;
+
+    if (!name || !email) {
+      alert('Please enter your name and email.');
+      return;
+    }
+
+    const btn = document.querySelector('.modal-submit');
+    btn.textContent = 'Submitting…';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    try {
+      const res = await fetch(FORMSPREE_CAREERS, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `[Fulcrum Careers] Application — ${role} — ${name}`,
+          name,
+          email,
+          role,
+          clearance_level: clearance || '(not specified)',
+          linkedin_or_portfolio: linkedin || '(not provided)',
+          why_fulcrum: message || '(none)',
+          submitted_at: new Date().toISOString()
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        btn.textContent = 'Application Received ✓';
+        btn.style.background = 'var(--green)';
+        btn.style.opacity = '1';
+        // Clear fields
+        fields.forEach(f => { f.value = ''; });
+        setTimeout(closeApply, 2500);
+      } else {
+        throw new Error(data.error || 'Submission failed');
+      }
+    } catch (err) {
+      btn.textContent = 'Error — Please Try Again';
+      btn.style.background = '#e53e3e';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      console.error('Formspree error:', err);
+      setTimeout(() => {
+        btn.textContent = 'Submit Application →';
+        btn.style.background = 'var(--fulcrum)';
+      }, 3000);
+    }
+  }
+
+  // close modal on backdrop click
+  document.getElementById('applyModal').addEventListener('click', function(e) {
+    if (e.target === this) closeApply();
+  });
+
+  // ESC key
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeApply(); });
+</script>
+</body>
+</html>
