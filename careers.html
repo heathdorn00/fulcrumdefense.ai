@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon_32.png"/>
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon_16.png"/>
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Careers — Build the Defense AI Layer — Fulcrum Platform</title>
@@ -306,67 +301,6 @@
     }
     .modal-submit:hover { background: transparent; color: var(--fulcrum); outline: 1px solid var(--fulcrum); }
     .modal-note { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; color: rgba(122,143,176,0.4); margin-top: 12px; line-height: 1.7; }
-  /* ── MOBILE RESPONSIVE ── */
-  @media (max-width: 768px) {
-    /* Nav */
-    nav { padding: 0 16px; }
-    .nav-left .nav-section { display: none; }
-    .nav-right { gap: 10px; }
-    .nav-link:not([style*="green"]) { display: none; }
-    .nav-cta-sm { font-size: 12px !important; padding: 7px 12px !important; }
-
-    /* Page wrap */
-    .page-wrap { padding: 0 16px !important; }
-
-    /* Hero */
-    .careers-hero { padding: 90px 0 48px; }
-    .careers-title { font-size: 34px !important; }
-    .careers-sub { font-size: 15px !important; }
-    .hero-stats-row { gap: 16px; }
-    .hero-stat-num { font-size: 24px !important; }
-
-    /* Filter bar */
-    .filter-bar { gap: 6px; }
-    .filter-btn { font-size: 8px !important; padding: 6px 10px !important; }
-
-    /* Section headings */
-    .section-heading { flex-wrap: wrap; gap: 8px; }
-    .section-title { font-size: 18px !important; }
-
-    /* Job cards */
-    .job-card-header { padding: 16px; gap: 10px; }
-    .job-accent { display: none; }
-    .job-title { font-size: 14px !important; }
-    .job-meta { gap: 6px; }
-    .job-tag { font-size: 7px !important; padding: 2px 6px !important; }
-    .job-body { padding: 0 16px 22px; }
-    .job-body-inner { padding-top: 14px; }
-    .jb-text { font-size: 13px !important; }
-    .jb-list li { font-size: 13px !important; }
-    .jb-apply-btn { font-size: 14px !important; padding: 10px 18px !important; }
-
-    /* Orchestrator grid: 3-col → 1-col */
-    .orchestrator-grid { grid-template-columns: 1fr !important; }
-    .orch-header { padding: 14px 16px; }
-    .orch-body { padding: 0 16px 18px; }
-
-    /* CTA section */
-    .careers-cta { flex-direction: column; padding: 32px 24px; gap: 24px; }
-    .cta-title { font-size: 22px !important; }
-    .cta-btn { width: 100%; justify-content: center; }
-
-    /* Apply modal */
-    .modal-box { padding: 28px 20px; }
-    .modal-title { font-size: 20px !important; }
-    .modal-field input,
-    .modal-field textarea,
-    .modal-field select { font-size: 16px !important; } /* prevent iOS zoom */
-  }
-
-  @media (max-width: 480px) {
-    .careers-title { font-size: 28px !important; }
-    .hero-stats-row { grid-template-columns: 1fr 1fr; display: grid; }
-  }
   </style>
 </head>
 <body>
@@ -394,7 +328,7 @@
     <h1 class="careers-title">Build the <em>Defense AI Layer</em><br>That Doesn't Exist Yet</h1>
     <p class="careers-sub">Fulcrum is the first MCP-native AI agent orchestration platform built for IL5 and above. We are assembling the team that will put it into production across every branch of the U.S. military. Zero competitors. High stakes. Real mission.</p>
     <div class="hero-stats-row">
-      <div class="hero-stat"><span class="hero-stat-num">12</span><span class="hero-stat-label">Open Roles</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">11</span><span class="hero-stat-label">Open Roles</span></div>
       <div class="hero-stat"><span class="hero-stat-num gold">TS/SCI</span><span class="hero-stat-label">Required for most positions</span></div>
       <div class="hero-stat"><span class="hero-stat-num green">IL5+</span><span class="hero-stat-label">Operating environment</span></div>
       <div class="hero-stat"><span class="hero-stat-num" style="color:var(--orange)">6</span><span class="hero-stat-label">Military branches served</span></div>
@@ -416,7 +350,7 @@
     <div class="section-heading">
       <div class="section-heading-bar cyan"></div>
       <div class="section-title">Engineering</div>
-      <div class="section-count">5 OPEN ROLES</div>
+      <div class="section-count">4 OPEN ROLES</div>
     </div>
     <div class="roles-grid">
 
@@ -498,7 +432,7 @@
             <div class="jb-label">Requirements</div>
             <ul class="jb-list">
               <li>3+ years full stack development with strong TypeScript/Node.js backend and React/Next.js frontend</li>
-              <li>Hands-on experience integrating LLM APIs (OpenAI, Claude, Gemini, or equivalent) into production applications</li>
+              <li>Hands-on experience integrating LLM APIs (OpenAI, Anthropic, or equivalent) into production applications</li>
               <li>Familiarity with WebSocket or SSE for real-time features</li>
               <li>Comfort with PostgreSQL or similar relational databases, including row-level security patterns</li>
               <li>U.S. citizenship required; clearance preferred but not required to start</li>
@@ -555,102 +489,6 @@
               Apply for This Role →
             </button>
             <div class="jb-note">Active TS/SCI required on day one. Polygraph eligibility a strong plus. Remote with occasional SCIF access required.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ROLE 4: Fulcrum MCP Software Engineer -->
-      <div class="job-card" onclick="toggleCard(this)" style="border-color:rgba(0,200,255,0.2)">
-        <div class="job-card-header">
-          <div class="job-accent" style="height:72px;background:linear-gradient(180deg,#00c8ff,#00d4a0)"></div>
-          <div class="job-info">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-              <div class="job-title" style="margin-bottom:0">Software Engineer, Model Context Protocol</div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2px;padding:3px 8px;background:rgba(0,200,255,0.1);border:1px solid rgba(0,200,255,0.3);color:var(--fulcrum);text-transform:uppercase">Fulcrum</span>
-            </div>
-            <div class="job-meta">
-              <span class="job-tag" style="background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.2);color:var(--fulcrum)">DARC Protocol Team</span>
-              <span class="job-tag tag-new">MCP-Native</span>
-              <span class="job-tag tag-senior">5+ Years</span>
-              <span class="job-tag" style="background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.2);color:var(--fulcrum)">📍 Charleston, SC · Remote</span>
-              <span class="job-tag tag-remote">Clearable · US Citizen</span>
-              <span class="job-tag" style="background:rgba(0,212,160,0.07);border:1px solid rgba(0,212,160,0.2);color:var(--green)">Security Clearance Support</span>
-            </div>
-          </div>
-          <div class="job-arrow">›</div>
-        </div>
-        <div class="job-body">
-          <div class="job-body-inner">
-
-            <!-- Fulcrum context bar -->
-            <div style="background:rgba(0,200,255,0.05);border:1px solid rgba(0,200,255,0.15);border-left:3px solid var(--fulcrum);padding:14px 18px;margin-bottom:20px">
-              <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(0,200,255,0.5);text-transform:uppercase;margin-bottom:4px">About Fulcrum</div>
-              <div style="font-size:13px;line-height:1.65;color:var(--body-text);font-weight:300">Fulcrum is the first MCP-native multi-agent collaboration platform purpose-built for classified defense environments. Built by Digital Transformations LLC, Fulcrum deploys coordinated AI agent teams inside IL5 and IL6 boundaries — with zero competitors at classification. We are actively deploying across the U.S. military and executing our federal authorization pathway.</div>
-            </div>
-
-            <div class="jb-label">The Opportunity</div>
-            <div class="jb-text">Model Context Protocol (MCP) is the open standard at the center of Fulcrum's entire architecture. As a Software Engineer on the DARC Protocol Team, you will own the MCP layer that connects agents, tools, memory systems, and LLM providers inside classified environments. This is the role that makes Fulcrum work at the protocol level — building the agent coordination infrastructure that no other platform has deployed at IL5. You will shape how MCP evolves for defense use cases, contributing to both Fulcrum's proprietary runtime and the broader open source ecosystem.</div>
-
-            <div class="jb-label">What You'll Do</div>
-            <ul class="jb-list">
-              <li>Design and implement MCP protocol extensions for classified environments — tool calling, agent-to-agent communication, resource scoping</li>
-              <li>Build and maintain the DARC runtime's MCP server and client layers with production-grade error handling, retry logic, and full auditability</li>
-              <li>Enforce row-level security and RBAC at the MCP protocol layer — not at the application layer</li>
-              <li>Integrate Fulcrum with model-agnostic LLM providers — Claude, GPT-4o, Gemini, LeapfrogAI — through a unified MCP abstraction</li>
-              <li>Write technical documentation that makes Fulcrum's MCP integration approachable for defense software teams</li>
-              <li>Contribute to the open MCP specification and maintain awareness of ecosystem developments that affect the defense use case</li>
-              <li>Participate in security reviews and ensure every protocol change is STIG-aware and IL5-compatible</li>
-              <li>Drive technical decisions in collaboration with the platform and infrastructure teams</li>
-            </ul>
-
-            <div class="jb-label">Required Qualifications</div>
-            <ul class="jb-list">
-              <li><strong>5+ years</strong> of software engineering experience</li>
-              <li>Strong proficiency in <strong>TypeScript/JavaScript and Python</strong></li>
-              <li>Hands-on experience building MCP servers or clients — not just familiarity</li>
-              <li>Deep understanding of API design, protocol development, or distributed systems</li>
-              <li>Experience with OAuth 2.1, JWT, RBAC, and authentication/authorization patterns</li>
-              <li>Excellent written communication — you can explain complex protocol decisions clearly to both engineers and non-technical stakeholders</li>
-              <li>U.S. citizenship required · Must be clearable to Secret or above</li>
-            </ul>
-
-            <div class="jb-label">Preferred Qualifications</div>
-            <ul class="jb-list">
-              <li>Active Secret or TS/SCI clearance</li>
-              <li>Experience with STIG hardening, IL4/IL5 compliance, or DoD security frameworks</li>
-              <li>Familiarity with agentic AI workflows — multi-agent orchestration, tool use, memory systems</li>
-              <li>Experience with row-level security enforcement at the database or protocol layer</li>
-              <li>Background in developer experience (DX) or open source ecosystem tooling</li>
-              <li>Contributions to technical standards or cross-organization protocol efforts</li>
-            </ul>
-
-            <div class="jb-label">Core Technologies</div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px">
-              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.18);color:var(--fulcrum)">TypeScript</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.18);color:var(--fulcrum)">Python</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.18);color:var(--fulcrum)">MCP / JSON-RPC</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.18);color:var(--fulcrum)">OAuth 2.1 + RLS</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.18);color:var(--fulcrum)">Supabase / PostgreSQL</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;padding:5px 12px;background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.18);color:var(--fulcrum)">Docker / IL5 Infra</span>
-            </div>
-
-            <div class="jb-label">What Fulcrum Offers</div>
-            <ul class="jb-list">
-              <li>Competitive salary + equity in a pre-Series A defense product company</li>
-              <li>Comprehensive health, dental, and vision coverage</li>
-              <li>Flexible remote-first culture with optional Charleston, SC home base</li>
-              <li>Security clearance sponsorship for qualified candidates</li>
-              <li>Direct access to senior defense leadership and program offices</li>
-              <li>Annual learning and development stipend</li>
-              <li>Work at the intersection of the open MCP ecosystem and classified defense infrastructure — a position that exists nowhere else</li>
-            </ul>
-
-            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;align-items:center">
-              <button class="jb-apply-btn" onclick="openApply('Software Engineer, Model Context Protocol'); event.stopPropagation()">
-                Apply Now →
-              </button>
-            </div>
-            <div class="jb-note" style="margin-top:12px">Applications reviewed on a rolling basis. Apply even if you don't meet every qualification — we care more about trajectory than a perfect checklist. Equal opportunity employer. U.S. citizenship required for clearance eligibility.</div>
           </div>
         </div>
       </div>
@@ -1001,71 +839,11 @@
     document.getElementById('applyModal').classList.remove('open');
     document.body.style.overflow = '';
   }
-  // ── FORMSPREE ENDPOINT ──────────────────────────────────────────────────
-  // 1. Go to https://formspree.io and sign up (free)
-  // 2. Create a SECOND form → set email to hdorn@digitaltransformations.com
-  // 3. Replace FULCRUM_CAREERS_ID below with your careers form ID
-  const FORMSPREE_CAREERS = 'https://formspree.io/f/FULCRUM_CAREERS_ID';
-  // ────────────────────────────────────────────────────────────────────────
-
-  async function submitApply() {
-    const fields   = document.querySelectorAll('#applyModal input, #applyModal select, #applyModal textarea');
-    const name     = fields[0].value.trim();
-    const email    = fields[1].value.trim();
-    const clearance = fields[2].value;
-    const linkedin = fields[3].value.trim();
-    const message  = fields[4].value.trim();
-    const role     = document.getElementById('modalTitle').textContent;
-
-    if (!name || !email) {
-      alert('Please enter your name and email.');
-      return;
-    }
-
+  function submitApply() {
     const btn = document.querySelector('.modal-submit');
-    btn.textContent = 'Submitting…';
-    btn.disabled = true;
-    btn.style.opacity = '0.7';
-
-    try {
-      const res = await fetch(FORMSPREE_CAREERS, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _subject: `[Fulcrum Careers] Application — ${role} — ${name}`,
-          name,
-          email,
-          role,
-          clearance_level: clearance || '(not specified)',
-          linkedin_or_portfolio: linkedin || '(not provided)',
-          why_fulcrum: message || '(none)',
-          submitted_at: new Date().toISOString()
-        })
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        btn.textContent = 'Application Received ✓';
-        btn.style.background = 'var(--green)';
-        btn.style.opacity = '1';
-        // Clear fields
-        fields.forEach(f => { f.value = ''; });
-        setTimeout(closeApply, 2500);
-      } else {
-        throw new Error(data.error || 'Submission failed');
-      }
-    } catch (err) {
-      btn.textContent = 'Error — Please Try Again';
-      btn.style.background = '#e53e3e';
-      btn.style.opacity = '1';
-      btn.disabled = false;
-      console.error('Formspree error:', err);
-      setTimeout(() => {
-        btn.textContent = 'Submit Application →';
-        btn.style.background = 'var(--fulcrum)';
-      }, 3000);
-    }
+    btn.textContent = 'Application Received ✓';
+    btn.style.background = 'var(--green)';
+    setTimeout(closeApply, 1800);
   }
 
   // close modal on backdrop click
