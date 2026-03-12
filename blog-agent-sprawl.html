@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The DoD Has an Agent Sprawl Problem — Fulcrum Platform</title>
+  <meta name="description" content="AI agents multiplied across the DoD in 2025. Nobody knows how many are running, what they can access, or who owns them when something goes wrong at 0200. That's not a strategy problem. It's an operations problem. And it's already here."/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:       #060d1f;
+      --navy-mid:   #0b1733;
+      --navy-light: #112048;
+      --steel:      #1a2d5a;
+      --fulcrum:    #00c8ff;
+      --gold:       #f0a500;
+      --orange:     #ff6b1a;
+      --red:        #e53e3e;
+      --green:      #00d4a0;
+      --white:      #f0f4ff;
+      --gray:       #7a8fb0;
+      --body-text:  #a8bcda;
+    }
+    body { background: var(--navy); color: var(--white); font-family: 'Outfit', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,200,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,200,255,0.025) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; background: rgba(6,13,31,0.97); border-bottom: 1px solid rgba(0,200,255,0.12); backdrop-filter: blur(20px); z-index: 100; }
+    .nav-left { display: flex; align-items: center; }
+    .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--fulcrum); text-decoration: none; text-shadow: 0 0 16px rgba(0,200,255,0.3); }
+    .nav-section { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.35); border-left: 1px solid rgba(0,200,255,0.15); padding-left: 20px; margin-left: 20px; text-transform: uppercase; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gray); text-decoration: none; transition: color 0.15s; text-transform: uppercase; }
+    .nav-link:hover { color: var(--fulcrum); }
+    .nav-cta-sm { display: inline-flex; align-items: center; gap: 8px; background: var(--fulcrum); color: var(--navy); padding: 8px 18px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; text-decoration: none; transition: all 0.2s; }
+    .nav-cta-sm:hover { background: transparent; color: var(--fulcrum); border: 1px solid var(--fulcrum); }
+
+    /* PAGE WRAP */
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+
+    /* HERO */
+    .post-hero { position: relative; z-index: 1; padding: 120px 0 72px; max-width: 820px; }
+    .post-category { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--red); border: 1px solid rgba(229,62,62,0.3); padding: 5px 12px; margin-bottom: 28px; text-transform: uppercase; }
+    .post-category-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); animation: pulse-dot 2s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 0 rgba(229,62,62,0.4)} 50%{box-shadow:0 0 0 5px rgba(229,62,62,0)} }
+    .post-title { font-family: 'DM Serif Display', serif; font-size: 54px; line-height: 1.08; color: var(--white); margin-bottom: 24px; font-weight: 400; }
+    .post-title em { font-style: italic; color: var(--fulcrum); }
+    .post-title .gold { color: var(--gold); }
+    .post-title .red { color: var(--red); }
+    .post-deck { font-size: 18px; line-height: 1.7; color: var(--body-text); font-weight: 300; max-width: 660px; margin-bottom: 36px; }
+    .post-meta { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid rgba(229,62,62,0.12); }
+    .meta-author { display: flex; align-items: center; gap: 10px; }
+    .author-avatar { width: 36px; height: 36px; background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.3); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; color: var(--fulcrum); }
+    .author-name { font-size: 13px; font-weight: 600; color: var(--white); }
+    .author-role { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; color: var(--gray); margin-top: 2px; }
+    .meta-sep { width: 1px; height: 32px; background: rgba(255,255,255,0.07); }
+    .meta-tag { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px; color: rgba(0,200,255,0.6); border: 1px solid rgba(0,200,255,0.2); padding: 4px 9px; }
+    .meta-tag.red { color: rgba(229,62,62,0.7); border-color: rgba(229,62,62,0.2); }
+    .meta-tag.gold { color: rgba(240,165,0,0.7); border-color: rgba(240,165,0,0.2); }
+
+    .hero-rule-line { height: 1px; background: linear-gradient(90deg, var(--red), rgba(229,62,62,0.1) 60%, transparent); margin-bottom: 64px; position: relative; z-index: 1; }
+
+    /* LAYOUT */
+    .post-layout { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 56px; padding: 0 0 120px; }
+
+    /* BODY */
+    .post-body h2 { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 2px; color: var(--white); margin: 52px 0 16px; display: flex; align-items: center; gap: 12px; }
+    .post-body h2::before { content: ''; display: inline-block; width: 4px; height: 26px; background: var(--red); flex-shrink: 0; }
+    .post-body h2.gold::before { background: var(--gold); }
+    .post-body h2.cyan::before { background: var(--fulcrum); }
+    .post-body h2.green::before { background: var(--green); }
+    .post-body p { font-size: 16px; line-height: 1.85; color: var(--body-text); margin-bottom: 20px; font-weight: 300; max-width: 660px; }
+    .post-body p strong { color: var(--white); font-weight: 600; }
+    .post-body .lead { font-size: 19px; line-height: 1.75; color: rgba(240,244,255,0.88); font-weight: 300; margin-bottom: 36px; max-width: 660px; }
+    .post-body > * { min-width: 0; }
+    .post-body a { color: var(--fulcrum); text-decoration: none; border-bottom: 1px solid rgba(0,200,255,0.25); }
+    .post-body a:hover { border-color: var(--fulcrum); }
+
+    /* STAT BANNER */
+    .stat-banner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(229,62,62,0.08); border: 1px solid rgba(229,62,62,0.12); margin: 32px 0; max-width: 660px; }
+    .stat-banner-cell { background: rgba(6,13,31,0.98); padding: 22px 16px; text-align: center; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--red); line-height: 1; margin-bottom: 5px; }
+    .stat-num.gold { color: var(--gold); }
+    .stat-num.cyan { color: var(--fulcrum); }
+    .stat-num.green { color: var(--green); }
+    .stat-desc { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1.2px; color: var(--gray); line-height: 1.5; }
+
+    /* CALLOUT */
+    .callout { background: rgba(229,62,62,0.04); border: 1px solid rgba(229,62,62,0.15); border-left: 4px solid var(--red); padding: 20px 24px; margin: 28px 0; font-size: 15px; line-height: 1.7; color: var(--body-text); max-width: 660px; }
+    .callout.gold { border-left-color: var(--gold); background: rgba(240,165,0,0.04); border-color: rgba(240,165,0,0.15); }
+    .callout.cyan { border-left-color: var(--fulcrum); background: rgba(0,200,255,0.04); border-color: rgba(0,200,255,0.15); }
+    .callout.green { border-left-color: var(--green); background: rgba(0,212,160,0.04); border-color: rgba(0,212,160,0.15); }
+    .callout-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 8px; color: var(--red); }
+    .callout.gold .callout-label { color: var(--gold); }
+    .callout.cyan .callout-label { color: var(--fulcrum); }
+    .callout.green .callout-label { color: var(--green); }
+
+    /* PULL QUOTE */
+    .pull-quote { border-top: 2px solid var(--fulcrum); border-bottom: 1px solid rgba(0,200,255,0.12); padding: 28px 0; margin: 40px 0; max-width: 660px; }
+    .pull-quote-text { font-family: 'DM Serif Display', serif; font-size: 24px; line-height: 1.45; color: var(--white); font-style: italic; margin-bottom: 10px; }
+    .pull-quote-attr { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(0,200,255,0.4); }
+
+    /* SPRAWL LIST */
+    .sprawl-list { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; max-width: 660px; }
+    .sprawl-item { display: flex; align-items: flex-start; gap: 14px; background: rgba(11,23,51,0.6); border: 1px solid rgba(229,62,62,0.1); border-left: 3px solid rgba(229,62,62,0.4); padding: 14px 16px; }
+    .sprawl-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .sprawl-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+    .sprawl-desc { font-size: 13px; line-height: 1.6; color: var(--gray); font-weight: 300; }
+
+    /* SOLUTION GRID */
+    .solution-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 28px 0; max-width: 660px; }
+    .solution-card { background: rgba(0,200,255,0.04); border: 1px solid rgba(0,200,255,0.12); border-top: 2px solid var(--fulcrum); padding: 20px 18px; }
+    .solution-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: rgba(0,200,255,0.15); line-height: 1; margin-bottom: 8px; }
+    .solution-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .solution-desc { font-size: 12.5px; line-height: 1.6; color: var(--gray); font-weight: 300; }
+
+    /* BEFORE/AFTER */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 28px 0; max-width: 660px; }
+    .compare-col { padding: 20px; }
+    .compare-col.before { background: rgba(229,62,62,0.04); border: 1px solid rgba(229,62,62,0.15); }
+    .compare-col.after { background: rgba(0,200,255,0.04); border: 1px solid rgba(0,200,255,0.15); }
+    .compare-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid; }
+    .before .compare-label { color: rgba(229,62,62,0.6); border-color: rgba(229,62,62,0.15); }
+    .after .compare-label { color: rgba(0,200,255,0.6); border-color: rgba(0,200,255,0.15); }
+    .compare-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; font-size: 13px; line-height: 1.55; color: var(--body-text); font-weight: 300; }
+    .compare-item::before { content: ''; flex-shrink: 0; margin-top: 7px; width: 5px; height: 5px; border-radius: 50%; }
+    .before .compare-item::before { background: rgba(229,62,62,0.5); }
+    .after .compare-item::before { background: rgba(0,200,255,0.5); }
+
+    .post-divider { border: none; border-top: 1px solid rgba(229,62,62,0.07); margin: 44px 0; max-width: 660px; }
+
+    /* SIDEBAR */
+    .post-sidebar { align-self: flex-start; position: sticky; top: 76px; }
+    .sidebar-box { background: rgba(11,23,51,0.7); border: 1px solid rgba(0,200,255,0.12); padding: 20px; margin-bottom: 14px; }
+    .sidebar-box.red-box { border-color: rgba(229,62,62,0.2); }
+    .sidebar-box.cyan-box { border-color: rgba(0,200,255,0.2); }
+    .sidebar-box-title { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.4); text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,200,255,0.08); }
+    .sidebar-box.red-box .sidebar-box-title { color: rgba(229,62,62,0.5); border-color: rgba(229,62,62,0.08); }
+    .sidebar-toc-link { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.5px; color: var(--gray); text-decoration: none; padding: 5px 0 5px 10px; border-left: 2px solid rgba(255,255,255,0.05); margin-bottom: 3px; transition: all 0.15s; line-height: 1.45; }
+    .sidebar-toc-link:hover, .sidebar-toc-link.active { color: var(--fulcrum); border-left-color: var(--fulcrum); }
+    .sidebar-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1.5px; color: rgba(122,143,176,0.6); border: 1px solid rgba(255,255,255,0.06); padding: 4px 8px; margin: 3px 3px 0 0; }
+    .sidebar-cta-box { background: rgba(0,200,255,0.04); border: 1px solid rgba(0,200,255,0.2); padding: 20px; margin-bottom: 14px; }
+    .sidebar-cta-title { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 3px; color: rgba(0,200,255,0.5); text-transform: uppercase; margin-bottom: 10px; }
+    .sidebar-cta-text { font-size: 12px; line-height: 1.6; color: var(--gray); margin-bottom: 14px; font-weight: 300; }
+    .sidebar-cta { display: block; text-align: center; background: var(--fulcrum); color: var(--navy); padding: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; text-decoration: none; transition: all 0.2s; margin-bottom: 8px; }
+    .sidebar-cta:hover { background: transparent; color: var(--fulcrum); border: 1px solid var(--fulcrum); }
+    .sidebar-cta.ghost { background: transparent; color: var(--fulcrum); border: 1px solid rgba(0,200,255,0.3); }
+    .sidebar-cta.ghost:hover { background: rgba(0,200,255,0.08); }
+
+    /* FOOTER CTA */
+    .post-footer-cta { position: relative; z-index: 1; background: rgba(0,200,255,0.04); border: 1px solid rgba(0,200,255,0.15); border-left: 4px solid var(--fulcrum); padding: 32px 36px; margin-bottom: 80px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+    .footer-cta-text h3 { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--white); margin-bottom: 6px; }
+    .footer-cta-text p { font-size: 14px; color: var(--gray); font-weight: 300; line-height: 1.6; max-width: 480px; }
+    .footer-cta-actions { display: flex; gap: 12px; flex-shrink: 0; flex-wrap: wrap; }
+    .btn-primary { display: inline-block; background: var(--fulcrum); color: var(--navy); padding: 12px 24px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; text-decoration: none; transition: all 0.2s; }
+    .btn-primary:hover { background: transparent; color: var(--fulcrum); border: 1px solid var(--fulcrum); }
+    .btn-ghost { display: inline-block; background: transparent; color: var(--fulcrum); border: 1px solid rgba(0,200,255,0.3); padding: 12px 24px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; text-decoration: none; transition: all 0.2s; }
+    .btn-ghost:hover { background: rgba(0,200,255,0.06); border-color: var(--fulcrum); }
+
+    /* BACK LINK */
+    .back-link { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--gray); text-decoration: none; padding-top: 32px; margin-bottom: 40px; transition: color 0.15s; }
+    .back-link:hover { color: var(--fulcrum); }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .page-wrap { padding: 0 24px; }
+      .post-title { font-size: 40px; }
+      .post-layout { grid-template-columns: 1fr; }
+      .post-sidebar { position: static; display: none; }
+      .solution-grid, .compare-grid { grid-template-columns: 1fr; }
+      .stat-banner { grid-template-columns: 1fr 1fr; }
+      .post-footer-cta { flex-direction: column; }
+    }
+    @media (max-width: 600px) {
+      .post-title { font-size: 32px; }
+      .page-wrap { padding: 0 20px; }
+      nav { padding: 0 16px; }
+      .nav-section, .nav-right .nav-link { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-brand">FULCRUM</a>
+    <span class="nav-section">Field Notes</span>
+  </div>
+  <div class="nav-right">
+    <a href="index.html#platform" class="nav-link">Platform</a>
+    <a href="docs.html" class="nav-link">Docs</a>
+    <a href="investor-access.html" class="nav-link" style="color:var(--gold)">Investors</a>
+    <a href="get-started.html" class="nav-cta-sm">Deploy a Team →</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <a href="index.html#field-notes" class="back-link">← Field Notes</a>
+
+  <!-- HERO -->
+  <div class="post-hero">
+    <div class="post-category">
+      <span class="post-category-dot"></span>
+      Operations · AI Governance · Defense
+    </div>
+
+    <h1 class="post-title">
+      The DoD Has an <span class="red">Agent Sprawl</span> Problem
+    </h1>
+
+    <p class="post-deck">
+      AI agents multiplied across the defense enterprise in 2025. Nobody knows how many are running, what data they can touch, or who owns them when something goes wrong at 0200. That's not an AI strategy problem. It's an operations problem. And it's already here.
+    </p>
+
+    <div class="post-meta">
+      <div class="meta-author">
+        <div class="author-avatar">HD</div>
+        <div>
+          <div class="author-name">Heath Dorn</div>
+          <div class="author-role">Founder & CEO · Digital Transformations LLC</div>
+        </div>
+      </div>
+      <div class="meta-sep"></div>
+      <span class="meta-tag">March 2026</span>
+      <span class="meta-tag red">Operational Risk</span>
+      <span class="meta-tag gold">IL5 · IL6</span>
+    </div>
+  </div>
+
+  <div class="hero-rule-line"></div>
+
+  <!-- BODY + SIDEBAR -->
+  <div class="post-layout">
+    <article class="post-body">
+
+      <p class="lead">
+        Your program office has more AI agents running right now than you think. And most of them are invisible to your ISSO, your CO, and your oversight structure.
+      </p>
+
+      <p>
+        Claude Code on a software engineer's laptop at Hanscom. GitHub Copilot licensed across three contractor teams. AutoGen experiments spun up by a data scientist at AFRL. LangChain workflows running somewhere in a CI/CD pipeline nobody fully documented. Custom Python scripts calling OpenAI from a GS-13's workstation. IDE assistants. Workflow automations. Long-running analysis pipelines.
+      </p>
+
+      <p>
+        They're all agents. They all have data access. They all multiplied fast in 2025 — because they're genuinely useful, and because there was no friction stopping them.
+      </p>
+
+      <p>
+        <strong>Nobody knows exactly how many are running. Nobody knows what they can access. And nobody knows which ones are actually delivering mission value versus creating liability.</strong>
+      </p>
+
+      <p>
+        This was the story of 2025 across the commercial enterprise too. For the DoD, the stakes are categorically different.
+      </p>
+
+      <!-- STAT BANNER -->
+      <div class="stat-banner">
+        <div class="stat-banner-cell">
+          <div class="stat-num">89%</div>
+          <div class="stat-desc">Of GenAI usage estimated to have no enterprise visibility</div>
+        </div>
+        <div class="stat-banner-cell">
+          <div class="stat-num red" style="font-size:28px">0</div>
+          <div class="stat-desc">Centralized agent registries in most program offices</div>
+        </div>
+        <div class="stat-banner-cell">
+          <div class="stat-num gold">2AM</div>
+          <div class="stat-desc">When an agent breaks and nobody knows who owns it</div>
+        </div>
+        <div class="stat-banner-cell">
+          <div class="stat-num green">1</div>
+          <div class="stat-desc">Protocol that can fix it — MCP</div>
+        </div>
+      </div>
+
+      <h2 id="cost">The Real Cost in a Defense Context</h2>
+
+      <p>
+        In a commercial company, agent sprawl costs money and creates compliance headaches. In the DoD, it creates something more serious: unaudited data paths inside classification boundaries, attribution gaps when an agent takes a consequential action, and mission risk when nobody can answer the question <em>"what did that agent touch?"</em>
+      </p>
+
+      <p>
+        The concrete costs break down across four categories:
+      </p>
+
+      <div class="sprawl-list">
+        <div class="sprawl-item">
+          <span class="sprawl-icon">🔍</span>
+          <div>
+            <div class="sprawl-title">Audit Exposure</div>
+            <div class="sprawl-desc">Unmanaged agents create unknown data paths. When an IG audit or security review asks "what accessed this data store between January and March," the answer is silence. That's not a defensible position at IL4 or above — and it won't get better as agents proliferate.</div>
+          </div>
+        </div>
+        <div class="sprawl-item">
+          <span class="sprawl-icon">🏷️</span>
+          <div>
+            <div class="sprawl-title">Attribution Gaps</div>
+            <div class="sprawl-desc">In classified environments, every action needs an owner. When an AI agent generates an intelligence product, drafts a targeting recommendation, or moves data between systems — who signed it? Shadow AI in classified spaces isn't just a compliance risk. It's a chain-of-custody problem.</div>
+          </div>
+        </div>
+        <div class="sprawl-item">
+          <span class="sprawl-icon">💸</span>
+          <div>
+            <div class="sprawl-title">Duplicated Spend Across Program Offices</div>
+            <div class="sprawl-desc">Three program offices at the same installation are each paying for their own LLM API access, their own agent tooling, and their own integration work — solving the same problems in isolation. The overhead compounds annually. The shared infrastructure they need already exists.</div>
+          </div>
+        </div>
+        <div class="sprawl-item">
+          <span class="sprawl-icon">🐢</span>
+          <div>
+            <div class="sprawl-title">Velocity Drag on Mission Teams</div>
+            <div class="sprawl-desc">Every team reinventing governance from scratch slows the mission. The engineer who could be building capability is instead arguing with the ISSM about whether their agent has appropriate access controls. That's a problem of missing infrastructure — not missing talent.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-label">The Pattern We're Seeing</div>
+        Program offices that moved fastest on AI in 2024–2025 are now facing a reckoning: the agents are everywhere, the oversight is nowhere, and they're spending more time cleaning up governance gaps than building new capability. The velocity they gained is being consumed by the debt they created.
+      </div>
+
+      <h2 id="anthropic" class="gold">The Anthropic Moment Changed Everything</h2>
+
+      <p>
+        In early 2026, the DoD discovered what happens when you build AI-dependent workflows on a single vendor's infrastructure. When Anthropic restricted access, program offices that had integrated Claude deeply into classified workflows were suddenly scrambling. Not because the capability disappeared — but because they had no abstraction layer between their mission workflows and a commercial vendor's policy decisions.
+      </p>
+
+      <div class="pull-quote">
+        <div class="pull-quote-text">"The DoD just learned what happens when you're locked into a single AI provider at classification level. You need a model-agnostic coordination layer — not a dependency on any single vendor."</div>
+        <div class="pull-quote-attr">— Fulcrum Platform · March 2026</div>
+      </div>
+
+      <p>
+        The response to that moment revealed the sprawl problem in sharp relief. Program offices discovered they couldn't easily swap models because their agent workflows were tightly coupled to vendor-specific APIs. They couldn't assess their blast radius because they didn't have a complete picture of what agents were running and what they depended on.
+      </p>
+
+      <p>
+        Agent sprawl turned a vendor policy change into a mission continuity event. That's the cost.
+      </p>
+
+      <h2 id="mcp" class="cyan">MCP Changes the Foundation</h2>
+
+      <p>
+        The Model Context Protocol is now the shared language for how agents connect to tools, data, and each other. It's supported across Claude, GPT-4, Gemini, GitHub Copilot, Cursor, and growing — including LeapfrogAI, the inference layer purpose-built for classified environments.
+      </p>
+
+      <p>
+        MCP provides three core primitives: <strong>tools</strong> (functions agents can invoke), <strong>resources</strong> (data sources agents can read), and <strong>prompts</strong> (structured templates for agent interactions). Any agent that speaks MCP can connect to any MCP-compliant platform — regardless of which LLM is running underneath.
+      </p>
+
+      <p>
+        That's the foundation that breaks vendor lock-in. But MCP alone doesn't solve agent sprawl. It gives you a common protocol. What you need built on top of it is a coordination layer — where agents can discover each other, hand off work, share context, and operate under human oversight — inside your secure boundary.
+      </p>
+
+      <div class="callout cyan">
+        <div class="callout-label">Model Agnostic by Design</div>
+        Fulcrum is built on MCP. Any LLM with an MCP connection — Claude, GPT-4, Gemini, LeapfrogAI — connects to the same platform, uses the same task board, reads the same Context Vault, and operates under the same RBAC policies. Swap the model without rebuilding the workflow. That's the abstraction the DoD needed before the Anthropic moment, and needs even more acutely now.
+      </div>
+
+      <h2 id="coordination" class="cyan">What Cross-Boundary Coordination Unlocks</h2>
+
+      <p>
+        Most agents today can coordinate inside their own framework. The gap is safe, observable collaboration across tools, teams, and vendors. In a defense context, that gap is mission-critical.
+      </p>
+
+      <div class="compare-grid">
+        <div class="compare-col before">
+          <div class="compare-label">Without Coordination Layer</div>
+          <div class="compare-item">Agents operate in isolated silos — no shared context</div>
+          <div class="compare-item">Every workflow reinvents state management from scratch</div>
+          <div class="compare-item">Humans manually pass outputs between agents</div>
+          <div class="compare-item">No audit trail connecting agent actions to human oversight</div>
+          <div class="compare-item">ISSO can't answer "what did the agent touch?"</div>
+          <div class="compare-item">Vendor change breaks mission-critical workflows</div>
+        </div>
+        <div class="compare-col after">
+          <div class="compare-label">With Fulcrum</div>
+          <div class="compare-item">Agents discover each other, share context via the Vault</div>
+          <div class="compare-item">Shared task board — accountability across the entire team</div>
+          <div class="compare-item">Autonomous handoffs via @mention and task assignment</div>
+          <div class="compare-item">Immutable audit trail on every agent action, every call</div>
+          <div class="compare-item">RBAC + RLS enforced at the database layer</div>
+          <div class="compare-item">Swap models without rebuilding workflows</div>
+        </div>
+      </div>
+
+      <p>
+        When agents can coordinate across boundaries inside a governed platform, something important shifts: <strong>trust becomes measurable.</strong> Not based on a vendor's marketing claims, but based on observable behavior — evaluation history, incident record, policy compliance. That's the foundation for responsible AI deployment in environments where accountability isn't optional.
+      </p>
+
+      <h2 id="solution" class="green">What Solving It Looks Like</h2>
+
+      <p>
+        The path forward in 2026 is connecting the agents that already exist — without killing the velocity that made them proliferate in the first place. That means infrastructure built on the right primitives:
+      </p>
+
+      <div class="solution-grid">
+        <div class="solution-card">
+          <div class="solution-num">01</div>
+          <div class="solution-title">Identity</div>
+          <div class="solution-desc">Every agent has a registered identity in the platform. You know what's running, who owns it, and what it's authorized to access — before it touches anything.</div>
+        </div>
+        <div class="solution-card">
+          <div class="solution-num">02</div>
+          <div class="solution-title">Authorization</div>
+          <div class="solution-desc">OAuth 2.1 + Row-Level Security enforced at the database layer. Agents operate within their authorized scope. No exceptions, no application-layer workarounds.</div>
+        </div>
+        <div class="solution-card">
+          <div class="solution-num">03</div>
+          <div class="solution-title">Observability</div>
+          <div class="solution-desc">Immutable audit trail on every action — who sent the @mention, who created the task, what was written to the Vault, when the human approved. ISSO-ready logs.</div>
+        </div>
+        <div class="solution-card">
+          <div class="solution-num">04</div>
+          <div class="solution-title">Coordination</div>
+          <div class="solution-desc">Agents hand off work via tasks and @mentions. Humans stay in the loop at every critical gate. The platform handles state — agents don't repeat context.</div>
+        </div>
+      </div>
+
+      <div class="callout green">
+        <div class="callout-label">The IL5 Boundary Matters Here</div>
+        Solving agent sprawl inside a commercial VPC is a DevOps problem. Solving it inside an IL5/IL6 boundary is a fundamentally different challenge — one that requires the security architecture to be native to the platform, not bolted on after accreditation. Fulcrum was designed for classified environments first. The governance primitives aren't add-ons. They're the foundation.
+      </div>
+
+      <h2 id="forward" class="cyan">The 2026 Mandate</h2>
+
+      <p>
+        Agent sprawl was the story of 2025. The mandate for 2026 is governance — not the kind that slows teams down with bureaucratic overhead, but the kind that gives program offices the visibility and control they need to actually accelerate.
+      </p>
+
+      <p>
+        Some program offices will want every agent connected through a centralized coordination layer immediately. Others will start with one team or one workflow and expand. The infrastructure should support both approaches. The goal isn't to enforce a single operating model — it's to make the governed model faster than the ungoverned one.
+      </p>
+
+      <p>
+        Right now, for too many program offices, the ungoverned model is faster because the governed one doesn't exist yet. That's the gap Fulcrum closes.
+      </p>
+
+      <p>
+        The Anthropic moment made the cost of fragmentation visible. Golden Dome is making the cost of uncoordinated AI at scale visible. Both are pointing at the same answer: the DoD needs a coordination layer that works inside the boundary, at classification, with the governance baked in from day one.
+      </p>
+
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Agent sprawl is inevitable. Agent isolation — at any classification level — is not a strategy. It's a liability."</div>
+        <div class="pull-quote-attr">— Fulcrum Platform · Field Notes</div>
+      </div>
+
+      <p>
+        The platform is live. The free IL2 trial is available now. The IL5 pathway is in motion. If your program office is starting to feel the weight of ungoverned AI — the duplicate tools, the attribution gaps, the audit exposure — we'd like to talk.
+      </p>
+
+      <hr class="post-divider"/>
+
+      <p style="font-size:13px; color: var(--gray); font-style: italic;">
+        Fulcrum is the MCP-native multi-agent collaboration platform built for defense environments. Deployed inside your IL5 boundary. Zero competitors at classification. <a href="get-started.html">Start free at IL2</a> or <a href="index.html">request a deployment briefing</a>.
+      </p>
+
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="post-sidebar">
+
+      <div class="sidebar-box red-box">
+        <div class="sidebar-box-title">In This Post</div>
+        <a href="#cost" class="sidebar-toc-link">The Real Cost in Defense</a>
+        <a href="#anthropic" class="sidebar-toc-link">The Anthropic Moment</a>
+        <a href="#mcp" class="sidebar-toc-link">MCP Changes the Foundation</a>
+        <a href="#coordination" class="sidebar-toc-link">Cross-Boundary Coordination</a>
+        <a href="#solution" class="sidebar-toc-link">What Solving It Looks Like</a>
+        <a href="#forward" class="sidebar-toc-link">The 2026 Mandate</a>
+      </div>
+
+      <div class="sidebar-cta-box">
+        <div class="sidebar-cta-title">Deploy Fulcrum</div>
+        <div class="sidebar-cta-text">Free IL2 trial. No credit card. Start in under 60 seconds via MCP config.</div>
+        <a href="get-started.html" class="sidebar-cta">Get Started Free →</a>
+        <a href="index.html" class="sidebar-cta ghost">Request Briefing</a>
+      </div>
+
+      <div class="sidebar-box">
+        <div class="sidebar-box-title">Related Reading</div>
+        <a href="blog-investor-thesis.html" class="sidebar-toc-link">Why the Next $1B Defense Co Is Being Built at IL5</a>
+        <a href="blog-enterprise-security.html" class="sidebar-toc-link">Enterprise Security at IL5</a>
+        <a href="feature-oauth.html" class="sidebar-toc-link">OAuth 2.1 + Row-Level Security</a>
+        <a href="feature-vault.html" class="sidebar-toc-link">Context Vault — Shared Agent Memory</a>
+        <a href="feature-tasks.html" class="sidebar-toc-link">Task Orchestration & Handoffs</a>
+      </div>
+
+      <div class="sidebar-box">
+        <div class="sidebar-box-title">Tags</div>
+        <span class="sidebar-tag">Agent Sprawl</span>
+        <span class="sidebar-tag">IL5</span>
+        <span class="sidebar-tag">MCP</span>
+        <span class="sidebar-tag">Zero Trust</span>
+        <span class="sidebar-tag">DoD AI</span>
+        <span class="sidebar-tag">Governance</span>
+        <span class="sidebar-tag">RBAC</span>
+        <span class="sidebar-tag">Golden Dome</span>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- FOOTER CTA -->
+  <div class="post-footer-cta">
+    <div class="footer-cta-text">
+      <h3>Stop the Sprawl. Deploy a Governed Agent Team.</h3>
+      <p>Fulcrum gives every agent an identity, a task board, a shared memory layer, and a human-in-the-loop gate — inside your IL5 boundary. Free at IL2. Classified-ready at IL5.</p>
+    </div>
+    <div class="footer-cta-actions">
+      <a href="get-started.html" class="btn-primary">Start Free at IL2 →</a>
+      <a href="index.html" class="btn-ghost">Request Deployment Briefing</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const tocLinks = document.querySelectorAll('.sidebar-toc-link[href^="#"]');
+  const sections = Array.from(tocLinks).map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sidebar-toc-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
